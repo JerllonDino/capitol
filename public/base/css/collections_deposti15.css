@@ -1,0 +1,17 @@
+#collections{
+    max-width: 768px;
+}
+
+#collections>thead>tr>th,#collections>tbody>tr>td{
+    font-size: 10px;
+    word-wrap: break-word;
+    word-break: break-all;
+    padding:  1px;
+}
+
+.small-launay>thead>tr>th,.small-launay>tbody>tr>th,.small-launay>tbody>tr>td{
+    font-size: 10px;
+    padding: 1px;
+    
+
+}

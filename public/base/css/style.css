@@ -1,0 +1,96 @@
+textarea {
+    min-height: 94px;
+    resize: vertical;
+}
+
+.dtable {
+    table-layout: fixed;
+}
+
+.dtable td {
+    overflow:hidden;
+    word-wrap: break-word;
+}
+
+.row-hidden {
+    display: none;
+}
+
+.msg {
+    display: block;
+}
+
+#nonav-wrapper {
+    padding-top: 50px;
+}
+
+#login-form {
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+/* Bootstrap theme */
+.top-nav {
+    display: none;
+}
+
+@media(min-width:768px) {
+    .top-nav {
+        display: block;
+    }
+    
+    .top-menu {
+        /* Adds important to override default of display */
+        display: none !important;
+    }
+    
+    .datatable-btn {
+        margin-right: 3px;
+    }
+    
+    #nonav-wrapper {
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}
+
+@media(max-width:767px) {
+    .btn {
+        width: 100%;
+    }
+    
+    .datatable-btn {
+        margin-bottom: 3px;
+    }
+    
+    #login-form {
+        border: 0px;
+    }
+}
+
+.dt-custom {
+    float: left;
+}
+
+.dataTables_filter {
+    float: right;
+}
+
+/* jQuery UI dialog overlay */
+.ui-widget-overlay {
+	opacity: .60 !important;
+	filter: Alpha(Opacity=60) !important;
+	background-color: #000000 !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.combinex{
+    max-height: 20px;
+    max-width: 20px;
+}
