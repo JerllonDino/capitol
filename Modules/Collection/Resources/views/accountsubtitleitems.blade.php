@@ -38,9 +38,9 @@
                     var view = '';
                     var write = '';
                     var can_delete = ''; 
-                    @if ( Session::get('permission')['col_settings'] & $base['can_read'] )
-                    view = '<a href="{{ route('account_subtitle_items.index') }}/'+data.id+'" class="btn btn-sm btn-info datatable-btn" title="View"><i class="fa fa-eye"></i></a>';
-                    @endif
+                    // @if ( Session::get('permission')['col_settings'] & $base['can_read'] )
+                    // view = '<a href="{{ route('account_subtitle_items.index') }}/'+data.id+'" class="btn btn-sm btn-info datatable-btn" title="View"><i class="fa fa-eye"></i></a>';
+                    // @endif
 
                     @if ( Session::get('permission')['col_settings'] & $base['can_write'] )
                     write = '<a href="{{ route('account_subtitle_items.index') }}/'+data.id+'/edit" class="btn btn-sm btn-info datatable-btn" title="Edit"><i class="fa fa-pencil-square-o"></i></a>';

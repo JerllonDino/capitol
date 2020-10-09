@@ -71,7 +71,7 @@ return [
             'host' => 'localhost',
             'port' => '3306',
             'database' => 'capitol_rpt',
-            'username' => 'capitol',
+            'username' => 'root',
             'password' => env('DB_PASSWORD2', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
