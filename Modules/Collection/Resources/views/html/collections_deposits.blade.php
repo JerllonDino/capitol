@@ -145,7 +145,7 @@
             @foreach($base['shares'] as $i => $share)
                 <th>{{ $share['name'] }}</th>
                 @foreach($share['barangays'] as $j => $barangay)
-                <th>{{ $barangay['name'] }}</th>
+                <th>{{ isset($barangay['name']) ? $barangay['name'] : '' }}</th>
                 @endforeach
             @endforeach
         </tr>
@@ -521,7 +521,7 @@
         <tr class="page-break">
             <th class="" colspan="13">
                 Accountable Form 51
-                <span class="hidden">
+                <span class="hidden" style="display:none">
                 {{ $beg_total = 0 }}
                 {{ $rec_total = 0 }}
                 {{ $iss_total = 0 }}

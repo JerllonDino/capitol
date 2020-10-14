@@ -19,6 +19,8 @@
         .header-container {
             width: 80%;
             text-align: center;
+            margin-right: auto;
+            margin-left: auto;
         }
         .header {
             width: 95%;
@@ -26,9 +28,10 @@
             font-weight: strong;
         }
         #logo {
-            height: 70px;
-            float: left;
-            margin-left: 100px;
+            height: 80px;
+            position: fixed;
+            top: 0;
+            left: 13%;
         }
         #header-dt {
             float: right;

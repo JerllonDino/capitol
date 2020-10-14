@@ -89,6 +89,7 @@
 @endsection
 
 @section('content')
+    {{-- <img src="{{ asset('asset/images/benguet_capitol.png') }}" alt="Logo"> --}}
     @if ( Session::get('permission')['col_field_land_tax'] & $base['can_write'] )
         <div class="row">
             {{ Form::open(['method'=>'POST', 'route'=>['mncpal.create'], 'id'=>'create_form']) }}

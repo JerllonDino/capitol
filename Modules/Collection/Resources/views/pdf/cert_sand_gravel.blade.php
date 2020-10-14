@@ -19,6 +19,8 @@
         .header-container {
             width: 80%;
             text-align: center;
+            margin-right: auto;
+            margin-left: auto;
         }
         .header {
             width: 95%;
@@ -27,8 +29,9 @@
         }
         #logo {
             height: 80px;
-            float: left;
-            margin-left: 100px;
+            position: fixed;
+            top: 0;
+            left: 13%;
         }
         #header-dt {
             float: right;

@@ -25,16 +25,20 @@
         .header-container {
             width: 80%;
             text-align: center;
+            margin-right: auto;
+            margin-left: auto;
         }
         .header {
             width: 95%;
+            margin-left: 25px;
             display: block;
             font-weight: bold;
         }
         #logo {
             height: 80px;
-            float: left;
-            margin-left: 100px;
+            position: fixed;
+            top: 0;
+            left: 13%;
         }
         #header-dt {
             float: right;
@@ -136,6 +140,7 @@
 <body>
     <div class="header-container">
         {{ Html::image('/asset/images/benguet_capitol.png', "Logo", array('id' => 'logo')) }}
+        {{-- <img src="{{ public_path('/asset/images/benguet_capitol.png') }}" id="logo"> --}}
         <span class="header">Republic of the Philippines</span>
         <span class="header">PROVINCE OF BENGUET</span>
         <span class="header">La Trinidad</span>

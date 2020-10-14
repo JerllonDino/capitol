@@ -255,9 +255,9 @@
             @endforeach
 
             @foreach($shares as $i => $share)
-                <th>{{ $share['name'] }}</th> -->
+                <th>{{ isset($share['name']) ? $share['name'] : '' }}</th> -->
                 @foreach($share['barangays'] as $j => $barangay)
-                    <th>{{ $barangay['name'] }}</th>
+                    <th>{{ isset($barangay['name']) ? $barangay['name'] : '' }}</th>
                 @endforeach
 <!-- adjust share -->
 <!-- adjust share END -->
@@ -399,11 +399,11 @@
 
             @foreach($shares as $i => $share)
                 <td class="val text-right" style="font-size: 10px;">
-                    {{ number_format($share['total_share'], 2) }}
+                    {{ isset($share['total_share']) ? number_format($share['total_share'], 2) : '' }}
                 </td>
                 @foreach($share['barangays'] as $j => $barangay)
                 <td class="val text-right" style="font-size: 10px;">
-                    {{ number_format($barangay['total_share'], 2) }}
+                    {{ isset($barangay['total_share']) ? number_format($barangay['total_share'], 2) : '' }}
                 </td>
                 @endforeach
             @endforeach

@@ -273,10 +273,10 @@
                     </tr>
                     @foreach ($share['barangays'] as $j => $barangay)
                         <tr >
-                            <td><div class="brgy">{{ $barangay['name'] }}</div></td>
+                            <td><div class="brgy">{{ isset($barangay['name']) ? $barangay['name'] : '' }}</div></td>
                             <td class="val text-right">
-                                <?php $total += $barangay['total_share']; ?>
-                                {{ number_format($barangay['total_share'], 2) }}
+                                <?php $total += isset($barangay['total_share']) ? $barangay['total_share'] : 0; ?>
+                                {{ isset($barangay['total_share']) ? number_format($barangay['total_share'], 2) : null }}
                             </td>
                         </tr>
                     @endforeach

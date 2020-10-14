@@ -83,10 +83,10 @@
     </span>
     <table class="center ">
     <tr>
-        <td>
+        <td style="width:30%">
             <img src="{{asset('asset/images/benguet_capitol.png')}}" class="image_logo" />
         </td>
-        <td>
+        <td style="width:70%">
         REPORT OF COLLECTIONS AND DEPOSITS <br />
         <strong>PROVINCIAL GOVERNMENT OF BENGUET</strong><br />
         <strong>OFFICE OF THE PROVINCIAL TREASURER</strong>
