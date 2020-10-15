@@ -899,12 +899,12 @@ function handle_rate(response, shared_acc, element, id, type) {
             '</div>' +
             '<div class="form-group col-sm-4">' +
                 '<label>Multiple</label>' +
-                '<input type="number" min="1" step="1" class="form-control" id="sched_multiple" readonly>' +
+                '<input type="number" min="1" step="1" class="form-control" id="sched_multiple" disabled>' +
                 '<input type="hidden" id="sched_multiple_rate">' +
             '</div>' +
             '<div class="form-group col-sm-4">' +
                 '<label>Unit</label>' +
-                '<input type="text" class="form-control" id="sched_unit" readonly>' +
+                '<input type="text" class="form-control" id="sched_unit" disabled>' +
             '</div>' +
             '<div class="form-group col-sm-1">' +
                 '<label>&nbsp; </label>' +
@@ -925,7 +925,7 @@ function handle_rate(response, shared_acc, element, id, type) {
         element.prev('td').children('button').attr('disabled', false);
         element.prev('td').children('button').trigger('click');
 
-        sched_multiple();
+        // sched_multiple();
     }
 
 }
@@ -1198,7 +1198,7 @@ $(document).on('autocompleteselect', '#sched_type', function(event, ui) {
             }
             $('#addtl_rate').val((value).toFixed(2));
             $('#sched_multiple_rate').val(response[0].value);
-            $('#sched_multiple').attr('readonly', false).val(1);
+            $('#sched_multiple').val(1);
             $('#sched_multiple_two').attr('readonly', false).val(1);
             $('#sched_unit').val(response[0].sched_unit);
 
@@ -1267,18 +1267,18 @@ $(document).on('keyup', '#sched_multiple', function() {
 });
 // END
 
-function sched_multiple(){
+// function sched_multiple(){
 
     // console.log('sched_mult');
 
-    $('#sched_multiple, #sched_multiple_two').keyup(function() {
+    $(document).on('keyup', '#sched_multiple_two', function() {
         compute_sched_total(
             parseFloat($('#sched_multiple_rate').val()),
             parseFloat($('#sched_multiple').val()),
             parseFloat($('#sched_multiple_two').val())
         );
     });
-}
+// }
 
 
 function compute_sched_total(rate, multiple, multiple_two) {
