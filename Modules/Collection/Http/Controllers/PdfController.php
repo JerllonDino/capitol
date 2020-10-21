@@ -4384,12 +4384,13 @@ class PdfController extends Controller
         $this->base['advance_yr'] = $advance_yr;
         $this->base['current'] = $current;
 
-        $report_exist = RptSefAdjustments::where('municipality', $request['municipality'])
+        $report_exist = RptSefAdjustments::where('report_no', '=', $request['report_no'])
+            // ->where('start_date', '=', $date_start)
+            // ->where('end_date', '=', $date_end)
             ->with('report_sef_items')
             ->with('report_basic_items')
-            ->where('start_date', '=', $date_start)
-            ->where('end_date', '=', $date_end)
             ->get();
+
         $this->base['sef_exist'] = $report_exist;
 
         foreach ($receipts as $rcpt_index => $receipt) {
@@ -4440,10 +4441,13 @@ class PdfController extends Controller
         $this->base['class_amt'] = $class_amt;
         $this->base['report_date'] = $report_date;
 
+        // if report number exists
+        if(!$request['isEdit'] && count($report_exist) > 0){
+            return 'Report '. $request['report_no'] .' already Exists!';
+        }
         // empty receipts
         if(count($receipts) == 0)
             return 'No transaction for '. date('F d, Y', strtotime($date_start)) .' to '. date('F d, Y', strtotime($date_end)) .'.';
-
         // process 
 
         $total_basic_current = 0;
@@ -4571,8 +4575,22 @@ class PdfController extends Controller
         $this->base['mun'] = Municipality::find($req->municipality);
 
         if($req['btn_pdf'] == 'button' || $req['btn'] == 'rpt_mun_report_protest') {
-            $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');
-            return $pdf->stream();
+            // $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');
+            // return $pdf->stream();
+            $html = view('collection::pdf.new_rpt_abstract.real_property', $this->base)->render();
+            $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+            /* Note: any element you append to a document must reside inside of a Section. */
+
+            // Adding an empty Section to the document...
+            $section = $phpWord->addSection();
+            // Adding Text element to the Section having font styled by default...
+            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+
+            // Saving the document as OOXML file...
+            $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+            $objWriter->save(storage_path('helloWorld.docx'));
+            return response()->download(storage_path('helloWorld.docx'));
         } else if($req['btn_pdf'] == 'rpt_mun_report_collections' || $req['btn'] == 'rpt_mun_report_protest_col') {
             $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property_collections', $this->base)->setPaper(array(0,0,612,936), 'landscape');
             return $pdf->stream();
@@ -4582,4 +4600,14 @@ class PdfController extends Controller
         }
     }
 
+
+    public function rpt_report_search($report_num)
+    {
+        $report = RptSefAdjustments::where('report_no', '=', $report_num)->get();
+        if(count($report) == 0){
+            return response()->json('Report Not Found', 500);
+        }
+        return $report;
+        
+    }
 }

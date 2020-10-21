@@ -898,21 +898,16 @@ function handle_rate(response, shared_acc, element, id, type) {
                 '<input class="form-control" id="sched_type">' +
             '</div>' +
             '<div class="form-group col-sm-4">' +
-                '<label>Multiple</label>' +
+                '<label>Volume</label>' +
                 '<input type="number" min="1" step="1" class="form-control" id="sched_multiple" disabled>' +
                 '<input type="hidden" id="sched_multiple_rate">' +
             '</div>' +
             '<div class="form-group col-sm-4">' +
-                '<label>Unit</label>' +
+                '<label>Unit Cost</label>' +
                 '<input type="text" class="form-control" id="sched_unit" disabled>' +
             '</div>' +
             '<div class="form-group col-sm-1">' +
                 '<label>&nbsp; </label>' +
-                '<div style="padding-top:5px;">X</div>' +
-            '</div>' +
-            '<div class="form-group col-sm-3">' +
-                '<label>&nbsp; </label>' +
-                '<input type="number" min="1" step="1" class="form-control" id="sched_multiple_two" readonly>' +
             '</div>' +
             '<div class="form-group col-sm-12">' +
                 '<label>Value</label>' +
@@ -1161,7 +1156,8 @@ $(document).on('keyup', '#sched_type', function() {
             scheds_ids = [];
             $.each( response, function(key, sched) {
                 if(sched.col_acct_title_id == '4'){
-                    scheds.push(sched.label+' ( @ '+sched.value+' )');
+                    volume = sched.sched_unit ? '1'+sched.sched_unit : '';
+                    scheds.push(sched.label+' ('+volume+' @ '+sched.value+' )');
                     // scheds.push(sched.label+' (1 @ '+sched.value+' )');
                 }else{
                     scheds.push(sched.label+' ( '+sched.value+' )'); // here
@@ -1193,14 +1189,18 @@ $(document).on('autocompleteselect', '#sched_type', function(event, ui) {
             var value = parseFloat(response[0].value);
 
             if (response[0].sched_is_perunit == 0) {
+                console.log('notunit');
                 $('#addtl_rate').val((value).toFixed(2));
+                $('#sched_multiple').attr('disabled','disabled').val('');
+                $('#sched_unit').val('');
+                $('#sched_unit').data('unit', '');
                 return;
             }
             $('#addtl_rate').val((value).toFixed(2));
             $('#sched_multiple_rate').val(response[0].value);
-            $('#sched_multiple').val(1);
-            $('#sched_multiple_two').attr('readonly', false).val(1);
-            $('#sched_unit').val(response[0].sched_unit);
+            $('#sched_multiple').removeAttr('disabled').val(1);
+            $('#sched_unit').val(response[0].value+''+response[0].sched_unit);
+            $('#sched_unit').data('unit', response[0].sched_unit);
 
 // PROBLEM LOCATED HERE
 // console.log('test response');
@@ -1238,7 +1238,6 @@ $(document).on('keyup', '#sched_type', function() {
         compute_sched_total(
             parseFloat($('#sched_multiple_rate').val()),
             parseFloat($('#sched_multiple').val()),
-            parseFloat($('#sched_multiple_two').val())
         );
     }
 });
@@ -1251,7 +1250,7 @@ $(document).on('keyup', '#sched_multiple', function() {
     if(split_type[1] != undefined && split_type[1] != "" && sched_mult != "") {
         var split_type2 = split_type[1].split("@");   
         if(isNaN($('#sched_unit').val())) {
-            var strval = split_type[0] + "(" + parseFloat(sched_mult) + $('#sched_unit').val() + " @" + split_type2[split_type2.length-1];
+            var strval = split_type[0] + "(" + parseFloat(sched_mult) + $('#sched_unit').data('unit') + " @" + split_type2[split_type2.length-1];
         } else {
             var strval = split_type[0] + "(" + parseFloat(sched_mult) + " @" + split_type2[split_type2.length-1];
         }
@@ -1261,7 +1260,6 @@ $(document).on('keyup', '#sched_multiple', function() {
         compute_sched_total(
             parseFloat($('#sched_multiple_rate').val()),
             parseFloat($('#sched_multiple').val()),
-            parseFloat($('#sched_multiple_two').val())
         );
     }
 });
@@ -1271,18 +1269,17 @@ $(document).on('keyup', '#sched_multiple', function() {
 
     // console.log('sched_mult');
 
-    $(document).on('keyup', '#sched_multiple_two', function() {
+    $(document).on('keyup', '#sched_multiple', function() {
         compute_sched_total(
             parseFloat($('#sched_multiple_rate').val()),
             parseFloat($('#sched_multiple').val()),
-            parseFloat($('#sched_multiple_two').val())
         );
     });
 // }
 
 
-function compute_sched_total(rate, multiple, multiple_two) {
-    var amt = rate * multiple * multiple_two;
+function compute_sched_total(rate, multiple) {
+    var amt = rate * multiple;
     $('#addtl_rate').val((amt).toFixed(2));
 }
 

@@ -63,10 +63,40 @@
             width: 60px;
             font-size: 10px;
         }
+        input{
+            position: relative; 
+            z-index: 10;
+        }
     </style>
 @endsection
 
 @section('content')
+<h3>View/Edit Report</h3>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <select name="report_type" id="report_type" class="form-control">
+            <option value="button">Municipal Report</option>
+            <option value="rpt_mun_report_collections">Municipal Report (Collection)</option>
+            <option value="rpt_mun_report_summary_disposition">Municipal Report (Summary and Disposition)</option>
+            <option value="rpt_mun_report_protest">Municipal Report (Paid under protest/Held in Trust)</option>
+            <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
+            <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
+        </select>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="input-group">
+            <span class="input-group-addon">RPT-</span>
+            <input type="text" class="form-control" id="report_number" placeholder="Please Input Report Number">
+            <span class="input-group-addon btn btn-warning" style="width:5%" id="search-report"><i class="fa fa-search" aria-hidden="true"></i></span>
+        </div>
+        <div class="loading hidden">
+            <i class="fa fa-spinner fa-spin"></i>
+            <span>Searching...</span>
+        </div>
+    </div>
+</div>
+<hr>
+<h3>Generate New Report</h3>
 <div class="row">
     {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property'], 'id' => 'pdf_rpt']) }}
         <div class="form-group col-sm-6">
@@ -80,7 +110,10 @@
         
         <div class="form-group col-sm-2">
             <label for="report_no">Report No.</label>
-            <input type="text" class="form-control" name="report_no" id="report_no" value="{{ date('Y') }}" required>
+            <div class="input-group">
+                <span class="input-group-addon">RPT-</span>
+                <input type="text" class="form-control" name="report_no" id="report_no" value="{{ date('Y') }}" required>
+            </div>
         </div>
 
          <div class="form-group col-sm-4">
@@ -96,6 +129,8 @@
             <label for="end_date">End Date</label>
             <input type="text" class="form-control date" name="end_date" value="{{ date('m/d/Y') }}" required>
         </div>
+
+        <input type="hidden" name="isEdit" class="isEdit" value="0">
 
         <div class="form-group col-sm-12">
           <button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm">Municipal Report</button>
@@ -189,6 +224,7 @@
                         <input type="hidden" name="report_no" id="report_num">
                         <input type="hidden" name="report_date" id="report_date">
                         <input type="hidden" name="btn_pdf" id="btn_pdf">
+                        <input type="hidden" name="isEdit" class="isEdit" value="0">
                     </div>
 
                     <div id="report_content">
@@ -213,28 +249,60 @@
         showAnim:'slide'
     });
 
+    $('#search-report').click(function(){
+        $('#loading-error').remove();
+        $('.isEdit').val(1);
+        console.log($('#pdf_rpt').find('input[name="isEdit"]').val());
+        reportNumber = 'RPT-'+$('#report_number').val();
+        $.ajax({
+            url: '{{ route("pdf.real_property_search", ["report_number" => "reportNumber"]) }}'.replace('reportNumber', reportNumber),
+            method: 'GET',
+            beforeSend: function(){
+                $('.loading').removeClass('hidden');
+            }
+        }).done(function(data){
+            reportType = $('#report_type').val();
+            preparePDF(data[0], reportType);
+        }).fail(function(err){
+            $('.loading').after(`
+            <div class="alert alert-danger" id="loading-error">
+                <strong>`+err.responseJSON+`</strong>
+            </div>
+            `);
+            setTimeout(function(){
+                $('#loading-error').remove();
+            }, 3000);
+        }).always(function(){
+            $('.loading').addClass('hidden');
+        });
+    })
+
     $(document).on('click', '.rpt_report', function(e) {
         e.preventDefault();
-        var form_data = $(pdf_rpt).serializeArray();
-        var municipality = '';
-        var report_no = '';
-        var report_date = '';
-        var start_date = '';
-        var end_date = '';
-        var button_pdf = $(this).attr('name');
-
-        for(var i = 0; i < form_data.length; i++) {
-            if(form_data[i]['name'] == 'municipality')
-                municipality = form_data[i]['value'];
-            if(form_data[i]['name'] == 'report_no')
-                report_no = form_data[i]['value'];
-            if(form_data[i]['name'] == 'report_date')
-                report_date = form_data[i]['value'];
-            if(form_data[i]['name'] == 'start_date')
-                start_date = form_data[i]['value'];
-            if(form_data[i]['name'] == 'end_date')
-                end_date = form_data[i]['value'];
+        $('.isEdit').val(0);
+        arrayData = {
+            'municipality' : $('#pdf_rpt').find('[name="municipality"]').val(),
+            'report_no' : 'RPT-'+$('#pdf_rpt').find('input[name="report_no"]').val(),
+            'report_date' : $('#pdf_rpt').find('input[name="report_date"]').val(),
+            'start_date' : $('#pdf_rpt').find('input[name="start_date"]').val(),
+            'end_date' : $('#pdf_rpt').find('input[name="end_date"]').val(),
         }
+        console.log(arrayData);
+        reportType = $(this).attr('name');
+
+        preparePDF(arrayData, reportType);
+        
+    });
+    function preparePDF(arrayData, reportType){
+        var isEdit = $('.isEdit').val();
+        var municipality = arrayData.municipality;
+        var report_no = arrayData.report_no;
+        var report_date = arrayData.report_date;
+        var start_date = arrayData.start_date;
+        var end_date = arrayData.end_date;
+        var button_pdf = reportType;
+        console.log(isEdit);
+
         $.ajax({
             'url' : '{{ route("rpt.prepare") }}', 
             'data' : {
@@ -243,8 +311,13 @@
                 'report_date' : report_date,
                 'start_date' : start_date,
                 'end_date' : end_date,
-            }, 
+                'isEdit' : isEdit,
+            },
+            error : function(error) {
+                alert(error.responseJSON);
+            },
             success : function(data) {
+                console.log(data);
                 $('#report_content').removeClass('alert alert-danger');
                 $('#report_content').empty();
                 if(typeof(data) == 'object') {
@@ -255,8 +328,6 @@
                     $('#report_num').val(report_no);
                     $('#report_date').val(report_date);
                     $('#btn_pdf').val(button_pdf);
-
-
                     $('#report_content_modal').modal('show');
                     var content = '';
 
@@ -1841,7 +1912,7 @@
             $('#sef_total_basic_net').val(parseFloat(mnc_gross).toFixed(2));
             $('#gtotal_sef').val(parseFloat(gtotal).toFixed(2));
         });
-    });
+    }
 
     $(document).on('click', '#submit_btn', function(e) {
         e.preventDefault();
