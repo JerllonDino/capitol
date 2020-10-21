@@ -3,6 +3,7 @@
 namespace Modules\Collection\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use DOMDocument;
 use Illuminate\Http\{Request,Response};
 use Illuminate\Support\Facades\{Session,Validator};
 use Illuminate\Support\Arr;
@@ -4577,15 +4578,23 @@ class PdfController extends Controller
         if($req['btn_pdf'] == 'button' || $req['btn'] == 'rpt_mun_report_protest') {
             // $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');
             // return $pdf->stream();
-            $html = view('collection::pdf.new_rpt_abstract.real_property', $this->base)->render();
+            $html = view('collection::docx.rpt_test', $this->base)->render();
             $phpWord = new \PhpOffice\PhpWord\PhpWord();
+            $doc= new DOMDocument();
+            $doc->loadHTML($html);
+            
 
             /* Note: any element you append to a document must reside inside of a Section. */
 
             // Adding an empty Section to the document...
-            $section = $phpWord->addSection();
+            $section = $phpWord->addSection([
+                'pageSizeH' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(14),
+                'pageSizeW' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(8.5),
+                'orientation' => 'landscape',
+            ]);
             // Adding Text element to the Section having font styled by default...
-            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+            \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $doc->saveXML(),true);
 
             // Saving the document as OOXML file...
             $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');

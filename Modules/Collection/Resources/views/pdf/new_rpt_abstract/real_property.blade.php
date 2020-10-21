@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
 <head>
     <title>Collections And Deposits</title>
@@ -74,7 +74,7 @@
             <td>RECORD OF REAL PROPERTY TAX COLLECTIONS</td>
         </tr>
         <tr>
-            <td>BASIC & SEF</td>
+            <td>BASIC and SEF</td>
         </tr>
         @if(isset($mun->name))
         <tr>
@@ -177,9 +177,9 @@
                     T<br>
                 </th>
                 <th>{{ $prior_start }}-1992</th>
-                <th>1991 & Below</th>
+                <th>1991 and Below</th>
                 <th>{{ $prior_start }}-1992</th>
-                <th>1991 & Below</th>
+                <th>1991 and Below</th>
 
                 <!-- sef -->
                 <th>Gross Amount</th>
@@ -205,9 +205,9 @@
                     T<br>
                 </th>
                 <th>{{ $prior_start }}-1992</th>
-                <th>1991 & Below</th>
+                <th>1991 and Below</th>
                 <th>{{ $prior_start }}-1992</th>
-                <th>1991 & Below</th>
+                <th>1991 and Below</th>
             </tr>
         </thead>
         <tbody>
@@ -293,11 +293,11 @@
                         $gt_net += ($basic_net*2);
 
                         // prior years
-                        if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992) {
+                        if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered >= 1992) {
                             $total_prior_1992 += $f56_detail->basic_previous;
                             $total_penalty_prior_1992 += $f56_detail->basic_penalty_previous;
                         }
-                        if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991) {
+                        if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered <= 1991) {
                             $total_prior_1991 += $f56_detail->basic_previous;
                             $total_penalty_prior_1991 += $f56_detail->basic_penalty_previous;
                         }
@@ -395,14 +395,14 @@
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered >= 1992)
                                     {{ number_format($f56_detail->basic_previous, 2) }}
                                 @else
                                     0.00
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered <= 1991)
                                     {{ number_format($f56_detail->basic_previous, 2) }}
                                 @else
                                     0.00
@@ -417,14 +417,14 @@
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered >= 1992)
                                     {{ number_format($f56_detail->basic_penalty_previous, 2) }}
                                 @else
                                     0.00
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered <= 1991)
                                     {{ number_format($f56_detail->basic_penalty_previous, 2) }}
                                 @else
                                     0.00
@@ -470,14 +470,14 @@
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered >= 1992)
                                     {{ number_format($f56_detail->basic_previous, 2) }}
                                 @else
                                     0.00
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered <= 1991)
                                     {{ number_format($f56_detail->basic_previous, 2) }}
                                 @else
                                     0.00
@@ -492,14 +492,14 @@
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered >= 1992)
                                     {{ number_format($f56_detail->basic_penalty_previous, 2) }}
                                 @else
                                     0.00
                                 @endif
                             </td>
                             <td>
-                                @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
+                                @if($f56_detail->period_covered <= $prior_start and $f56_detail->period_covered <= 1991)
                                     {{ number_format($f56_detail->basic_penalty_previous, 2) }}
                                 @else
                                     0.00
@@ -711,7 +711,7 @@
         </tr>
 
         <tr>
-            <th colspan="35">&nbsp;</th>
+            <th colspan="35">andnbsp;</th>
         </tr>
 
     </table>
@@ -727,7 +727,7 @@
                 <th colspan="5" class="border_all ctr">CURRENT</th>
                 <th colspan="3" class="border_all ctr">{{ $preceeding }}</th>
                 <th colspan="3" class="border_all ctr">{{ $prior_start }}-1992</th>
-                <th colspan="3" class="border_all ctr">1991 & below</th>
+                <th colspan="3" class="border_all ctr">1991 and below</th>
                 <th colspan="10" class="border_all ctr">PENALTIES</th>
                 <th colspan="2" rowspan="2" class="border_all ctr">TOTAL</th>
             </tr>           
@@ -756,7 +756,7 @@
                 <th colspan="3" class="border_all ctr">CURRENT</th>
                 <th colspan="2" class="border_all ctr">{{ $preceeding }}</th>
                 <th colspan="2" class="border_all ctr">{{ $prior_start }}-1992</th>
-                <th colspan="2" class="border_all ctr">1991 & below</th>
+                <th colspan="2" class="border_all ctr">1991 and below</th>
             </tr>
 
             <tr>
@@ -983,7 +983,7 @@
                 // // $sef_prv_penalty = $total_basic_penalty_current * .5;
                 // // $sef_prev_prv_penalty = $total_basic_penalty_previous * .5;          
 
-                // if($total_basic_discount > 0 && $total_adv_discount > 0) {
+                // if($total_basic_discount > 0 and $total_adv_discount > 0) {
                 //     $sef_prv_discount = $total_basic_discount * .5; 
                 //     $sef_mncpl_dscnt = round(floatval($total_basic_discount), 2) - round(floatval($sef_prv_discount), 2);
                 // } else {
@@ -996,7 +996,7 @@
                 // // $sef_mncpl_pen_crnt = round(floatval($total_basic_penalty_current), 2) - round(floatval($sef_prv_penalty), 2); // less
                 // // $sef_mncpl_pen_crnt_prev = round(floatval($total_basic_penalty_previous), 2) - round(floatval($sef_prev_prv_penalty), 2); // less  
 
-                // if($total_basic_penalty_current > 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 <= 0 && $total_penalty_prior_1991 <= 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
+                // if($total_basic_penalty_current > 0 and $total_basic_penalty_previous <= 0 and $total_penalty_prior_1992 <= 0 and $total_penalty_prior_1991 <= 0 and ($total_basic_discount > 0 || $total_adv_discount > 0)) {
                 //     $sef_mncpl_pen_crnt = $total_basic_penalty_current * .5;
                 //     $sef_prv_penalty = round(floatval($total_basic_penalty_current), 2) - round(floatval($sef_mncpl_pen_crnt), 2); // less
                 // } else {
@@ -1004,7 +1004,7 @@
                 //     $sef_mncpl_pen_crnt = round(floatval($total_basic_penalty_current), 2) - round(floatval($sef_prv_penalty), 2); // less
                 // }
 
-                // if($total_basic_penalty_current > 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 <= 0 && $total_penalty_prior_1991 <= 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
+                // if($total_basic_penalty_current > 0 and $total_basic_penalty_previous <= 0 and $total_penalty_prior_1992 <= 0 and $total_penalty_prior_1991 <= 0 and ($total_basic_discount > 0 || $total_adv_discount > 0)) {
                 //     $sef_mncpl_pen_crnt_prev = $total_basic_penalty_previous * .5; 
                 //     $sef_prev_prv_penalty = round(floatval($total_basic_penalty_previous), 2) - round(floatval($sef_mncpl_pen_crnt_prev), 2); // less 
                 // } else {
@@ -1024,7 +1024,7 @@
                 // $sef_prv_adv_amt = $total_adv * .50;
                 // $sef_mnc_adv_amt = round(floatval($total_adv), 2) - round(floatval($sef_prv_adv_amt), 2);
                 // $sef_total_adv_amt = round(floatval($sef_prv_adv_amt), 2) + round(floatval($sef_mnc_adv_amt), 2);
-                // if($total_basic_discount > 0 && $total_adv_discount > 0) {
+                // if($total_basic_discount > 0 and $total_adv_discount > 0) {
                 //     $sef_prv_adv_discount = $total_adv_discount * .50;
                 //     $sef_mnc_adv_discount = round(floatval($total_adv_discount), 2) - round(floatval($sef_prv_adv_discount), 2); // lesser
                 // } else {
@@ -1039,7 +1039,7 @@
                 // $sef_mnc_prior_1992_amt = round(floatval($total_prior_1992), 2) - round(floatval($sef_prv_prior_1992_amt), 2);
                 // // $sef_prv_prior_1992_penalties = $total_penalty_prior_1992 * .50;
                 // // $sef_mnc_prior_1992_penalties = round(floatval($total_penalty_prior_1992), 2) - round(floatval($sef_prv_prior_1992_penalties), 2);
-                // if($total_basic_penalty_current <= 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 > 0 && $total_penalty_prior_1991 <= 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
+                // if($total_basic_penalty_current <= 0 and $total_basic_penalty_previous <= 0 and $total_penalty_prior_1992 > 0 and $total_penalty_prior_1991 <= 0 and ($total_basic_discount > 0 || $total_adv_discount > 0)) {
                 //     $sef_mnc_prior_1992_penalties = $total_penalty_prior_1992 * .50;
                 //     $sef_prv_prior_1992_penalties = round(floatval($total_penalty_prior_1992), 2) - round(floatval($sef_mnc_prior_1992_penalties), 2);
                 // } else {
@@ -1054,7 +1054,7 @@
                 // $sef_mnc_prior_1991_amt = round(floatval($total_prior_1991), 2) - round(floatval($sef_prv_prior_1991_amt), 2);
                 // // $sef_prv_prior_1991_penalties = $total_penalty_prior_1991 * .50;
                 // // $sef_mnc_prior_1991_penalties = round(floatval($total_penalty_prior_1991), 2) - round(floatval($sef_prv_prior_1991_penalties), 2);
-                // if($total_basic_penalty_current <= 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 <= 0 && $total_penalty_prior_1991 > 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
+                // if($total_basic_penalty_current <= 0 and $total_basic_penalty_previous <= 0 and $total_penalty_prior_1992 <= 0 and $total_penalty_prior_1991 > 0 and ($total_basic_discount > 0 || $total_adv_discount > 0)) {
                 //     $sef_mnc_prior_1991_penalties = $total_penalty_prior_1991 * .50;
                 //     $sef_prv_prior_1991_penalties = round(floatval($total_penalty_prior_1991), 2) - round(floatval($sef_mnc_prior_1991_penalties), 2);
                 // } else {
