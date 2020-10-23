@@ -207,14 +207,13 @@ $.fn.bms_showTDRPclear = function(){
 
 $.fn.bms_showTDRP = function(){
     $.ajax({
-            url: 'http://192.168.2.11/capitol_rpt/public/api/bms_get_tax_dec_info',
+            url: 'http://localhost/capitol_rpt/public/api/bms_get_tax_dec_info',
             type: 'POST',
             data:{
               'tax_dec' : $('#tax_dec_no_bms').val()
             },
             dataType: 'html',
             success: (data) => {
-                console.log(data);
                 $('#tdrp_tax_dec').html(data);
 
             }

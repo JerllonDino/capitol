@@ -4385,9 +4385,10 @@ class PdfController extends Controller
         $this->base['advance_yr'] = $advance_yr;
         $this->base['current'] = $current;
 
-        $report_exist = RptSefAdjustments::where('report_no', '=', $request['report_no'])
-            // ->where('start_date', '=', $date_start)
-            // ->where('end_date', '=', $date_end)
+        $report_exist = RptSefAdjustments::where('municipality', $request['municipality'])
+            ->where('start_date', '=', $date_start)
+            ->where('end_date', '=', $date_end)
+            // ->where('report_no', '=', $request['report_no'])
             ->with('report_sef_items')
             ->with('report_basic_items')
             ->get();
@@ -4442,10 +4443,6 @@ class PdfController extends Controller
         $this->base['class_amt'] = $class_amt;
         $this->base['report_date'] = $report_date;
 
-        // if report number exists
-        if(!$request['isEdit'] && count($report_exist) > 0){
-            return 'Report '. $request['report_no'] .' already Exists!';
-        }
         // empty receipts
         if(count($receipts) == 0)
             return 'No transaction for '. date('F d, Y', strtotime($date_start)) .' to '. date('F d, Y', strtotime($date_end)) .'.';
@@ -4486,15 +4483,15 @@ class PdfController extends Controller
     public function rpt_report_submit(Request $req) {
         $request = new Request($req->all()); 
         $data = $this->rpr_report_edit($request);
-
+        
         $insert = RptSefAdjustments::updateOrCreate(
             [
-                'municipality' => $req->municipality,
-                'start_date' => Carbon::parse($req->start_date)->format('Y-m-d'),
-                'end_date' => Carbon::parse($req->end_date)->format('Y-m-d')
+                'report_no' => $req->report_no,
+                'municipality' => $req->municipality
             ],
             [
-                'report_no' => $req->report_no,
+                'start_date' => Carbon::parse($req->start_date)->format('Y-m-d'),
+                'end_date' => Carbon::parse($req->end_date)->format('Y-m-d'),
                 'report_date' => Carbon::parse($req->report_date)->format('Y-m-d')
             ]
         );
@@ -4576,30 +4573,26 @@ class PdfController extends Controller
         $this->base['mun'] = Municipality::find($req->municipality);
 
         if($req['btn_pdf'] == 'button' || $req['btn'] == 'rpt_mun_report_protest') {
-            // $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');
-            // return $pdf->stream();
-            $html = view('collection::docx.rpt_test', $this->base)->render();
-            $phpWord = new \PhpOffice\PhpWord\PhpWord();
-            $doc= new DOMDocument();
-            $doc->loadHTML($html);
+            $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');
+            return $pdf->stream();
+            // $html = view('collection::docx.rpt_test', $this->base)->render();
+            // $phpWord = new \PhpOffice\PhpWord\PhpWord();
+            // $doc= new DOMDocument();
+            // $doc->loadHTML($html);
+
+            // $section = $phpWord->addSection([
+            //     'pageSizeH' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(14),
+            //     'pageSizeW' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(8.5),
+            //     'orientation' => 'landscape',
+            // ]);
             
+            // \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+            // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $doc->saveXML(),true);
 
-            /* Note: any element you append to a document must reside inside of a Section. */
-
-            // Adding an empty Section to the document...
-            $section = $phpWord->addSection([
-                'pageSizeH' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(14),
-                'pageSizeW' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(8.5),
-                'orientation' => 'landscape',
-            ]);
-            // Adding Text element to the Section having font styled by default...
-            \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
-            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $doc->saveXML(),true);
-
-            // Saving the document as OOXML file...
-            $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-            $objWriter->save(storage_path('helloWorld.docx'));
-            return response()->download(storage_path('helloWorld.docx'));
+            // // Saving the document as OOXML file...
+            // $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+            // $objWriter->save(storage_path($req->report_no.'.docx'));
+            // return response()->download(storage_path($req->report_no.'.docx'));
         } else if($req['btn_pdf'] == 'rpt_mun_report_collections' || $req['btn'] == 'rpt_mun_report_protest_col') {
             $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property_collections', $this->base)->setPaper(array(0,0,612,936), 'landscape');
             return $pdf->stream();
@@ -4610,9 +4603,11 @@ class PdfController extends Controller
     }
 
 
-    public function rpt_report_search($report_num)
+    public function rpt_report_search($report_num, $municipality)
     {
-        $report = RptSefAdjustments::where('report_no', '=', $report_num)->get();
+        $report = RptSefAdjustments::where('report_no', '=', $report_num)
+            ->where('municipality', '=', $municipality)
+            ->get();
         if(count($report) == 0){
             return response()->json('Report Not Found', 500);
         }

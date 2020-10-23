@@ -99,7 +99,7 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/pdf/provincial_income/', 'PdfController@provincial_income_new2')->name('pdf.provincial_income'); // Sept 2020 revision
     Route::get('/pdf/collections_deposits/', 'PdfController@collections_deposits')->name('pdf.collections_deposits');
     Route::get('/pdf/real_property/', 'PdfController@real_property')->name('pdf.real_property');
-    Route::get('/pdf/real_property/search/{report_num}', 'PdfController@rpt_report_search')->name('pdf.real_property_search');
+    Route::get('/pdf/real_property/search/{report_num}/{municipality}', 'PdfController@rpt_report_search')->name('pdf.real_property_search');
     Route::get('/pdf/real_property_consolidated/', 'PdfController@real_property_consolidated')->name('pdf.real_property_consolidated');
     Route::get('/pdf/real_property_p2/', 'PdfController@real_property_p2')->name('pdf.real_property_p2');
     Route::get('/pdf/land_tax_collection/{nsign}/{id}', 'Form56Controller@print_receipt')->name('pdf.land_tax_collection');

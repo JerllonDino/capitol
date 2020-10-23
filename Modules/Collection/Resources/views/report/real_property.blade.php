@@ -74,16 +74,28 @@
 <h3>View/Edit Report</h3>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12">
-        <select name="report_type" id="report_type" class="form-control">
-            <option value="button">Municipal Report</option>
-            <option value="rpt_mun_report_collections">Municipal Report (Collection)</option>
-            <option value="rpt_mun_report_summary_disposition">Municipal Report (Summary and Disposition)</option>
-            <option value="rpt_mun_report_protest">Municipal Report (Paid under protest/Held in Trust)</option>
-            <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
-            <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
-        </select>
+        <div class="form-group col-sm-6">
+            <label for="municipality">Municipality</label>
+            <select class="form-control" name="search_municipality" id="search_municipality" required>
+                @foreach ($base['municipalities'] as $mun)
+                <option value="{{ $mun->id }}">{{ $mun->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="report_type">Report Type</label>
+            <select name="report_type" id="report_type" class="form-control">
+                <option value="button">Municipal Report</option>
+                <option value="rpt_mun_report_collections">Municipal Report (Collection)</option>
+                <option value="rpt_mun_report_summary_disposition">Municipal Report (Summary and Disposition)</option>
+                <option value="rpt_mun_report_protest">Municipal Report (Paid under protest/Held in Trust)</option>
+                <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
+                <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
+            </select>
+    </div>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12">
+        <label for="report_number">Report Number</label>
         <div class="input-group">
             <span class="input-group-addon">RPT-</span>
             <input type="text" class="form-control" id="report_number" placeholder="Please Input Report Number">
@@ -112,7 +124,7 @@
             <label for="report_no">Report No.</label>
             <div class="input-group">
                 <span class="input-group-addon">RPT-</span>
-                <input type="text" class="form-control" name="report_no" id="report_no" value="{{ date('Y') }}" required>
+                <input type="text" class="form-control" name="report_no" id="report_no" value="{{ $base['report_number'] }}" required>
             </div>
         </div>
 
@@ -252,17 +264,17 @@
     $('#search-report').click(function(){
         $('#loading-error').remove();
         $('.isEdit').val(1);
-        console.log($('#pdf_rpt').find('input[name="isEdit"]').val());
         reportNumber = 'RPT-'+$('#report_number').val();
+        municipal = $('#search_municipality').val();
+        reportType = $('#report_type').val();
         $.ajax({
-            url: '{{ route("pdf.real_property_search", ["report_number" => "reportNumber"]) }}'.replace('reportNumber', reportNumber),
+            url: '{{ route("pdf.real_property_search", ["report_num" => "reportNumber", "municipality" => "mun_id"]) }}'.replace('reportNumber', reportNumber).replace('mun_id', municipal),
             method: 'GET',
             beforeSend: function(){
                 $('.loading').removeClass('hidden');
             }
         }).done(function(data){
-            reportType = $('#report_type').val();
-            preparePDF(data[0], reportType);
+            preparePDF(data[0], reportType, municipal);
         }).fail(function(err){
             $('.loading').after(`
             <div class="alert alert-danger" id="loading-error">
@@ -290,18 +302,15 @@
         console.log(arrayData);
         reportType = $(this).attr('name');
 
-        preparePDF(arrayData, reportType);
+        preparePDF(arrayData, reportType, arrayData.municipality);
         
     });
-    function preparePDF(arrayData, reportType){
+    function preparePDF(arrayData, button_pdf, municipality){
         var isEdit = $('.isEdit').val();
-        var municipality = arrayData.municipality;
         var report_no = arrayData.report_no;
         var report_date = arrayData.report_date;
         var start_date = arrayData.start_date;
         var end_date = arrayData.end_date;
-        var button_pdf = reportType;
-        console.log(isEdit);
 
         $.ajax({
             'url' : '{{ route("rpt.prepare") }}', 

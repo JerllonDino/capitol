@@ -1,4 +1,65 @@
-<table class="center">
+<style>
+    @page { margin: 0px; }
+    body {
+        margin-bottom: 8px;
+        margin-top: 2cm;
+        margin-left: 18px;
+        margin-right: 18px;
+
+        font-family: arial, "sans-serif";
+        font-size: 8;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8px;
+    }
+    table, td {
+        padding: 1px;
+    }
+    .border_all_table {
+        margin: 1px;
+        padding-top: 5px;
+    }
+    .border_all {
+        border: 1px solid #000000;
+        font-size: 10px;
+    }
+    .border_all_table tr th, .border_all_table tr td  {
+        border: 1px solid #000000;
+        /*font-size: 8px;*/ /* 10px */
+        text-align: center;
+    }
+    .val {
+        text-align: right;
+    }
+    .hidden {
+        display: none;
+    }
+    .min_width {
+        width: 1px;
+    }
+    .underline {
+        border-bottom: 1px solid #000000;
+    }
+    .ctr {
+        text-align: center;
+    }
+    .remdep {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .newpage {
+        page-break-before: always;
+    }
+    .table-center {
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+<table style="width: 100%; text-align: center;border-collapse: collapse;font-size: 8px;">
     <tr>
         <td>RECORD OF REAL PROPERTY TAX COLLECTIONS</td>
     </tr>
@@ -15,7 +76,7 @@
     </tr>
 </table>
 
-<table>
+<table style="width: 100%;border-collapse: collapse;font-size: 8px;">
     <tr>
         <td width="50%">Name of Accountable Officer: ISABEL D. KIW-AN - Local Recenue Collection Officer IV</td>
         <td width="35%"></td>
@@ -32,7 +93,7 @@
     </tr>
 </table>
 
-<table class="border_all_table">
+<table class="border_all_table" style="width: 100%;border-collapse: collapse;font-size: 8px;">
     <thead>
         <tr>
             <th rowspan="4">Date</th>
@@ -475,7 +536,7 @@
     </tbody>
 </table>
 
-<table class="table">
+<table class="table" style="width: 100%;border-collapse: collapse;font-size: 8px;">
     <tr>
         <th colspan="4"></th>
         <td><b>Summary</b></td>
@@ -640,7 +701,7 @@
 </table>
 
 <div>
-    <table class="table dis-pgbreak">
+    <table class="table dis-pgbreak" style="width: 100%;border-collapse: collapse;font-size: 8px;">
         <!-- DISPOSITION SECTION -->
         <tr>
             <th colspan="4"></th>

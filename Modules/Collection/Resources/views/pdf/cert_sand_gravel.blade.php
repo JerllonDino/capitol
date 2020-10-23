@@ -282,10 +282,10 @@
     <table id="detail" style="margin: 80px 0 0;">
         <tr id="detail-head">
             <th width="40%"></th>
-            <th>Sand and Gravel Processed <br /><span class="small-font">(in CU.M)</span></th>
-            <th>Aggregate Base Course/SBBC <br /><span class="small-font">(in CU.M)</span></th>
-            <th>River Gravel/Sand <br /><span class="small-font">(in CU.M)</span></th>
-            <th>Boulders <br /><span class="small-font">(in CU.M)</span></th>
+            <th style="text-align:right">Sand and Gravel Processed <br /><span class="small-font">(in CU.M)</span></th>
+            <th style="text-align:right">Aggregate Base Course/SBBC <br /><span class="small-font">(in CU.M)</span></th>
+            <th style="text-align:right">River Gravel/Sand <br /><span class="small-font">(in CU.M)</span></th>
+            <th style="text-align:right">Boulders <br /><span class="small-font">(in CU.M)</span></th>
         </tr>
         <tr>
             <td>Total Volume as per Approved Agency Estimate</td>

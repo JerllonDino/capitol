@@ -1032,7 +1032,9 @@ class Form56Controller extends Controller
             ->setPaper($customPaper,'landscape');
         // $pdf = PDF::loadView('collection::form56/print_receipt3_03092020_bak',$this->base)
         //     ->setPaper($customPaper,'landscape');
-        return @$pdf->stream();
+        dd($this->base);
+        // return @$pdf->stream();
+        // return view('collection::form56/print_receipt3',$this->base);
     }
 
     public function tax_breakdown($f56, $date_processed){

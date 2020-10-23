@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{DB,Session};
 use Modules\Collection\Entities\{
         AllowedMonths,AccountTitle,AccountCategory,AccountSubtitle,CashDivision,CashDivisionItems,Barangay,BudgetEstimate,
         F56Type,F56Detail,Municipality,Receipt,ReceiptItems,Serial,TransactionType,RcptCertificate,RcptCertificateType,ReportOfficers,
-        MonthlyProvincialIncome,OtherFeesCharges,SandGravelTypes,Customer,ReportOfficerNew
+        MonthlyProvincialIncome,OtherFeesCharges,SandGravelTypes,Customer,ReportOfficerNew,RptSefAdjustments
     };
 
 use Excel,PDF,Carbon\Carbon;
@@ -69,12 +69,27 @@ class ReportController extends Controller
         $this->base['municipalities'] = Municipality::orderBy('name', 'ASC')->get();
         $this->base['page_title'] = 'Real Property Tax Collections';
         $this->base['months'] = array();
+        $latestReport = RptSefAdjustments::latest('id')->first();
+        $reportNumber = explode('-', $latestReport->report_no);
+        $reportIndex = (int)$reportNumber[1] == date('Y') ? (int)$reportNumber[2] + 1 : 0;
+        $digit = strlen((string)$reportIndex);
+        switch ($digit) {
+            case '1':
+                $reportIndex = '00'.$reportIndex;
+                break;
+            case '2':
+                $reportIndex = '0'.$reportIndex;
+                break;                    
+            default:
+                # code...
+                break;
+        }
+        $this->base['report_number'] = date('Y') .'-'. $reportIndex;
         for ($month = 1; $month <= 12; $month++) {
             $this->base['months'][$month] = date('F', mktime(0,0,0,$month));
         }
         return view('collection::report.real_property')->with('base', $this->base);
     }
-
 
     public function sandgravel_report_municpality(){
         $this->base['page_title'] = 'SAND and GRAVEL Monthly Report';

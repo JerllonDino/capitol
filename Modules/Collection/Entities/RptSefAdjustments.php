@@ -13,7 +13,7 @@ class RptSefAdjustments extends Model
     	'report_no',
     	'report_date',
     	'created_at',
-    	'updated_at'
+        'updated_at'
     ];
     protected $table = 'col_rpt_sef_adjustments';
 
