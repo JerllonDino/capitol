@@ -121,6 +121,7 @@ class Form56Controller extends Controller
         $this->base['receipt_id'] = $id;
 
         $f56_detail = F56Detail::where('col_receipt_id', $id)->first();
+        // dd($f56_detail);
         $f56_tdarp = F56TDARP::where('col_f56_detail_id', $f56_detail->id)->first();
         $this->base['receipt_tdarp'] = $f56_tdarp;
 
@@ -144,7 +145,7 @@ class Form56Controller extends Controller
                     }
                 }
         }
-
+        // dd($this->base);
         $this->base['cert_paid']  =  $latest_year;
         $this->base['barangay'] = Barangay::where('municipality_id','=',$this->base['receipt']->col_municipality_id)->get();
 
@@ -743,8 +744,8 @@ class Form56Controller extends Controller
                                         if($year == Carbon::now()->format('Y')) {
                                             $year_lumped[$arp][$keys[$i]]['assess_val'] += $val['assess_val'];
                                             // $year_lumped[$arp][$keys[$i]]['penalty'] += (($val['assess_val']*.01)/4) * ($penalty_percent/100); // basic/sef
-                                            $year_lumped[$arp][$keys[$i]]['penalty'] += $val['penalty'];
-                                            $year_lumped[$arp][$keys[$i]]['discount'] += $val['discount'];
+                                            $year_lumped[$arp][$keys[$i]]['penalty'] += isset($val['penalty']) ? $val['penalty'] : 0;
+                                            $year_lumped[$arp][$keys[$i]]['discount'] += isset($val['discount']) ? $val['discount'] : 0;
                                             $year_lumped[$arp][$keys[$i]]['sef'] += $annual_per_arp['yearly'][$arp][$keys[$i]]['sef'];
                                         } else {                             
                                             // $year_lumped[$arp][$keys[$i]]['assess_val'] += $data[$keys[$i]]['assess_val'];
@@ -1032,9 +1033,9 @@ class Form56Controller extends Controller
             ->setPaper($customPaper,'landscape');
         // $pdf = PDF::loadView('collection::form56/print_receipt3_03092020_bak',$this->base)
         //     ->setPaper($customPaper,'landscape');
-        dd($this->base);
+        // dd($this->base);
         // return @$pdf->stream();
-        // return view('collection::form56/print_receipt3',$this->base);
+        return view('collection::form56/print_receipt3',$this->base);
     }
 
     public function tax_breakdown($f56, $date_processed){

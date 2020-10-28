@@ -175,7 +175,7 @@
                             $first = reset($period_covered);
                             $last = end($period_covered);
 
-                            $p_calendar_year = $first.' -'.$last; 
+                            $p_calendar_year = $first.' -'.$last;
                             if($first == $last){
                                 $p_calendar_year = $first;
                             }
@@ -336,10 +336,18 @@
                         <!-- width: 1.2cm; -->
                         <td class="border-hidden text-left vertical-top" style="background: ##ef6585; padding-left: -15px;">
                             @if(!is_null($val['brgy']))
-                                {{ $val['brgy']->name }} <br> {{$val['tax_type']}}
-                            @else
-                                {{$val['tax_type']}}
+                                {{ $val['brgy']->name }}
                             @endif
+                            <br><br>
+                            @php
+                                $data_array = [];   
+                            @endphp
+                            @foreach ($dataa as $data)
+                                @if (!in_array($data['tax_type'], $data_array))
+                                    <br>
+                                    {{ $data_array[] = $data['tax_type'] }}
+                                @endif
+                            @endforeach
                         </td>
 
                         <!-- width: 1cm; -->
@@ -665,6 +673,8 @@
                                     @endif
                                 @endif
                             @endforeach
+
+                            {{-- TAX DUE AND TYPE --}}
                             <td class="border-hidden text-left vertical-top" style="width: 3cm; background: ##a276c4; position: relative; padding-left: 25px;">
                                 <div style="margin: 0; padding: 0; text-align: right;"> 
                                     @foreach($annual_arp as $this_arp => $data)
@@ -1235,8 +1245,8 @@
                                     @endif
                                 @endforeach
                             </td>
-
-                            <td class="border-hidden text-right vertical-top" style="width: 1.1cm; background: ##e8aa4e; padding-right: 6px;">
+                            {{-- FULL PAYMENT --}}
+                            <td class="border-hidden vertical-top" style="width: 100%; background: ##e8aa4e; padding-right: 6px;">
                                 @foreach($annual_arp as $this_arp => $data)
                                     <?php 
                                         $array_keys = array_keys($annual_arp);
@@ -1474,7 +1484,8 @@
                                                                     }
                                                                 }
                                                             }
-                                                        ?>     
+                                                        ?>  
+                                                           
                                                         @if($val['to'] == $entry_year_adv)   
                                                             <!-- previous -->
                                                             @if($year < $entry_year-1)
@@ -1487,7 +1498,23 @@
                                                             <!-- advance -->
                                                             {{ number_format($annual_per_arp['yearly'][$this_arp][$entry_year_adv]['sef'], 2) }}<br>
                                                             {{ number_format($annual_per_arp['yearly'][$this_arp][$entry_year_adv]['sef'], 2) }}<br>
-                                                        @else       
+                                                        @else  
+                                                            @php
+                                                                $display = [];   
+                                                            @endphp
+                                                            @foreach ($annual_per_arp['yearly'][$this_arp] as $key => $detail)
+                                                                    @php
+                                                                        $display[$detail['full_partial']][] = $detail;
+                                                                    @endphp
+                                                            @endforeach
+                                                            {{ dd($display) }}
+                                                            {{-- @foreach ($display as $item)
+                                                                    @foreach ($item as $it)
+                                                                        @foreach ($it as $i)
+                                                                            {{$i['sef']}}
+                                                                        @endforeach
+                                                                    @endforeach
+                                                            @endforeach --}}
                                                             {{ number_format($compute, 2) }}<br>
                                                             {{ number_format($compute, 2) }}<br>
                                                         @endif
@@ -1509,7 +1536,7 @@
                                     @endif
                                 @endforeach
                             </td>
-
+                            {{-- PENALTY OR DISCOUNT --}}
                             <td class="border-hidden text-right vertical-top" style="width: 1cm; background: ##e56b60; padding-right: -15px;">
                                 @foreach($annual_arp as $this_arp => $data)
                                     <?php 
@@ -1834,7 +1861,7 @@
                                                                 <?php
                                                                     $compute1 = round(floatval($val['penalty']), 2) - round(floatval($annual_per_arp['yearly'][$this_arp][$val['to']-1]['penalty']), 2);
                                                                 ?>
-                                                                <-- previous -->
+                                                                <!-- previous -->
                                                                 @if($year < $entry_year-1)
                                                                 {{ number_format($compute1, 2) }}<br>
                                                                 {{ number_format($compute1, 2) }}<br>
@@ -1915,7 +1942,7 @@
                                     @endif
                                 @endforeach
                             </td>
-
+                            {{-- TOTAL --}}
                             <td class="border-hidden text-right vertical-top" style="width: 2.1cm; background: ##7fe83e; padding-left: 10px;">
                                 @foreach($annual_arp as $this_arp => $data)
                                     <?php 
@@ -2679,10 +2706,10 @@
                                                                         $limit_total += ($compute1*2) + ($compute2*2);
                                                                     ?>
                                                                     <!-- previous -->
-                                                                    {{-- @if($val['to'] <= $entry_year-1) --}}
+                                                                    @if($val['to'] <= $entry_year-1)
                                                                     {{ number_format($compute1, 2) }}<br>
                                                                     {{ number_format($compute1, 2) }}<br>
-                                                                    {{-- @endif --}}
+                                                                    @endif
 
                                                                     <!-- current -->
                                                                     {{ number_format($compute2, 2) }}<br>
@@ -2747,7 +2774,8 @@
                                                                 <?php
                                                                     // $compute3 = round(floatval($annual_per_arp['yearly'][$this_arp][$val['to']]['sef']), 2) - round(floatval($annual_per_arp['yearly'][$this_arp][$val['to']]['discount']), 2);
                                                                     $compute3 = round(floatval($total_adv_sef), 2) - round(floatval($total_adv_discount), 2);
-                                                                    $limit_total += number_format($compute3, 2)*2;
+                                                                    $limit_total += (float)$compute3*2;
+
                                                                 ?>
                                                                 {{ number_format($compute3, 2) }}<br>
                                                                 {{ number_format($compute3, 2) }}<br>
@@ -2806,7 +2834,7 @@
                                                                             // $limit_total += ($annual_arp[$this_arp][$year]['assess_val']*.01)*2;
                                                                             $limit_total += ($annual_per_arp['yearly'][$this_arp][$year]['sef'])*2;
                                                                         ?>
-                                                                        {{ number_format($annual_per_arp['yearly'][$this_arp][$year]['sef'], 2) }}<br>s
+                                                                        {{ number_format($annual_per_arp['yearly'][$this_arp][$year]['sef'], 2) }}<br>
                                                                         {{ number_format($annual_per_arp['yearly'][$this_arp][$year]['sef'], 2) }}<br>
                                                                     @endif
                                                                 @endif
@@ -2981,6 +3009,7 @@
                     </tr>
                 </table>
         {{-- @endif --}}
+        @break
         @endforeach
 
         <!-- PAGE BREAK -->
