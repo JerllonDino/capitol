@@ -1063,7 +1063,7 @@
                                 var brgy_adv_discount = parseFloat(parseFloat(total_adv_discount).toFixed(2)) - parseFloat(parseFloat(prv_adv_discount).toFixed(2)) - parseFloat(parseFloat(mnc_adv_discount).toFixed(2));
                                 var total_adv_amt = parseFloat(parseFloat(prv_adv_ammount).toFixed(2)) + parseFloat(parseFloat(mnc_adv_ammount).toFixed(2)) + parseFloat(parseFloat(brgy_adv_ammount).toFixed(2));
                                 var total_adv_discount = parseFloat(parseFloat(prv_adv_discount).toFixed(2)) + parseFloat(parseFloat(mnc_adv_discount).toFixed(2)) + parseFloat(parseFloat(brgy_adv_discount).toFixed(2));
-
+                                
                                 // 1992-above
                                 var prv_prior_1992_amt = parseFloat(total_prior_1992) * .35;
                                 var prv_prior_1992_penalties = parseFloat(total_penalty_prior_1992) * .35;
@@ -1200,126 +1200,126 @@
                         var prv_adv_discount = parseFloat(total_adv_discount) * .35;
                         var mnc_adv_ammount = parseFloat(total_adv) * .40;
                         var mnc_adv_discount = parseFloat(total_adv_discount) * .40;
-                        var brgy_adv_ammount = parseFloat(parseFloat(total_adv).toFixed(2)) - parseFloat(parseFloat(prv_adv_ammount).toFixed(2)) - parseFloat(parseFloat(mnc_adv_ammount).toFixed(2));
-                        var brgy_adv_discount = parseFloat(parseFloat(total_adv_discount).toFixed(2)) - parseFloat(parseFloat(prv_adv_discount).toFixed(2)) - parseFloat(parseFloat(mnc_adv_discount).toFixed(2));
-                        var total_adv_amt = parseFloat(parseFloat(prv_adv_ammount).toFixed(2)) + parseFloat(parseFloat(mnc_adv_ammount).toFixed(2)) + parseFloat(parseFloat(brgy_adv_ammount).toFixed(2));
-                        var total_adv_discount = parseFloat(parseFloat(prv_adv_discount).toFixed(2)) + parseFloat(parseFloat(mnc_adv_discount).toFixed(2)) + parseFloat(parseFloat(brgy_adv_discount).toFixed(2));
-
+                        var brgy_adv_ammount = parseFloat(parseFloat(total_adv)) - parseFloat(parseFloat(prv_adv_ammount)) - parseFloat(parseFloat(mnc_adv_ammount));
+                        var brgy_adv_discount = parseFloat(parseFloat(total_adv_discount).toFixed(3)) - parseFloat(parseFloat(prv_adv_discount).toFixed(3)) - parseFloat(parseFloat(mnc_adv_discount).toFixed(3));
+                        var total_adv_amt = parseFloat(parseFloat(prv_adv_ammount).toFixed(3)) + parseFloat(parseFloat(mnc_adv_ammount).toFixed(3)) + parseFloat(parseFloat(brgy_adv_ammount).toFixed(3));
+                        var total_adv_discount = parseFloat(parseFloat(prv_adv_discount).toFixed(3)) + parseFloat(parseFloat(mnc_adv_discount).toFixed(3)) + parseFloat(parseFloat(brgy_adv_discount).toFixed(3));
+                        
                         // 1992-above
                         var prv_prior_1992_amt = parseFloat(total_prior_1992) * .35;
                         var prv_prior_1992_penalties = parseFloat(total_penalty_prior_1992) * .35;
                         var mnc_prior_1992_amt = parseFloat(total_prior_1992) * .40;
                         var mnc_prior_1992_penalties = parseFloat(total_penalty_prior_1992) * .40;
-                        var brgy_prior_1992_amt = parseFloat(parseFloat(total_prior_1992).toFixed(2)) - parseFloat(parseFloat(prv_prior_1992_amt).toFixed(2)) - parseFloat(parseFloat(mnc_prior_1992_amt).toFixed(2));
-                        var brgy_prior_1992_penalties = parseFloat(parseFloat(total_penalty_prior_1992).toFixed(2)) - parseFloat(parseFloat(prv_prior_1992_penalties).toFixed(2)) - parseFloat(parseFloat(mnc_prior_1992_penalties).toFixed(2));
-                        var total_prior_1992_amt = parseFloat(parseFloat(prv_prior_1992_amt).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1992_amt).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1992_amt).toFixed(2));
-                        var total_prior_1992_penalties = parseFloat(parseFloat(prv_prior_1992_penalties).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1992_penalties).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1992_penalties).toFixed(2));
+                        var brgy_prior_1992_amt = parseFloat(parseFloat(total_prior_1992).toFixed(3)) - parseFloat(parseFloat(prv_prior_1992_amt).toFixed(3)) - parseFloat(parseFloat(mnc_prior_1992_amt).toFixed(3));
+                        var brgy_prior_1992_penalties = parseFloat(parseFloat(total_penalty_prior_1992).toFixed(3)) - parseFloat(parseFloat(prv_prior_1992_penalties).toFixed(3)) - parseFloat(parseFloat(mnc_prior_1992_penalties).toFixed(3));
+                        var total_prior_1992_amt = parseFloat(parseFloat(prv_prior_1992_amt).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1992_amt).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1992_amt).toFixed(3));
+                        var total_prior_1992_penalties = parseFloat(parseFloat(prv_prior_1992_penalties).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1992_penalties).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1992_penalties).toFixed(3));
 
                         // 1991-below
                         var prv_prior_1991_amt = parseFloat(total_prior_1991) * .35;
                         var prv_prior_1991_penalties = parseFloat(total_penalty_prior_1991) * .35;
                         var mnc_prior_1991_amt = parseFloat(total_prior_1991) * .40;
                         var mnc_prior_1991_penalties = parseFloat(total_penalty_prior_1991) * .40;
-                        var brgy_prior_1991_amt = parseFloat(parseFloat(total_prior_1991).toFixed(2)) - parseFloat(parseFloat(prv_prior_1991_amt).toFixed(2)) - parseFloat(parseFloat(mnc_prior_1991_amt).toFixed(2));
-                        var brgy_prior_1991_penalties = parseFloat(parseFloat(total_penalty_prior_1991).toFixed(2)) - parseFloat(parseFloat(prv_prior_1991_penalties).toFixed(2)) - parseFloat(parseFloat(mnc_prior_1991_penalties).toFixed(2));
-                        var total_prior_1991_amt = parseFloat(parseFloat(prv_prior_1991_amt).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1991_amt).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1991_amt).toFixed(2));
-                        var total_prior_1991_penalties = parseFloat(parseFloat(prv_prior_1991_penalties).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1991_penalties).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1991_penalties).toFixed(2));         
+                        var brgy_prior_1991_amt = parseFloat(parseFloat(total_prior_1991).toFixed(3)) - parseFloat(parseFloat(prv_prior_1991_amt).toFixed(3)) - parseFloat(parseFloat(mnc_prior_1991_amt).toFixed(3));
+                        var brgy_prior_1991_penalties = parseFloat(parseFloat(total_penalty_prior_1991).toFixed(3)) - parseFloat(parseFloat(prv_prior_1991_penalties).toFixed(3)) - parseFloat(parseFloat(mnc_prior_1991_penalties).toFixed(3));
+                        var total_prior_1991_amt = parseFloat(parseFloat(prv_prior_1991_amt).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1991_amt).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1991_amt).toFixed(3));
+                        var total_prior_1991_penalties = parseFloat(parseFloat(prv_prior_1991_penalties).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1991_penalties).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1991_penalties).toFixed(3));         
 
-                        var brgyshare_basic_current            = parseFloat(parseFloat(total_basic_current).toFixed(2)) - parseFloat(parseFloat(prv_crnt_ammount).toFixed(2)) - parseFloat(parseFloat(munshare_basic_current).toFixed(2));
-                        var brgyshare_basic_discount           = parseFloat(parseFloat(total_basic_discount).toFixed(2)) - parseFloat(parseFloat(prv_crnt_discount).toFixed(2)) - parseFloat(parseFloat(munshare_basic_discount).toFixed(2));
-                        var brgyshare_basic_previous           = parseFloat(parseFloat(total_basic_previous).toFixed(2)) - parseFloat(parseFloat(prv_prvious_ammount).toFixed(2)) - parseFloat(parseFloat(munshare_basic_previous).toFixed(2));
-                        var brgyshare_basic_penalty_current    = parseFloat(parseFloat(total_basic_penalty_current).toFixed(2)) - parseFloat(parseFloat(prv_pnalties_crnt).toFixed(2)) - parseFloat(parseFloat(munshare_basic_penalty_current).toFixed(2));
-                        var brgyshare_basic_penalty_previous   = parseFloat(parseFloat(total_basic_penalty_previous).toFixed(2)) - parseFloat(parseFloat(prv_pnalties_prvious).toFixed(2)) - parseFloat(parseFloat(munshare_basic_penalty_previous).toFixed(2));
+                        var brgyshare_basic_current            = parseFloat(parseFloat(total_basic_current).toFixed(3)) - parseFloat(parseFloat(prv_crnt_ammount).toFixed(3)) - parseFloat(parseFloat(munshare_basic_current).toFixed(3));
+                        var brgyshare_basic_discount           = parseFloat(parseFloat(total_basic_discount).toFixed(3)) - parseFloat(parseFloat(prv_crnt_discount).toFixed(3)) - parseFloat(parseFloat(munshare_basic_discount).toFixed(3));
+                        var brgyshare_basic_previous           = parseFloat(parseFloat(total_basic_previous).toFixed(3)) - parseFloat(parseFloat(prv_prvious_ammount).toFixed(3)) - parseFloat(parseFloat(munshare_basic_previous).toFixed(3));
+                        var brgyshare_basic_penalty_current    = parseFloat(parseFloat(total_basic_penalty_current).toFixed(3)) - parseFloat(parseFloat(prv_pnalties_crnt).toFixed(3)) - parseFloat(parseFloat(munshare_basic_penalty_current).toFixed(3));
+                        var brgyshare_basic_penalty_previous   = parseFloat(parseFloat(total_basic_penalty_previous).toFixed(3)) - parseFloat(parseFloat(prv_pnalties_prvious).toFixed(3)) - parseFloat(parseFloat(munshare_basic_penalty_previous).toFixed(3));
 
-                        var prv_total_basic = parseFloat(parseFloat(prv_crnt_ammount).toFixed(2)) - parseFloat(parseFloat(prv_crnt_discount).toFixed(2)) + parseFloat(parseFloat(prv_prvious_ammount).toFixed(2)) + parseFloat(parseFloat(prv_pnalties_crnt).toFixed(2)) + parseFloat(parseFloat(prv_pnalties_prvious).toFixed(2)) + parseFloat(parseFloat(prv_adv_ammount).toFixed(2)) + parseFloat(parseFloat(prv_prior_1992_amt).toFixed(2)) + parseFloat(parseFloat(prv_prior_1991_amt).toFixed(2)) - parseFloat(parseFloat(prv_adv_discount).toFixed(2)) + parseFloat(parseFloat(prv_prior_1992_penalties).toFixed(2)) + parseFloat(parseFloat(prv_prior_1991_penalties).toFixed(2));
-                        var mncpal_total_basic = (parseFloat(parseFloat(munshare_basic_current).toFixed(2)) - parseFloat(parseFloat(munshare_basic_discount).toFixed(2))  + parseFloat(parseFloat(munshare_basic_previous).toFixed(2)) + parseFloat(parseFloat(munshare_basic_penalty_current).toFixed(2)) + parseFloat(parseFloat(munshare_basic_penalty_previous).toFixed(2))) + parseFloat(parseFloat(mnc_adv_ammount).toFixed(2)) - parseFloat(parseFloat(mnc_adv_discount).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1992_amt).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1992_penalties).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1991_amt).toFixed(2)) + parseFloat(parseFloat(mnc_prior_1991_penalties).toFixed(2));
-                        var brgy_total_basic = parseFloat(parseFloat(brgyshare_basic_current).toFixed(2)) - parseFloat(parseFloat(brgyshare_basic_discount).toFixed(2)) + parseFloat(parseFloat(brgyshare_basic_previous).toFixed(2)) + parseFloat(parseFloat(brgyshare_basic_penalty_current).toFixed(2)) + parseFloat(parseFloat(brgyshare_basic_penalty_previous).toFixed(2)) + parseFloat(parseFloat(brgy_adv_ammount).toFixed(2)) - parseFloat(parseFloat(brgy_adv_discount).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1992_amt).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1992_penalties).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1991_amt).toFixed(2)) + parseFloat(parseFloat(brgy_prior_1991_penalties).toFixed(2));
+                        var prv_total_basic = parseFloat(parseFloat(prv_crnt_ammount).toFixed(3)) - parseFloat(parseFloat(prv_crnt_discount).toFixed(3)) + parseFloat(parseFloat(prv_prvious_ammount).toFixed(3)) + parseFloat(parseFloat(prv_pnalties_crnt).toFixed(3)) + parseFloat(parseFloat(prv_pnalties_prvious).toFixed(3)) + parseFloat(parseFloat(prv_adv_ammount).toFixed(3)) + parseFloat(parseFloat(prv_prior_1992_amt).toFixed(3)) + parseFloat(parseFloat(prv_prior_1991_amt).toFixed(3)) - parseFloat(parseFloat(prv_adv_discount).toFixed(3)) + parseFloat(parseFloat(prv_prior_1992_penalties).toFixed(3)) + parseFloat(parseFloat(prv_prior_1991_penalties).toFixed(3));
+                        var mncpal_total_basic = (parseFloat(parseFloat(munshare_basic_current).toFixed(3)) - parseFloat(parseFloat(munshare_basic_discount).toFixed(3))  + parseFloat(parseFloat(munshare_basic_previous).toFixed(3)) + parseFloat(parseFloat(munshare_basic_penalty_current).toFixed(3)) + parseFloat(parseFloat(munshare_basic_penalty_previous).toFixed(3))) + parseFloat(parseFloat(mnc_adv_ammount).toFixed(3)) - parseFloat(parseFloat(mnc_adv_discount).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1992_amt).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1992_penalties).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1991_amt).toFixed(3)) + parseFloat(parseFloat(mnc_prior_1991_penalties).toFixed(3));
+                        var brgy_total_basic = parseFloat(parseFloat(brgyshare_basic_current).toFixed(3)) - parseFloat(parseFloat(brgyshare_basic_discount).toFixed(3)) + parseFloat(parseFloat(brgyshare_basic_previous).toFixed(3)) + parseFloat(parseFloat(brgyshare_basic_penalty_current).toFixed(3)) + parseFloat(parseFloat(brgyshare_basic_penalty_previous).toFixed(3)) + parseFloat(parseFloat(brgy_adv_ammount).toFixed(3)) - parseFloat(parseFloat(brgy_adv_discount).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1992_amt).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1992_penalties).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1991_amt).toFixed(3)) + parseFloat(parseFloat(brgy_prior_1991_penalties).toFixed(3));
 
-                        var total_basic_net = parseFloat(parseFloat(prv_total_basic).toFixed(2)) + parseFloat(parseFloat(mncpal_total_basic).toFixed(2)) + parseFloat(parseFloat(brgy_total_basic).toFixed(2));
-                        var total_basic_current = parseFloat(parseFloat(prv_crnt_ammount).toFixed(2)) + parseFloat(parseFloat(munshare_basic_current).toFixed(2)) + parseFloat(parseFloat(brgyshare_basic_current).toFixed(2));
+                        var total_basic_net = parseFloat(parseFloat(prv_total_basic).toFixed(3)) + parseFloat(parseFloat(mncpal_total_basic).toFixed(3)) + parseFloat(parseFloat(brgy_total_basic).toFixed(3));
+                        var total_basic_current = parseFloat(parseFloat(prv_crnt_ammount).toFixed(3)) + parseFloat(parseFloat(munshare_basic_current).toFixed(3)) + parseFloat(parseFloat(brgyshare_basic_current).toFixed(3));
 
                         content += '<td colspan="3">Provincial Share</td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_adv_ammount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_adv_ammount" name="prv_adv_ammount"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_adv_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_adv_discount" name="prv_adv_discount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_adv_ammount)+'" class="form-control" type="number" step="0.01" id="prv_adv_ammount" name="prv_adv_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_adv_discount)+'" class="form-control" type="number" step="0.01" id="prv_adv_discount" name="prv_adv_discount"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_crnt_ammount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_crnt_ammount" name="prv_crnt_ammount"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_crnt_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_crnt_discount" name="prv_crnt_discount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_crnt_ammount)+'" class="form-control" type="number" step="0.01" id="prv_crnt_ammount" name="prv_crnt_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_crnt_discount)+'" class="form-control" type="number" step="0.01" id="prv_crnt_discount" name="prv_crnt_discount"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_prvious_ammount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prvious_ammount" name="prv_prvious_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_prvious_ammount)+'" class="form-control" type="number" step="0.01" id="prv_prvious_ammount" name="prv_prvious_ammount"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(prv_prior_1992_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_amt" name="prv_prior_1992_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(prv_prior_1992_amt)+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_amt" name="prv_prior_1992_amt"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(prv_prior_1991_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_amt" name="prv_prior_1991_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(prv_prior_1991_amt)+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_amt" name="prv_prior_1991_amt"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="3" class="border_all val"><input value="'+parseFloat(prv_pnalties_crnt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_pnalties_crnt" name="prv_pnalties_crnt"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_pnalties_prvious).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_pnalties_prvious" name="prv_pnalties_prvious"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_prior_1992_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_penalties" name="prv_prior_1992_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_prior_1991_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_penalties" name="prv_prior_1991_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_total_basic).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_total_basic" name="prv_total_basic" readonly></td>\
+                                <td colspan="3" class="border_all val"><input value="'+roundoff(prv_pnalties_crnt)+'" class="form-control" type="number" step="0.01" id="prv_pnalties_crnt" name="prv_pnalties_crnt"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_pnalties_prvious)+'" class="form-control" type="number" step="0.01" id="prv_pnalties_prvious" name="prv_pnalties_prvious"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_prior_1992_penalties)+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_penalties" name="prv_prior_1992_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_prior_1991_penalties)+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_penalties" name="prv_prior_1991_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(prv_total_basic)+'" class="form-control" type="number" step="0.01" id="prv_total_basic" name="prv_total_basic" readonly></td>\
                             </tr>\
                             <tr>\
                                 <td colspan="3">Municipal Share</td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_adv_ammount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_adv_ammount" name="mnc_adv_ammount"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_adv_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_adv_discount" name="mnc_adv_discount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(mnc_adv_ammount)+'" class="form-control" type="number" step="0.01" id="mnc_adv_ammount" name="mnc_adv_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(mnc_adv_discount)+'" class="form-control" type="number" step="0.01" id="mnc_adv_discount" name="mnc_adv_discount"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_current).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_current" name="munshare_basic_current"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_discount" name="munshare_basic_discount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(munshare_basic_current)+'" class="form-control" type="number" step="0.01" id="munshare_basic_current" name="munshare_basic_current"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(munshare_basic_discount)+'" class="form-control" type="number" step="0.01" id="munshare_basic_discount" name="munshare_basic_discount"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_previous).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_previous" name="munshare_basic_previous"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(munshare_basic_previous)+'" class="form-control" type="number" step="0.01" id="munshare_basic_previous" name="munshare_basic_previous"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(mnc_prior_1992_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_amt" name="mnc_prior_1992_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(mnc_prior_1992_amt)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_amt" name="mnc_prior_1992_amt"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(mnc_prior_1991_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_amt" name="mnc_prior_1991_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(mnc_prior_1991_amt)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_amt" name="mnc_prior_1991_amt"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="3" class="border_all val"><input value="'+parseFloat(munshare_basic_penalty_current).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_current" name="munshare_basic_penalty_current"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_penalty_previous).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_previous" name="munshare_basic_penalty_previous"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_prior_1992_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_penalties" name="mnc_prior_1992_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_prior_1991_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_penalties" name="mnc_prior_1991_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mncpal_total_basic).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mncpal_total_basic" name="mncpal_total_basic" readonly></td>\
+                                <td colspan="3" class="border_all val"><input value="'+roundoff(munshare_basic_penalty_current)+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_current" name="munshare_basic_penalty_current"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(munshare_basic_penalty_previous)+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_previous" name="munshare_basic_penalty_previous"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(mnc_prior_1992_penalties)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_penalties" name="mnc_prior_1992_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(mnc_prior_1991_penalties)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_penalties" name="mnc_prior_1991_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(mncpal_total_basic)+'" class="form-control" type="number" step="0.01" id="mncpal_total_basic" name="mncpal_total_basic" readonly></td>\
                             </tr>\
                             <tr>\
                                 <td colspan="3">Barangay Share</td>\
                                 <td class="border_all ctr">25%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgy_adv_ammount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_adv_ammount" name="brgy_adv_ammount"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgy_adv_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_adv_discount" name="brgy_adv_discount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgy_adv_ammount)+'" class="form-control" type="number" step="0.01" id="brgy_adv_ammount" name="brgy_adv_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgy_adv_discount)+'" class="form-control" type="number" step="0.01" id="brgy_adv_discount" name="brgy_adv_discount"></td>\
                                 <td class="border_all ctr">25%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgyshare_basic_current).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_current" name="brgyshare_basic_current"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgyshare_basic_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_discount" name="brgyshare_basic_discount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgyshare_basic_current)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_current" name="brgyshare_basic_current"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgyshare_basic_discount)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_discount" name="brgyshare_basic_discount"></td>\
                                 <td class="border_all ctr">25%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgyshare_basic_previous).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_previous" name="brgyshare_basic_previous"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgyshare_basic_previous)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_previous" name="brgyshare_basic_previous"></td>\
                                 <td class="border_all ctr">25%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(brgy_prior_1992_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1992_amt" name="brgy_prior_1992_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(brgy_prior_1992_amt)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1992_amt" name="brgy_prior_1992_amt"></td>\
                                 <td class="border_all ctr">25%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(brgy_prior_1991_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1991_amt" name="brgy_prior_1991_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(brgy_prior_1991_amt)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1991_amt" name="brgy_prior_1991_amt"></td>\
                                 <td class="border_all ctr">25%</td>\
-                                <td colspan="3" class="border_all val"><input value="'+parseFloat(brgyshare_basic_penalty_current).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_penalty_current" name="brgyshare_basic_penalty_current"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgyshare_basic_penalty_previous).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_penalty_previous" name="brgyshare_basic_penalty_previous"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgy_prior_1992_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1992_penalties" name="brgy_prior_1992_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgy_prior_1991_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1991_penalties" name="brgy_prior_1991_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(brgy_total_basic).toFixed(2)+'" class="form-control" type="number" step="0.01" id="brgy_total_basic" name="brgy_total_basic" readonly></td>\
+                                <td colspan="3" class="border_all val"><input value="'+roundoff(brgyshare_basic_penalty_current)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_penalty_current" name="brgyshare_basic_penalty_current"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgyshare_basic_penalty_previous)+'" class="form-control" type="number" step="0.01" id="brgyshare_basic_penalty_previous" name="brgyshare_basic_penalty_previous"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgy_prior_1992_penalties)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1992_penalties" name="brgy_prior_1992_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgy_prior_1991_penalties)+'" class="form-control" type="number" step="0.01" id="brgy_prior_1991_penalties" name="brgy_prior_1991_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(brgy_total_basic)+'" class="form-control" type="number" step="0.01" id="brgy_total_basic" name="brgy_total_basic" readonly></td>\
                             </tr>\
                             <tr>\
                                 <th colspan="3">TOTAL(S)</th>\
                                 <td class="border_all"></td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(total_adv_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_adv_amt" name="total_adv_amt" readonly></td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(total_adv_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_adv_discount" name="total_adv_discount" readonly></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(total_adv_amt)+'" class="form-control" type="number" step="0.01" id="total_adv_amt" name="total_adv_amt" readonly></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(total_adv_discount)+'" class="form-control" type="number" step="0.01" id="total_adv_discount" name="total_adv_discount" readonly></td>\
                                 <td class="border_all"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(total_basic_current).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_current" name="total_basic_current" readonly></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(total_basic_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_discount" name="total_basic_discount" readonly></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(total_basic_current)+'" class="form-control" type="number" step="0.01" id="total_basic_current" name="total_basic_current" readonly></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(total_basic_discount)+'" class="form-control" type="number" step="0.01" id="total_basic_discount" name="total_basic_discount" readonly></td>\
                                 <td class="border_all"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(total_basic_previous).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_previous" name="total_basic_previous" readonly></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(total_basic_previous)+'" class="form-control" type="number" step="0.01" id="total_basic_previous" name="total_basic_previous" readonly></td>\
                                 <td class="border_all"></td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(total_prior_1992_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_prior_1992_amt" name="total_prior_1992_amt" readonly></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(total_prior_1992_amt)+'" class="form-control" type="number" step="0.01" id="total_prior_1992_amt" name="total_prior_1992_amt" readonly></td>\
                                 <td class="border_all"></td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(total_prior_1991_amt).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_prior_1991_amt" name="total_prior_1991_amt" class="total_prior_1991_amt" readonly></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(total_prior_1991_amt)+'" class="form-control" type="number" step="0.01" id="total_prior_1991_amt" name="total_prior_1991_amt" class="total_prior_1991_amt" readonly></td>\
                                 <td class="border_all"></td>\
-                                <td colspan="3" class="border_all val"><input value="'+parseFloat(total_basic_penalty_current).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_penalty_current" name="total_basic_penalty_current" class="total_basic_penalty_current" readonly></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(total_basic_penalty_previous).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_penalty_previous" name="total_basic_penalty_previous" class="total_basic_penalty_previous" readonly></td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(total_prior_1992_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_prior_1992_penalties" name="total_prior_1992_penalties"class="total_prior_1992_penalties" readonly></td>\
-                                <td class="border_all val" colspan="2"><input value="'+parseFloat(total_prior_1991_penalties).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_prior_1991_penalties" name="total_prior_1991_penalties" class="total_prior_1991_penalties" readonly></td>\
-                                <td colspan="2" class="border_all val"><input value="'+parseFloat(total_basic_net).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_net" name="total_basic_net" class="total_basic_net" readonly></td>\
+                                <td colspan="3" class="border_all val"><input value="'+roundoff(total_basic_penalty_current)+'" class="form-control" type="number" step="0.01" id="total_basic_penalty_current" name="total_basic_penalty_current" class="total_basic_penalty_current" readonly></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(total_basic_penalty_previous)+'" class="form-control" type="number" step="0.01" id="total_basic_penalty_previous" name="total_basic_penalty_previous" class="total_basic_penalty_previous" readonly></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(total_prior_1992_penalties)+'" class="form-control" type="number" step="0.01" id="total_prior_1992_penalties" name="total_prior_1992_penalties"class="total_prior_1992_penalties" readonly></td>\
+                                <td class="border_all val" colspan="2"><input value="'+roundoff(total_prior_1991_penalties)+'" class="form-control" type="number" step="0.01" id="total_prior_1991_penalties" name="total_prior_1991_penalties" class="total_prior_1991_penalties" readonly></td>\
+                                <td colspan="2" class="border_all val"><input value="'+roundoff(total_basic_net)+'" class="form-control" type="number" step="0.01" id="total_basic_net" name="total_basic_net" class="total_basic_net" readonly></td>\
                             </tr>';
                     }
                     
@@ -1993,5 +1993,9 @@
             $('#form').submit();
         }
     });
+
+    function roundoff(number){
+        return(Math.round(parseFloat(number).toFixed(3) * 100) / 100);
+    }
 </script>
 @endsection

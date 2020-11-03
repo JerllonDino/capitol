@@ -13,6 +13,10 @@
 
 <br /><br /><br />
 <div class="col-sm-12">
+    @if (session('isEmpty'))
+        <div class="alert alert-danger">Sorry, there are no entries yet. :)</div>
+    @endif
+    
 <form method="POST" action="{{route('report.sandgravel_report_municpality_generate')}}">
 {{ csrf_field() }}
     <div class="form-group col-sm-4">

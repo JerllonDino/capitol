@@ -944,7 +944,78 @@
                                                                             @endif --}}
 
                                                                             @if($year < $val['to'])
+                                                                            @php
+                                                                                $display = [];   
+                                                                            @endphp
+                                                                            @foreach ($annual_per_arp['yearly'][$this_arp] as $detail)
+                                                                                    @php
+                                                                                        $display[$detail['full_partial']][] = $detail;
+                                                                                    @endphp
+                                                                            @endforeach
+                                                                            @if (count($display) > 1)
+                                                                                
+                                                                            @foreach ($display as $lumped)
+                                                                                @php
+                                                                                    $previousPenalty = 0;
+                                                                                    $previousDiscount = 0;
+                                                                                    $computedValue=0;
+                                                                                    $dates = [];
+                                                                                    $sameCounter = 0;
+                                                                                @endphp
+                                                                                @foreach ($lumped as $key => $data)
+                                                                                    @php
+                                                                                        if(count($lumped) == 1){
+                                                                                            echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>". $data['period_covered'] ."<br>");
+                                                                                        }else{
+                                                                                            
+                                                                                            if($data['discount'] == 0){
+                                                                                                if ($previousPenalty == $data['penalty'] and $sameCounter <= 3) {
+                                                                                                    array_push($dates, $data['period_covered']);
+                                                                                                    $previousPenalty = $data['penalty'];
+                                                                                                    $sameCounter++;
+                                                                                                }else{
+                                                                                                    if ($computedValue) {
+                                                                                                        echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0]."-".$dates[count($dates)-1].")<br>");
+                                                                                                        
+                                                                                                        $sameCounter = 0;
+                                                                                                    }
+                                                                                                    array_push($dates, $data['period_covered']);
+                                                                                                    $computedValue = $data['sef'];
+                                                                                                    $previousPenalty = $data['penalty'];
+                                                                                                    
+                                                                                                }
+                                                                                                if(count($lumped)-1 == $key){
+                                                                                                    echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>".$dates[count($dates)-1]."<br>");
+                                                                                                }
+                                                                                                
+                                                                                            }elseif($data['penalty'] == 0){
+                                                                                                if ($previousDiscount == $data['discount'] and $sameCounter <= 3) {
+                                                                                                    $computedValue += $data['sef'];
+                                                                                                    $previousDiscount = $data['discount'];
+                                                                                                    $sameCounter++;
+                                                                                                }else{
+                                                                                                    if ($computedValue) {
+                                                                                                        echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0]."-".$dates[count($dates)-1].")<br>");
+                                                                                                        
+                                                                                                        $sameCounter = 0;
+                                                                                                    }
+                                                                                                    array_push($dates, $data['period_covered']);
+                                                                                                    $computedValue = $data['sef'];
+                                                                                                    $previousPenalty = $data['penalty'];
+                                                                                                    
+                                                                                                }
+                                                                                                if(count($lumped)-1 == $key){
+                                                                                                    echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>".$dates[count($dates)-1]."<br>");
+                                                                                                }
+                                                                                            }
+                                                                                            
+                                                                                        }
+                                                                                    @endphp
+                                                                                @endforeach
+                                                                            @endforeach
+                                                                            @else
                                                                                 {{ number_format($annual_per_arp['yearly'][$this_arp][$year]['sef'], 2) }} <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>({{ $year }}-{{ $val['to'] }})<br>
+                                                                            @endif
                                                                             @else
                                                                                 {{ number_format($annual_per_arp['yearly'][$this_arp][$year]['sef'], 2) }} <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>({{ $val['to'] }})<br>
                                                                             @endif
@@ -1234,7 +1305,8 @@
                                                                 $display[$detail['full_partial']][] = $detail;
                                                             @endphp
                                                     @endforeach
-
+                                                        @if (count($display))
+                                                            
                                                     @foreach ($display as $lumped)
                                                         @php
                                                             $previousPenalty = 0;
@@ -1296,6 +1368,10 @@
                                                             @endphp
                                                         @endforeach
                                                     @endforeach
+                                                    @else
+                                                        BASIC<br> 
+                                                        SEF<br>
+                                                    @endif
                                                         @endif
                                                     @endif
                                                     <?php
@@ -1575,7 +1651,8 @@
                                                                         $display[$detail['full_partial']][] = $detail;
                                                                     @endphp
                                                             @endforeach
-
+                                                            @if (count($display) > 1)
+                                                                
                                                             @foreach ($display as $lumped)
                                                                 @php
                                                                     $previousPenalty = 0;
@@ -1637,16 +1714,11 @@
                                                                     @endphp
                                                                 @endforeach
                                                             @endforeach
-                                                            {{-- {{ dd($display) }} --}}
-                                                            {{-- @foreach ($display as $item)
-                                                                    @foreach ($item as $it)
-                                                                        @foreach ($it as $i)
-                                                                            {{$i['sef']}}
-                                                                        @endforeach
-                                                                    @endforeach
-                                                            @endforeach --}}
-                                                            {{-- {{ number_format($compute, 2) }}<br>
-                                                            {{ number_format($compute, 2) }}<br> --}}
+                                                            @else
+                                                            {{ number_format($compute, 2) }}<br>
+                                                            {{ number_format($compute, 2) }}<br>
+                                                            
+                                                            @endif
                                                         @endif
                                                     @endif
                                                     <?php
@@ -2044,8 +2116,81 @@
                                                                 ({{ number_format($annual_arp[$this_arp][$year]['discount'], 2) }})<br>
                                                                 ({{ number_format($annual_arp[$this_arp][$year]['discount'], 2) }})<br>
                                                             @else
+                                                            @php
+                                                                $display = [];   
+                                                            @endphp
+                                                            @foreach ($annual_per_arp['yearly'][$this_arp] as $detail)
+                                                                    @php
+                                                                        $display[$detail['full_partial']][] = $detail;
+                                                                    @endphp
+                                                            @endforeach
+                                                            @if (count($display) > 1)
+                                                             
+                                                            @foreach ($display as $lumped)
+                                                                @php
+                                                                    $previousPenalty = 0;
+                                                                    $previousDiscount = 0;
+                                                                    $computedValue = 0;
+                                                                    $sameCounter = 0;
+                                                                @endphp
+                                                                @foreach ($lumped as $key => $data)
+                                                                    @php
+                                                                        if(count($lumped) == 1){
+                                                                            echo(number_format($data['penalty'],2)."<br>");
+                                                                            echo(number_format($data['penalty'],2)."<br>");
+                                                                        }else{
+                                                                            
+                                                                            if($data['discount'] == 0){
+                                                                                if ($previousPenalty == $data['penalty'] and $sameCounter <= 3) {
+                                                                                    $computedValue += $data['penalty'];
+                                                                                    $previousPenalty = $data['penalty'];
+                                                                                    $sameCounter++;
+                                                                                }else{
+                                                                                    if ($computedValue) {
+                                                                                        echo(number_format($computedValue, 2)."<br>");
+                                                                                        echo(number_format($computedValue, 2)."<br>");
+                                                                                        $sameCounter = 0;
+                                                                                    }
+                                                                                    $computedValue = $data['penalty'];
+                                                                                    $previousPenalty = $data['penalty'];
+                                                                                    
+                                                                                }
+                                                                                if(count($lumped)-1 == $key){
+                                                                                    echo(number_format($computedValue, 2)."<br>");
+                                                                                    echo(number_format($computedValue, 2)."<br>");
+                                                                                }
+                                                                                
+                                                                            }elseif($data['penalty'] == 0){
+                                                                                if ($previousDiscount == $data['discount'] and $sameCounter <= 3) {
+                                                                                    $computedValue += $data['discount'];
+                                                                                    $previousDiscount = $data['discount'];
+                                                                                    $sameCounter++;
+                                                                                }else{
+                                                                                    if ($computedValue) {
+                                                                                        echo(number_format($computedValue, 2)."<br>");
+                                                                                        echo(number_format($computedValue, 2)."<br>");
+                                                                                        $sameCounter = 0;
+                                                                                    }
+                                                                                    $computedValue = $data['discount'];
+                                                                                    $previousDiscount = $data['discount'];
+                                                                                    
+                                                                                }
+                                                                                if(count($lumped)-1 == $key){
+                                                                                    if($previousDiscount == $data['discount']){
+                                                                                        echo(number_format($computedValue, 2)."<br>");
+                                                                                        echo(number_format($computedValue, 2)."<br>");
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            
+                                                                        }
+                                                                    @endphp
+                                                                @endforeach
+                                                            @endforeach
+                                                            @else
                                                                 0.00<br>
                                                                 0.00<br>
+                                                            @endif
                                                             @endif
                                                         @endif                                                   
                                                     @endif
@@ -2970,13 +3115,83 @@
                                                                 @endif
                                                             @else
                                                                 @if($annual_arp[$this_arp][$year]['penalty'] > 0)
-                                                                    <?php
-                                                                        // $compute1 = round(floatval($annual_per_arp['yearly'][$this_arp][$year]['sef'])*$diff, 2) + round(floatval($annual_arp[$this_arp][$year]['penalty']), 2);
-                                                                        $compute1 = round(floatval($total_sef), 2) + round(floatval($total_penalty), 2); 
-                                                                        $limit_total += $compute1*2;
-                                                                    ?>
-                                                                    {{ number_format($compute1, 2) }}<br>
-                                                                    {{ number_format($compute1, 2) }}<br>
+                                                                    @php
+                                                                        $display = [];   
+                                                                    @endphp
+                                                                    @foreach ($annual_per_arp['yearly'][$this_arp] as $detail)
+                                                                            @php
+                                                                                $display[$detail['full_partial']][] = $detail;
+                                                                            @endphp
+                                                                    @endforeach
+                                                                    @if (count($display) > 1)
+                                                                     
+                                                                    @foreach ($display as $lumped)
+                                                                        @php
+                                                                            $previousPenalty = 0;
+                                                                            $previousDiscount = 0;
+                                                                            $computedValue = 0;
+                                                                            $sameCounter = 0;
+                                                                        @endphp
+                                                                        @foreach ($lumped as $key => $data)
+                                                                            @php
+                                                                                if(count($lumped) == 1){
+                                                                                    echo(number_format($data['total'],2)."<br>");
+                                                                                    echo(number_format($data['total'],2)."<br>");
+                                                                                }else{
+                                                                                    
+                                                                                    if($data['discount'] == 0){
+                                                                                        if ($previousPenalty == $data['penalty'] and $sameCounter <= 3) {
+                                                                                            $computedValue += $data['total'];
+                                                                                            $previousPenalty = $data['penalty'];
+                                                                                            $sameCounter++;
+                                                                                        }else{
+                                                                                            if ($computedValue) {
+                                                                                                echo(number_format($computedValue, 2)."<br>");
+                                                                                                echo(number_format($computedValue, 2)."<br>");
+                                                                                                $sameCounter = 0;
+                                                                                            }
+                                                                                            $computedValue = $data['total'];
+                                                                                            $previousPenalty = $data['penalty'];
+                                                                                            
+                                                                                        }
+                                                                                        if(count($lumped)-1 == $key){
+                                                                                            echo(number_format($computedValue, 2)."<br>");
+                                                                                            echo(number_format($computedValue, 2)."<br>");
+                                                                                        }
+                                                                                        
+                                                                                    }elseif($data['penalty'] == 0){
+                                                                                        if ($previousDiscount == $data['discount'] and $sameCounter <= 3) {
+                                                                                            $computedValue += $data['total'];
+                                                                                            $previousDiscount = $data['discount'];
+                                                                                            $sameCounter++;
+                                                                                        }else{
+                                                                                            if ($computedValue) {
+                                                                                                echo(number_format($computedValue, 2)."<br>");
+                                                                                                echo(number_format($computedValue, 2)."<br>");
+                                                                                                $sameCounter = 0;
+                                                                                            }
+                                                                                            $computedValue = $data['total'];
+                                                                                            $previousDiscount = $data['discount'];
+                                                                                            
+                                                                                        }
+                                                                                        if(count($lumped)-1 == $key){
+                                                                                            if($previousDiscount == $data['discount']){
+                                                                                                echo(number_format($computedValue, 2)."<br>");
+                                                                                                echo(number_format($computedValue, 2)."<br>");
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    
+                                                                                }
+                                                                            @endphp
+                                                                        @endforeach
+                                                                    @endforeach
+
+                                                                    @else
+                                                                       {{ number_format($compute1, 2) }}<br>
+                                                                       {{ number_format($compute1, 2) }}<br>
+                                                                    @endif
+                                                                    
                                                                 @elseif($annual_arp[$this_arp][$year]['discount'] > 0)
                                                                     <?php
                                                                         // $compute1 = round(floatval($annual_arp[$this_arp][$year]['assess_val'])*.01, 2) + round(floatval($annual_arp[$this_arp][$year]['discount']), 2);
@@ -3117,7 +3332,7 @@
                             </table>
                         </td>
                         <!-- padding-top: -38px; -->
-                        <td colspan="7" class="border-hidden text-right" style="background-color: ##7fe83e; padding-top: -55px;"><span class="text-hidden">TOTAL ></span> {{ number_format($limit_total, 2) }}</td> 
+                        <td colspan="7" class="border-hidden text-right" style="background-color: ##7fe83e; padding-top: -55px;"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
                     </tr>
                     <tr>
                         <td colspan="3" class="border-hidden" style="padding-top: -15px; background-color: ##7fe83e;">

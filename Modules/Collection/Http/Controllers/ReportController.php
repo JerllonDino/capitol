@@ -608,19 +608,24 @@ class ReportController extends Controller
                 }
                      // die;
             } 
-            $this->base['dailygraveltypes'] = $types;
             
+            $this->base['dailygraveltypes'] = isset($types) ? $types : [];
             $dpwh_total = 0;
             // $totalCurr_provShare = 0;
-            foreach($types as $key => $val) {
-                foreach($val as $ctype => $vals) {
-                    if($ctype == 3) {
-                        foreach($vals as $key => $val) {
-                            $dpwh_total += $val['val'];
-                            // $totalCurr_provShare += $val['prov_share'];
+            if(isset($types)){
+                
+                foreach($types as $key => $val) {
+                    foreach($val as $ctype => $vals) {
+                        if($ctype == 3) {
+                            foreach($vals as $key => $val) {
+                                $dpwh_total += $val['val'];
+                                // $totalCurr_provShare += $val['prov_share'];
+                            }
                         }
                     }
                 }
+            }else{
+                return redirect('sandgravel_report')->with('isEmpty', 'Sorry, there are no entries here yet :)');
             }
 
             $this->base['dpwh_total'] = $dpwh_total;
