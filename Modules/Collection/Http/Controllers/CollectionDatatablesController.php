@@ -279,7 +279,7 @@ class CollectionDatatablesController extends DatatablesController
                         ]);
                     }
                     $multiple_unq = array_unique($array_multiple, SORT_REGULAR);
-                    if(($r->is_cancelled == 0 && $repeat_ctr[$r->serial_no] < 1) || $r->is_printed == 0 || count($multiple_unq) > 1) {
+                    if(($repeat_ctr[$r->serial_no] < 1) || $r->is_printed == 0 || count($multiple_unq) > 1) {
                         array_push($unique, $r);
                         $repeat_ctr[$r->serial_no]++;
                     }
