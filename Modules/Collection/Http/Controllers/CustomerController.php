@@ -847,6 +847,7 @@ class CustomerController extends Controller
             order by effectivity_assesment_yr ASC')); 
         if(count($tax_decs) > 0) {
             $tax_decs = collect($tax_decs);
+            $owners = [];
             foreach($tax_decs as $det) {
 // pdf parser
 // $pdf_link = DB::connection('mysql2')->select(DB::raw('select path_img from tax_dec_archive_docs where tax_dec_id = '.$det->taxdec_id));
@@ -894,44 +895,47 @@ class CustomerController extends Controller
                 $owner_name = '';
                 $loc_mnc = Municipality::find($det->municipality);
                 $loc_brgy = Barangay::find($det->brgy);
-
-                if($det->type_o == 'Spouse') {
-                    $get_owner_info = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$det->owner_id));
-                    $get_owner_info = collect($get_owner_info);
-                    foreach($get_owner_info as $info) {
-                        $owner_name .= nl2br($info->spouse . ' & ' . $info->married_to . '
-                            ');
+                if (!in_array($det->owner_id, $owners)) {
+                    
+                    if($det->type_o == 'Spouse') {
+                        $get_owner_info = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$det->owner_id));
+                        $get_owner_info = collect($get_owner_info);
+                        foreach($get_owner_info as $info) {
+                            $owner_name .= nl2br($info->spouse . ' & ' . $info->married_to . '
+                                ');
+                        }
+                    } elseif($det->type_o == 'Person') {
+                        $get_owner_info = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$det->owner_id));
+                        $get_owner_info = collect($get_owner_info);
+                        foreach($get_owner_info as $info) {
+                            $owner_name .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
+                                ');
+                        }
+                    } elseif($det->type_o == 'Company') {
+                        $get_owner_info = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$det->owner_id));
+                        $get_owner_info = collect($get_owner_info);
+                        foreach($get_owner_info as $info) {
+                            $owner_name .= nl2br($info->company_name . '
+                                ');
+                        }
+                    } elseif($det->type_o == 'MarriedTo') {
+                        $get_owner_info = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$det->owner_id));
+                        $get_owner_info = collect($get_owner_info);
+                        foreach($get_owner_info as $info) {
+                            $owner_name .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
+                                ');
+                        }
+                    } elseif($det->type_o == 'Special') {
+                        $get_owner_info = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$det->owner_id));
+                        $get_owner_info = collect($get_owner_info);
+                        foreach($get_owner_info as $info) {
+                            $owner_name .= nl2br($info->special_name.'
+                                ');
+                        }
                     }
-                } elseif($det->type_o == 'Person') {
-                    $get_owner_info = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$det->owner_id));
-                    $get_owner_info = collect($get_owner_info);
-                    foreach($get_owner_info as $info) {
-                        $owner_name .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
-                            ');
-                    }
-                } elseif($det->type_o == 'Company') {
-                    $get_owner_info = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$det->owner_id));
-                    $get_owner_info = collect($get_owner_info);
-                    foreach($get_owner_info as $info) {
-                        $owner_name .= nl2br($info->company_name . '
-                            ');
-                    }
-                } elseif($det->type_o == 'MarriedTo') {
-                    $get_owner_info = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$det->owner_id));
-                    $get_owner_info = collect($get_owner_info);
-                    foreach($get_owner_info as $info) {
-                        $owner_name .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
-                            ');
-                    }
-                } elseif($det->type_o == 'Special') {
-                    $get_owner_info = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$det->owner_id));
-                    $get_owner_info = collect($get_owner_info);
-                    foreach($get_owner_info as $info) {
-                        $owner_name .= nl2br($info->special_name.'
-                            ');
-                    }
+                    
                 }
-
+                
                 if($det->canceled_by_tdrp != null && $det->canceled_by_tdrp != "") {
                     $replace = preg_replace('/[^0-9-\s]+/', '', $det->canceled_by_tdrp);
                     $split_td = explode(" ", $replace);
