@@ -71,7 +71,7 @@ class ReportController extends Controller
         $this->base['months'] = array();
         $latestReport = RptSefAdjustments::latest('id')->first();
         $reportNumber = explode('-', $latestReport->report_no);
-        $reportIndex = (int)$reportNumber[1] == date('Y') ? (int)$reportNumber[2] + 1 : 0;
+        $reportIndex = (int)$reportNumber[1] == date('Y') ? (count($reportNumber) > 2 ? (int)$reportNumber[2] + 1 : 1) : 0;
         $digit = strlen((string)$reportIndex);
         switch ($digit) {
             case '1':
