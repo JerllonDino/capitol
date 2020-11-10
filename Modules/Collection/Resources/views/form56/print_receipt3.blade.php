@@ -728,6 +728,7 @@
                                                                                                         echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . ($dates[count($dates)-1] != $dates[0] ? "-".$dates[count($dates)-1] : "").")<br>");
                                                                                                         $sameCounter = 0;
                                                                                                     }
+                                                                                                    $dates = [];
                                                                                                     array_push($dates, $data['period_covered']);
                                                                                                     $computedValue = $data['sef'];
                                                                                                     $previousPenalty = $data['penalty'];
@@ -739,7 +740,7 @@
                                                                                                 
                                                                                             }elseif($data['penalty'] == 0){
                                                                                                 if ($previousDiscount == $data['discount'] and $sameCounter <= 3) {
-                                                                                                    $computedValue += $data['sef'];
+                                                                                                    array_push($dates, $data['period_covered']);
                                                                                                     $previousDiscount = $data['discount'];
                                                                                                     $sameCounter++;
                                                                                                 }else{
@@ -748,9 +749,10 @@
                                                                                                         
                                                                                                         $sameCounter = 0;
                                                                                                     }
+                                                                                                    $dates = [];
                                                                                                     array_push($dates, $data['period_covered']);
                                                                                                     $computedValue = $data['sef'];
-                                                                                                    $previousPenalty = $data['penalty'];
+                                                                                                    $previousDiscount = $data['discount'];
                                                                                                     
                                                                                                 }
                                                                                                 if(count($lumped)-1 == $key){
@@ -946,9 +948,9 @@
                                                                         $display[$detail['full_partial']][] = $detail;
                                                                     @endphp
                                                             @endforeach
-                                                            @php
+                                                            {{-- @php
                                                                 dd($display)
-                                                            @endphp
+                                                            @endphp --}}
                                                              
                                                             @foreach ($display as $lumped)
                                                                 @php
@@ -982,6 +984,7 @@
                                                                                 }else{
 
                                                                                         if ($computedValue) {
+                                                                                            
                                                                                             echo(number_format($computedValue, 2)."<br>");
                                                                                             echo(number_format($computedValue, 2)."<br>");
                                                                                             $sameCounter = 0;
@@ -1012,9 +1015,7 @@
                                                                                     $previousDiscount = $data['discount'];
                                                                                     $sameCounter++;
                                                                                 }else{
-                                                                                    
-                                                                                    
-                                                                                        if($computedValue){
+                                                                                        if($computedValue and count($lumped)-1 != $key ){
                                                                                             echo("(".number_format($computedValue, 2).")<br>");
                                                                                             echo("(".number_format($computedValue, 2).")<br>");
                                                                                             $sameCounter = 0;
@@ -1023,18 +1024,15 @@
                                                                                     $computedValue = $data['discount'];
                                                                                     $previousDiscount = $data['discount'];
                                                                                     
-                                                                                    
                                                                                 }
                                                                                 if(count($lumped)-1 == $key){
-                                                                                    
+
                                                                                         echo("(".number_format($computedValue, 2).")<br>");
                                                                                         echo("(".number_format($computedValue, 2).")<br>");
                                                                                     
                                                                                 }
                                                                                 $isPrevDisc = 1;
                                                                                 $isPrevPenalty = 0;
-                                                                            }elseif ($data['full_partial'] == 7) {
-                                                                                # code...
                                                                             }
                                                                             
                                                                         }

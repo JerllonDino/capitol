@@ -361,7 +361,7 @@ class PdfController extends Controller
             }
             // $pdf = PDF::loadView('collection::pdf/real_property_collections', $this->base)
             // ->setPaper('legal', 'landscape');
-
+            
             $pdf = PDF::loadView('collection::pdf/new_rpt_abstract/real_property_collections', $this->base)
             ->setPaper('legal', 'landscape');
         }elseif (isset($request["rpt_mun_report_summary_disposition"])) {
@@ -666,6 +666,11 @@ class PdfController extends Controller
         $advance_yr = Carbon::now()->addYear()->format('Y');
         $current = Carbon::now()->format('Y');
 
+        $this->base['prior_start'] = $prior_start;
+        $this->base['preceeding'] = $preceeding;
+        $this->base['advance_yr'] = $advance_yr;
+        $this->base['current'] = $current;
+
         foreach ($receipts as $rcpt_index => $receipt) {
             if ($receipt->is_cancelled) {
                 continue;
@@ -706,6 +711,10 @@ class PdfController extends Controller
         $this->base['receipts'] = $receipts;
         $this->base['class_amt'] = $class_amt;
 
+        $merged = array_merge($this->base, $request->all());
+
+        $this->base['merged'] = $merged;
+
         $pdf = new PDF;
         if(isset($request["button"])){
             // $pdf = PDF::loadView('collection::pdf/real_property_consolidated', $this->base)
@@ -716,7 +725,7 @@ class PdfController extends Controller
         }elseif (isset($request["rpt_mun_report_collections"])) {
             //  $pdf = PDF::loadView('collection::pdf/real_property_consolidated_collections', $this->base)
             // ->setPaper('legal', 'landscape');
-
+            
             $pdf = PDF::loadView('collection::pdf/new_rpt_abstract/real_property_collections', $this->base)
             ->setPaper(array(0,0,612,936), 'landscape');
         }elseif (isset($request["rpt_mun_report_summary_disposition"])) {
@@ -4388,10 +4397,19 @@ class PdfController extends Controller
         $report_exist = RptSefAdjustments::where('municipality', $request['municipality'])
             ->where('start_date', '=', $date_start)
             ->where('end_date', '=', $date_end)
-            // ->where('report_no', '=', $request['report_no'])
             ->with('report_sef_items')
             ->with('report_basic_items')
             ->get();
+            
+        if($request['isEdit']){
+            $report_exist = RptSefAdjustments::where('municipality', $request['municipality'])
+            ->where('start_date', '=', $date_start)
+            ->where('end_date', '=', $date_end)
+            ->where('report_no', '=', $request['report_no'])
+            ->with('report_sef_items')
+            ->with('report_basic_items')
+            ->get();
+        }
 
         $this->base['sef_exist'] = $report_exist;
 
