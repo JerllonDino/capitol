@@ -687,13 +687,19 @@
                                                                             @endforeach
                                                                             
                                                                                 
-                                                                            @foreach ($display as $lumped)
+                                                                            @foreach ($display as $payment_type => $lumped)
                                                                                 @php
                                                                                     $previousPenalty = 0;
                                                                                     $previousDiscount = 0;
                                                                                     $computedValue=0;
                                                                                     $dates = [];
                                                                                     $sameCounter = 0;
+                                                                                    
+                                                                                    if ($payment_type == 7) {
+
+                                                                                        echo(number_format($lumped[0]['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$lumped[0]['period_covered'] . (count($lumped) > 1 ? "-".$lumped[count($lumped)-1]['period_covered'] : "").")<br>");
+                                                                                        continue;
+                                                                                    }
                                                                                 @endphp
                                                                                 @foreach ($lumped as $key => $data)
                                                                                     @php
@@ -779,12 +785,17 @@
                                                     @endforeach
                                                     
                                                             
-                                                    @foreach ($display as $lumped)
+                                                    @foreach ($display as $payment_type => $lumped)
                                                         @php
                                                             $previousPenalty = 0;
                                                             $previousDiscount = 0;
                                                             $computedValue = 0;
                                                             $sameCounter = 0;
+                                                            if ($payment_type == 7) {
+                                                                echo("BASIC<br>");
+                                                                echo("SEF<br>");
+                                                                continue;
+                                                            }
                                                         @endphp
                                                         @foreach ($lumped as $key => $data)
                                                             @php
@@ -854,13 +865,18 @@
                                                             @endforeach
                                                             
                                                                 
-                                                            @foreach ($display as $lumped)
+                                                            @foreach ($display as $payment_type => $lumped)
                                                                 @php
                                                                     $previousPenalty = 0;
                                                                     $previousDiscount = 0;
                                                                     $computedValue = 0;
                                                                     $sameCounter = 0;
                                                                     $isPrevPenalty = 0;
+                                                                    if ($payment_type == 7) {
+                                                                        echo(number_format($lumped[0]['sef'],2)."<br>");
+                                                                        echo(number_format($lumped[0]['sef'],2)."<br>");
+                                                                        continue;
+                                                                    }
                                                                 @endphp
                                                                 @foreach ($lumped as $key => $data)
                                                                     @php
@@ -952,7 +968,7 @@
                                                                 dd($display)
                                                             @endphp --}}
                                                              
-                                                            @foreach ($display as $lumped)
+                                                            @foreach ($display as $payment_type => $lumped)
                                                                 @php
                                                                     $previousPenalty = 0;
                                                                     $previousDiscount = 0;
@@ -960,6 +976,12 @@
                                                                     $sameCounter = 0;
                                                                     $isPrevPenalty = 0;
                                                                     $isPrevDisc = 0;
+
+                                                                    if ($payment_type == 7) {
+                                                                        echo(number_format($lumped[0]['penalty'],2)."<br>");
+                                                                        echo(number_format($lumped[0]['penalty'],2)."<br>");
+                                                                        continue;
+                                                                    }
                                                                 @endphp
                                                                 @foreach ($lumped as $key => $data)
                                                                     @php
@@ -1054,12 +1076,21 @@
                                                                     @endforeach
                                                                    
                                                                      
-                                                                    @foreach ($display as $lumped)
+                                                                    @foreach ($display as $payment_type => $lumped)
                                                                         @php
                                                                             $previousPenalty = 0;
                                                                             $previousDiscount = 0;
                                                                             $computedValue = 0;
                                                                             $sameCounter = 0;
+                                                                            if ($payment_type == 7) {
+                                                                                $sum = 0;
+                                                                                foreach ($lumped as $key => $value) {
+                                                                                    $sum += $value['total'];
+                                                                                }
+                                                                                echo(number_format($sum,2)."<br>");
+                                                                                echo(number_format($sum,2)."<br>");
+                                                                                continue;
+                                                                            }
                                                                         @endphp
                                                                         @foreach ($lumped as $key => $data)
                                                                             @php
