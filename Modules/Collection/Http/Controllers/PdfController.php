@@ -4502,6 +4502,8 @@ class PdfController extends Controller
         $request = new Request($req->all()); 
         $data = $this->rpr_report_edit($request);
         
+        if(isset($req['save_report'])){
+          
         $insert = RptSefAdjustments::updateOrCreate(
             [
                 'report_no' => $req->report_no,
@@ -4584,7 +4586,8 @@ class PdfController extends Controller
                 'brgy_penalty_1991' => $req->brgy_prior_1991_penalties,
             ]
         );
-
+  
+        }
         $merged = array_merge($data, $req->all());
 
         $this->base['merged'] = $merged;

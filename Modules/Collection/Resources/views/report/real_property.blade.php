@@ -244,7 +244,8 @@
 
                     <br>
                     <div class="modal-footer" id="submit" style="display: none;">
-                        <button class="btn btn-success pull-right" type="submit" id="submit_btn">Submit and Generate Report</button>
+                        <button class="btn btn-success pull-right" type="submit" name="view_report" id="submit_btn" style="margin: 0 0 0 1%"><i class="fa fa-eye"></i> View/Generate Report</button>
+                        <button class="btn btn-success pull-right" type="submit" name="save_report" id="submit_btn">Save and Generate Report</button>
                     </div>
                 </form>
             </div>
@@ -946,7 +947,7 @@
                             <th colspan="2" class="border_all ctr">1991 & below</th>\
                         </tr>';
                     if(data.sef_exist != null && data.sef_exist != undefined && data.sef_exist.length > 0) {
-                        console.log(data);
+                        console.log('exist');
                         // compute totals here
                         if(data.sef_exist[0].report_basic_items[0] != null && data.sef_exist[0].report_basic_items[0] != undefined) {
                             var provincial_total = parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_adv_amt).toFixed(2)) - parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_adv_discount).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_curr_amt).toFixed(2)) - parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_curr_discount).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_prev_amt).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_1992_amt).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_1991_amt).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_curr).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_prev).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_1992).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_1991).toFixed(2));
@@ -1051,6 +1052,7 @@
                                     <td colspan="2" class="border_all val"><input value="'+parseFloat(basic_total_net).toFixed(2)+'" class="form-control" type="number" step="0.01" id="total_basic_net" name="total_basic_net" class="total_basic_net" readonly></td>\
                                 </tr>';
                             } else {
+                                console.log('basic not exist');
                                 var munshare_basic_current             = parseFloat(total_basic_current) * .4;
                                 var munshare_basic_discount            = parseFloat(total_basic_discount) * .4;
                                 var munshare_basic_previous            = parseFloat(total_basic_previous) * .4;
@@ -1192,6 +1194,7 @@
                                     </tr>';
                             }
                     } else {
+                        console.log('adjusted doesnt exist');
                         var munshare_basic_current             = parseFloat(total_basic_current) * .4;
                         var munshare_basic_discount            = parseFloat(total_basic_discount) * .4;
                         var munshare_basic_previous            = parseFloat(total_basic_previous) * .4;
@@ -1338,7 +1341,6 @@
                     }
                     function adjustRounded(type)
                     {
-                        
                         switch (type) {
                             case 1:
                                 return roundOff(prv_crnt_ammount) - roundOff(prv_crnt_discount) + roundOff(prv_prvious_ammount) + roundOff(prv_pnalties_crnt) + roundOff(prv_pnalties_prvious) + roundOff(prv_adv_ammount) + roundOff(prv_prior_1992_amt) + roundOff(prv_prior_1991_amt) - roundOff(prv_adv_discount) + roundOff(prv_prior_1992_penalties) + roundOff(prv_prior_1991_penalties);
