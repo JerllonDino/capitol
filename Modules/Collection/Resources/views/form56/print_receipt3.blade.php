@@ -709,9 +709,7 @@
                                                 }else{
                                                     if(isset($lumped[$key-1])){
                                                         if ($data['discount'] == 0 and $data['penalty'] != 0) {
-                                                            
                                                             if ($data['penalty'] == $lumped[$key-1]['penalty']) {
-                                                                
                                                                 array_push($dates, $data['period_covered']);
                                                             }else{
                                                                 $dates = [];
@@ -728,10 +726,13 @@
                                                             }
                                                         }
                                                         if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                            if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount']) {
-                                                                # code...
+                                                            if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0) {
+                                                                array_push($dates, $data['period_covered']);
+                                                            }else{
+                                                                $dates = [];
+                                                                array_push($dates, $data['period_covered']);
                                                             }
-                                                            array_push($dates, $data['period_covered']);
+                                                            
                                                         }
                                                     }else{
                                                         if ($data['discount'] == 0 and $data['penalty'] != 0) {
@@ -751,12 +752,10 @@
                                                             if ($data['penalty'] == $lumped[$key+1]['penalty']) {
                                                                 continue;
                                                             }else{
-                                                                
                                                                 echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             
                                                             }
                                                         }if ($data['penalty'] == 0 and $data['discount'] != 0) {
-                                                            
                                                             if ($data['discount'] == $lumped[$key+1]['discount']) {
                                                                 continue;
                                                             }else{
@@ -765,8 +764,12 @@
                                                             }
                                                         }
                                                         if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                            if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount'] == 0) {
+                                                                continue;
+                                                            }else{
+                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                            }
                                                             
-                                                            echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                         }
                                                         
                                                     }else{
@@ -791,12 +794,17 @@
                                                                 array_push($dates, $data['period_covered']);
                                                                 echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }
-                                                            
-                                                            
                                                         }
                                                         if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                            array_push($dates, $data['period_covered']);
-                                                            echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                            if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0) {
+                                                                array_push($dates, $data['period_covered']);
+                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                            }else{
+                                                                $dates = [];
+                                                                array_push($dates, $data['period_covered']);
+                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                            }
+                                                            
                                                         }
                                                         
                                                     }
@@ -838,7 +846,7 @@
                                                 echo("SEF<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             
@@ -847,7 +855,7 @@
                                                             $computedValue = $data['sef'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue = $data['sef'];
                                                         }else{
@@ -855,13 +863,18 @@
                                                         }
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        $computedValue = $data['sef'];
+                                                        if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] ) {
+                                                            $computedValue = $data['sef'];
+                                                        }else{
+                                                            $computedValue = $data['sef'];
+                                                        }
+                                                        
                                                     }
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         $computedValue = $data['sef'];
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         $computedValue = $data['sef'];
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
@@ -869,7 +882,7 @@
                                                     }
                                                 }
                                                 if (isset($lumped[$key+1])) {
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key+1]['penalty']) {
                                                             continue;
                                                         }else{
@@ -878,7 +891,7 @@
                                                             echo("SEF<br>");
                                                             
                                                         }
-                                                    }if ($data['penalty'] == 0 and $data['discount']) {
+                                                    }if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key+1]['discount']) {
                                                             continue;
                                                         }else{
@@ -887,12 +900,16 @@
                                                             
                                                         }
                                                     }if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        echo("BASIC<br>");
-                                                        echo("SEF<br>");
+                                                        if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount']) {
+                                                            continue;
+                                                        }else{
+                                                            echo("BASIC<br>");
+                                                            echo("SEF<br>");
+                                                        }
                                                     }
                                                     
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             $computedValue = $data['sef'];
                                                             echo("BASIC<br>");
@@ -905,7 +922,7 @@
                                                         
                                                         
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue = $data['sef'];
                                                             echo("BASIC<br>");
@@ -918,8 +935,15 @@
                                                         
                                                         
                                                     }if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        echo("BASIC<br>");
-                                                        echo("SEF<br>");
+                                                        if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount']) {
+                                                            $computedValue = $data['sef'];
+                                                            echo("BASIC<br>");
+                                                            echo("SEF<br>");
+                                                        }else{
+                                                            $computedValue = $data['sef'];
+                                                            echo("BASIC<br>");
+                                                            echo("SEF<br>");
+                                                        }
                                                     }
                                                     
                                                 }  
@@ -930,7 +954,6 @@
                             </td>
                             {{-- FULL PAYMENT --}}
                             <td class="border-hidden text-right vertical-top" style="width: 1.1cm; background: ##e8aa4e; padding-right: 6px;">
-
                                 @php
                                     $display = [];   
                                 @endphp
@@ -961,7 +984,7 @@
                                                 echo(number_format($data['sef'],2)."<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             
@@ -970,7 +993,7 @@
                                                             $computedValue = $data['sef'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue = $data['sef'];
                                                         }else{
@@ -978,13 +1001,18 @@
                                                         }
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        $computedValue = $data['sef'];
+                                                        if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0) {
+                                                            $computedValue = $data['sef'];
+                                                        }else{
+                                                            $computedValue = $data['sef'];
+                                                        }
+                                                        
                                                     }
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         $computedValue = $data['sef'];
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         $computedValue = $data['sef'];
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
@@ -992,7 +1020,7 @@
                                                     }
                                                 }
                                                 if (isset($lumped[$key+1])) {
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key+1]['penalty']) {
                                                             continue;
                                                         }else{
@@ -1001,7 +1029,7 @@
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             
                                                         }
-                                                    }if ($data['penalty'] == 0 and $data['discount']) {
+                                                    }if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key+1]['discount']) {
                                                             continue;
                                                         }else{
@@ -1010,9 +1038,17 @@
                                                             
                                                         }
                                                     }
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                        if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount']) {
+                                                            continue;
+                                                        }else{
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                        }
+                                                    }
                                                     
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             $computedValue = $data['sef'];
                                                             echo(number_format($computedValue, 2)."<br>");
@@ -1025,7 +1061,7 @@
                                                         
                                                         
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue = $data['sef'];
                                                             echo(number_format($computedValue, 2)."<br>");
@@ -1037,6 +1073,11 @@
                                                         }
                                                         
                                                         
+                                                    }
+                                                    if ($data['penalty'] == 0 and $data['discount'] = 0) {
+                                                        $computedValue = $data['sef'];
+                                                        echo(number_format($computedValue, 2)."<br>");
+                                                        echo(number_format($computedValue, 2)."<br>");
                                                     }
                                                     
                                                 }
@@ -1090,7 +1131,7 @@
                                                 
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             
@@ -1099,23 +1140,33 @@
                                                             $computedValue = $data['penalty'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue += $data['discount'];
                                                         }else{
                                                             $computedValue = $data['discount'];
                                                         }
                                                     }
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                        if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0) {
+                                                            $computedValue = 0;
+                                                        }else{
+                                                            $computedValue = 0;
+                                                        }
+                                                    }
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         $computedValue = $data['penalty'];
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         $computedValue = $data['discount'];
+                                                    }
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                        $computedValue = 0;
                                                     }
                                                 }
                                                 if (isset($lumped[$key+1])) {
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key+1]['penalty']) {
                                                             continue;
                                                         }else{
@@ -1124,7 +1175,7 @@
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             
                                                         }
-                                                    }if ($data['penalty'] == 0 and $data['discount']) {
+                                                    }if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key+1]['discount']) {
                                                             continue;
                                                         }else{
@@ -1133,9 +1184,17 @@
                                                             
                                                         }
                                                     }
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                        if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount']) {
+                                                            continue;
+                                                        }else{
+                                                            echo("0.00<br>");
+                                                            echo("0.00<br>");
+                                                        }
+                                                    }
                                                     
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             $computedValue += $data['penalty'];
                                                             echo(number_format($computedValue, 2)."<br>");
@@ -1148,7 +1207,7 @@
                                                         
                                                         
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue += $data['discount'];
                                                             echo("(".number_format($computedValue, 2).")<br>");
@@ -1158,8 +1217,10 @@
                                                             echo("(".number_format($computedValue, 2).")<br>");
                                                             echo("(".number_format($computedValue, 2).")<br>");
                                                         }
-                                                        
-                                                        
+                                                    }
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                        echo("0.00<br>");
+                                                        echo("0.00<br>");
                                                     }
                                                     
                                                 }
@@ -1205,16 +1266,15 @@
                                                 echo(number_format($data['total'],2)."<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
-                                                            
                                                             $computedValue += $data['total'];
                                                         }else{
                                                             $computedValue = $data['total'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue += $data['total'];
                                                         }else{
@@ -1222,42 +1282,53 @@
                                                         }
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        $computedValue += $data['total'];
+                                                        if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0) {
+                                                            $computedValue += $data['total'];
+                                                        }else{
+                                                            $computedValue = $data['total'];
+                                                        }
+                                                        
                                                     }
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         $computedValue = $data['total'];
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
+                                                        $computedValue = $data['total'];
+                                                    }
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
                                                         $computedValue = $data['total'];
                                                     }
                                                 }
                                                 if (isset($lumped[$key+1])) {
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key+1]['penalty']) {
                                                             continue;
                                                         }else{
-                                                            
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             echo(number_format($computedValue, 2)."<br>");
                                                         
                                                         }
-                                                    }if ($data['penalty'] == 0 and $data['discount']) {
+                                                    }if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key+1]['discount']) {
                                                             continue;
                                                         }else{
-                                                            echo("(".number_format($computedValue, 2).")<br>");
-                                                            echo("(".number_format($computedValue, 2).")<br>");
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(number_format($computedValue, 2)."<br>");
                                                             
                                                         }
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        echo("(".number_format($computedValue, 2).")<br>");
-                                                        echo("(".number_format($computedValue, 2).")<br>");
+                                                        if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount']) {
+                                                            continue;
+                                                        }else{
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                        }
                                                     }
                                                     
                                                 }else{
-                                                    if ($data['discount'] == 0 and $data['penalty']) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty']) {
                                                             $computedValue += $data['total'];
                                                             echo(number_format($computedValue, 2)."<br>");
@@ -1270,7 +1341,7 @@
                                                         
                                                         
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount']) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                             $computedValue += $data['total'];
                                                             echo(number_format($computedValue, 2)."<br>");
@@ -1284,8 +1355,16 @@
                                                         
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
-                                                        echo(number_format($computedValue, 2)."<br>");
-                                                        echo(number_format($computedValue, 2)."<br>");
+                                                        if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0) {
+                                                            $computedValue += $data['total'];
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                        }else{
+                                                            $computedValue += $data['total'];
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(number_format($computedValue, 2)."<br>");
+                                                        }
+                                                        
                                                     }
                                                     
                                                 }
