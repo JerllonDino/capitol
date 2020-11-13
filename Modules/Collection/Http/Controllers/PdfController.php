@@ -4393,22 +4393,17 @@ class PdfController extends Controller
         $this->base['preceeding'] = $preceeding;
         $this->base['advance_yr'] = $advance_yr;
         $this->base['current'] = $current;
+        $this->base['municipality'] = Municipality::whereId($request['municipality'])->first();
 
-        $report_exist = RptSefAdjustments::where('municipality', $request['municipality'])
-            ->where('start_date', '=', $date_start)
-            ->where('end_date', '=', $date_end)
-            ->with('report_sef_items')
-            ->with('report_basic_items')
-            ->get();
-            
-        if($request['isEdit']){
-            $report_exist = RptSefAdjustments::where('municipality', $request['municipality'])
-            ->where('start_date', '=', $date_start)
-            ->where('end_date', '=', $date_end)
+        $report_exist = RptSefAdjustments::where('municipality', '=', $request['municipality'])
             ->where('report_no', '=', $request['report_no'])
             ->with('report_sef_items')
             ->with('report_basic_items')
             ->get();
+            
+        if($request['isEdit'] == 0 and count($report_exist) > 0){
+            return 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!';
+            return redirect()->route('report.real_property')->with('isExist', 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!');
         }
 
         $this->base['sef_exist'] = $report_exist;
@@ -4456,7 +4451,6 @@ class PdfController extends Controller
         $date_end = new Carbon($date_end);
         $this->base['f56_type'] = F56Type::get();
         $this->base['date_range'] = date('F d, Y', strtotime($date_start)) .' to '. $date_end->format('F d, Y') .'.';
-        $this->base['municipality'] = Municipality::whereId($request['municipality'])->first();
         $this->base['receipts'] = $receipts;
         $this->base['class_amt'] = $class_amt;
         $this->base['report_date'] = $report_date;

@@ -115,6 +115,9 @@
 </div>
 <hr>
 <h3>Generate New Report</h3>
+@if (session('isExist'))
+    <div class="alert alert-danger">{{ session('isExist') }}</div>
+@endif
 <div class="row">
     {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property'], 'id' => 'pdf_rpt']) }}
         <div class="form-group col-sm-6">
@@ -325,6 +328,21 @@
         var report_date = arrayData.report_date;
         var start_date = arrayData.start_date;
         var end_date = arrayData.end_date;
+        console.log(isEdit);
+
+        if(isEdit == 0){
+            $('#addl_inputs').append(`
+                    <div id="addl_entries">
+                        <input type="hidden" name="municipality" id="munic">
+                        <input type="hidden" name="start_date" id="start_date">
+                        <input type="hidden" name="end_date" id="end_date">
+                        <input type="hidden" name="report_no" id="report_num">
+                        <input type="hidden" name="report_date" id="report_date">
+                    </div>
+            `);
+        }else{
+            $('#addl_entries').remove();
+        }
 
         $.ajax({
             'url' : '{{ route("rpt.prepare") }}', 
@@ -359,27 +377,31 @@
                             </tr>';
 
                     if(data.municipality != undefined && data.municipality != null) {
+
                         municipalities = JSON.parse('{!! $base['municipalities'] !!}');
                         municipality_options = ``;
-                        console.log(municipalities);
+                        municipality_select = '';
 
-                        municipalities.forEach(element => {
+                        if (isEdit == 1) {
+                            municipalities.forEach(element => {
                             municipality_options += `
                                 <option value="`+element.id+`">`+element.name+`</option>
                             `;
                         });
-                        console.log(municipality_options);
-                        content += `<tr>\
-                                <td>MUNICIPALITY OF 
-                                    <select class="form-control-xs" name="municipality" id="munic" required>
-                                        `+municipality_options+`
-                                    </select> `+
-                                    '</td>\
-                            </tr>';
+
+                        municipality_select = `<select class="form-control-xs" name="municipality" id="munic" required>
+                                                    `+municipality_options+`
+                                                </select>`;
+                        }
+                        
+                        content += `<tr>
+                                <td>MUNICIPALITY OF `+ (isEdit == 1 ? municipality_select : data.municipality.name) +`
+                                </td>
+                            </tr>`;
                     }
                             
                     content += '<tr>\
-                                <td><input type="text" class="form-control-xs date" name="start_date" id="start_date" required> to <input type="text" class="form-control-xs date" name="end_date" id="end_date" required></td>\
+                                <td>'+( isEdit == 1 ? '<input type="text" class="form-control-xs date" name="start_date" id="start_date" required> to <input type="text" class="form-control-xs date" name="end_date" id="end_date" required>' : data.date_range )+'</td>\
                             </tr>\
                         </table>\
                         <table>\
@@ -389,7 +411,7 @@
 
                     if(report_no != undefined || report_no != null || report_no != "") {
                         content += '<td>Report No.</td>\
-                            <td>'+report_no+'</td>';
+                            <td>'+ (isEdit == 1 ? '<input class="form-control-xs" type="text" name="report_no" id="report_num">' : report_no  ) +'</td>';
                     }
 
                     content += '</tr>\
@@ -397,7 +419,7 @@
                                 <td>A. COLLECTIONS</td>\
                                 <td></td>\
                                 <td>Date</td>\
-                                <td><input type="text" class="form-control-xs date" name="report_date" id="report_date" required></td>\
+                                <td>'+ (isEdit == 1 ? '<input type="text" class="form-control-xs date" name="report_date" id="report_date" required>' : report_date) +'</td>\
                             </tr>\
                         </table>';
 
@@ -1271,43 +1293,43 @@
 
                         content += '<td colspan="3">Provincial Share</td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+ (prv_adv_ammount = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_adv_ammount) : roundOff(prv_adv_ammount)))+'" class="form-control" type="number" step="0.01" id="prv_adv_ammount" name="prv_adv_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+ parseFloat(prv_adv_ammount = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_adv_ammount) : roundOff(prv_adv_ammount))).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_adv_ammount" name="prv_adv_ammount"></td>\
                                 <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_adv_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_adv_discount" name="prv_adv_discount"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+ (prv_crnt_ammount = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_crnt_ammount) : roundOff(prv_crnt_ammount)))+'" class="form-control" type="number" step="0.01" id="prv_crnt_ammount" name="prv_crnt_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+ parseFloat(prv_crnt_ammount = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_crnt_ammount) : roundOff(prv_crnt_ammount))).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_crnt_ammount" name="prv_crnt_ammount"></td>\
                                 <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_crnt_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_crnt_discount" name="prv_crnt_discount"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+ (prv_prvious_ammount = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prvious_ammount) : roundOff(prv_prvious_ammount))) +'" class="form-control" type="number" step="0.01" id="prv_prvious_ammount" name="prv_prvious_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+ parseFloat(prv_prvious_ammount = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prvious_ammount) : roundOff(prv_prvious_ammount))).toFixed(2) +'" class="form-control" type="number" step="0.01" id="prv_prvious_ammount" name="prv_prvious_ammount"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+ (prv_prior_1992_amt = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1992_amt) : roundOff(prv_prior_1992_amt) ))+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_amt" name="prv_prior_1992_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+ parseFloat(prv_prior_1992_amt = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1992_amt) : roundOff(prv_prior_1992_amt) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_amt" name="prv_prior_1992_amt"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+ (prv_prior_1991_amt = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1991_amt) : roundOff(prv_prior_1991_amt) ))+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_amt" name="prv_prior_1991_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+ parseFloat(prv_prior_1991_amt = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1991_amt) : roundOff(prv_prior_1991_amt) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_amt" name="prv_prior_1991_amt"></td>\
                                 <td class="border_all ctr">35%</td>\
-                                <td colspan="3" class="border_all val"><input value="'+ (prv_pnalties_crnt = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_pnalties_crnt) : roundOff(prv_pnalties_crnt) ))+'" class="form-control" type="number" step="0.01" id="prv_pnalties_crnt" name="prv_pnalties_crnt"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+ (prv_pnalties_prvious = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_pnalties_prvious) : roundOff(prv_pnalties_prvious) ))+'" class="form-control" type="number" step="0.01" id="prv_pnalties_prvious" name="prv_pnalties_prvious"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+ (prv_prior_1992_penalties = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1992_penalties) : roundOff(prv_prior_1992_penalties) ))+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_penalties" name="prv_prior_1992_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+ (prv_prior_1991_penalties = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1991_penalties) : roundOff(prv_prior_1991_penalties)))+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_penalties" name="prv_prior_1991_penalties"></td>\
+                                <td colspan="3" class="border_all val"><input value="'+ parseFloat(prv_pnalties_crnt = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_pnalties_crnt) : roundOff(prv_pnalties_crnt) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_pnalties_crnt" name="prv_pnalties_crnt"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+ parseFloat(prv_pnalties_prvious = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_pnalties_prvious) : roundOff(prv_pnalties_prvious) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_pnalties_prvious" name="prv_pnalties_prvious"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+ parseFloat(prv_prior_1992_penalties = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1992_penalties) : roundOff(prv_prior_1992_penalties) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1992_penalties" name="prv_prior_1992_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+ parseFloat(prv_prior_1991_penalties = ( adjustRounded(1) > roundOff(prv_total_basic) ? unroundOff(prv_prior_1991_penalties) : roundOff(prv_prior_1991_penalties))).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_prior_1991_penalties" name="prv_prior_1991_penalties"></td>\
                                 <td colspan="2" class="border_all val"><input value="'+parseFloat(prv_total_basic).toFixed(2)+'" class="form-control" type="number" step="0.01" id="prv_total_basic" name="prv_total_basic" readonly></td>\
                             </tr>\
                             <tr>\
                                 <td colspan="3">Municipal Share</td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+(mnc_adv_ammount = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_adv_ammount) : roundOff(mnc_adv_ammount)))+'" class="form-control" type="number" step="0.01" id="mnc_adv_ammount" name="mnc_adv_ammount"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_adv_ammount = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_adv_ammount) : roundOff(mnc_adv_ammount))).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_adv_ammount" name="mnc_adv_ammount"></td>\
                                 <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_adv_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_adv_discount" name="mnc_adv_discount"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+(munshare_basic_current = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_current) : roundOff(munshare_basic_current) ))+'" class="form-control" type="number" step="0.01" id="munshare_basic_current" name="munshare_basic_current"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_current = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_current) : roundOff(munshare_basic_current) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_current" name="munshare_basic_current"></td>\
                                 <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_discount).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_discount" name="munshare_basic_discount"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="2" class="border_all val"><input value="'+(munshare_basic_previous = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_previous) : roundOff(munshare_basic_previous) ) )+'" class="form-control" type="number" step="0.01" id="munshare_basic_previous" name="munshare_basic_previous"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_previous = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_previous) : roundOff(munshare_basic_previous) ) ).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_previous" name="munshare_basic_previous"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+(mnc_prior_1992_amt = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1992_amt) : roundOff(mnc_prior_1992_amt) ) )+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_amt" name="mnc_prior_1992_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+parseFloat(mnc_prior_1992_amt = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1992_amt) : roundOff(mnc_prior_1992_amt) ) ).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_amt" name="mnc_prior_1992_amt"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td class="border_all val" colspan="2"><input value="'+(mnc_prior_1991_amt = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1991_amt) : roundOff(mnc_prior_1991_amt) ) )+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_amt" name="mnc_prior_1991_amt"></td>\
+                                <td class="border_all val" colspan="2"><input value="'+parseFloat(mnc_prior_1991_amt = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1991_amt) : roundOff(mnc_prior_1991_amt) ) ).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_amt" name="mnc_prior_1991_amt"></td>\
                                 <td class="border_all ctr">40%</td>\
-                                <td colspan="3" class="border_all val"><input value="'+(munshare_basic_penalty_current = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_penalty_current) : roundOff(munshare_basic_penalty_current) ) )+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_current" name="munshare_basic_penalty_current"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+(munshare_basic_penalty_previous = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_penalty_previous) : roundOff(munshare_basic_penalty_previous) ))+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_previous" name="munshare_basic_penalty_previous"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+(mnc_prior_1992_penalties = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1992_penalties) : roundOff(mnc_prior_1992_penalties) ) )+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_penalties" name="mnc_prior_1992_penalties"></td>\
-                                <td colspan="2" class="border_all val"><input value="'+(mnc_prior_1991_penalties = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1991_penalties) : roundOff(mnc_prior_1991_penalties) ) )+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_penalties" name="mnc_prior_1991_penalties"></td>\
+                                <td colspan="3" class="border_all val"><input value="'+parseFloat(munshare_basic_penalty_current = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_penalty_current) : roundOff(munshare_basic_penalty_current) ) ).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_current" name="munshare_basic_penalty_current"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+parseFloat(munshare_basic_penalty_previous = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(munshare_basic_penalty_previous) : roundOff(munshare_basic_penalty_previous) )).toFixed(2)+'" class="form-control" type="number" step="0.01" id="munshare_basic_penalty_previous" name="munshare_basic_penalty_previous"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_prior_1992_penalties = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1992_penalties) : roundOff(mnc_prior_1992_penalties) ) ).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1992_penalties" name="mnc_prior_1992_penalties"></td>\
+                                <td colspan="2" class="border_all val"><input value="'+parseFloat(mnc_prior_1991_penalties = ( adjustRounded(2) > roundOff(mncpal_total_basic) ? unroundOff(mnc_prior_1991_penalties) : roundOff(mnc_prior_1991_penalties) ) ).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mnc_prior_1991_penalties" name="mnc_prior_1991_penalties"></td>\
                                 <td colspan="2" class="border_all val"><input value="'+parseFloat(mncpal_total_basic).toFixed(2)+'" class="form-control" type="number" step="0.01" id="mncpal_total_basic" name="mncpal_total_basic" readonly></td>\
                             </tr>\
                             <tr>\
@@ -1816,13 +1838,14 @@
                     $('.date').datepicker({
                         changeMonth:true,
                         changeYear:true,
-                        showAnim:'slide'
+                        showAnim:'slide',
+                        dateFormat: 'mm/dd/yy'
                     });
                     $('#munic').val(municipality);
-                    $('#start_date').val(start_date);
-                    $('#end_date').val(end_date);
+                    $('#start_date').val(moment(new Date(start_date)).format('MM/DD/YYYY'));
+                    $('#end_date').val(moment(new Date(end_date)).format('MM/DD/YYYY'));
                     $('#report_num').val(report_no);
-                    $('#report_date').val(report_date);
+                    $('#report_date').val(moment(new Date(report_date)).format('MM/DD/YYYY'));
                 } else {
                     $('#submit').css('display', 'none');
                     $('#report_content_modal').modal('show');
@@ -2060,7 +2083,8 @@
     $('.date').datepicker({
             changeMonth:true,
             changeYear:true,
-            showAnim:'slide'
+            showAnim:'slide',
+            dateFormat: 'mm/dd/yy'
         });
 
     

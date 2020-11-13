@@ -70,7 +70,7 @@ class ReportController extends Controller
         $this->base['page_title'] = 'Real Property Tax Collections';
         $this->base['months'] = array();
         $latestReport = RptSefAdjustments::latest('id')->first();
-        $reportNumber = explode('-', $latestReport->report_no);
+        $reportNumber = $latestReport->report_no ? explode('-', $latestReport->report_no) : explode("-", 'RPT-'.date('Y'));
         $reportIndex = (int)$reportNumber[1] == date('Y') ? (count($reportNumber) > 2 ? (int)$reportNumber[2] + 1 : 1) : 0;
         $digit = strlen((string)$reportIndex);
         switch ($digit) {
