@@ -4501,7 +4501,7 @@ class PdfController extends Controller
     public function rpt_report_submit(Request $req) {
         $request = new Request($req->all()); 
         $data = $this->rpr_report_edit($request);
-        
+        $this->base['mun'] = Municipality::find($req->municipality);
         if(isset($req['save_report'])){
           
         $insert = RptSefAdjustments::updateOrCreate(
@@ -4586,12 +4586,11 @@ class PdfController extends Controller
                 'brgy_penalty_1991' => $req->brgy_prior_1991_penalties,
             ]
         );
-        return redirect()->route('report.real_property');
+        return redirect()->route('report.real_property')->with('isSaved', 'Report '.$req->report_no.' in '.$this->base['mun']->name.' succesfully saved!');
         }
         $merged = array_merge($data, $req->all());
 
         $this->base['merged'] = $merged;
-        $this->base['mun'] = Municipality::find($req->municipality);
 
         if($req['btn_pdf'] == 'button' || $req['btn'] == 'rpt_mun_report_protest') {
             $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');

@@ -67,12 +67,15 @@
             position: relative; 
             z-index: 10;
         }
+        .ui-datepicker{
+             z-index: 9999 !important;
+             }
     </style>
 @endsection
 
 @section('content')
-@if ()
-    
+@if (session('isSaved'))
+        <div class="alert alert-success">{{ session('isSaved') }}</div>
 @endif
 <h3>View/Edit Report</h3>
 <div class="row">
@@ -233,11 +236,11 @@
                 <form method="POST" action="{{ route('rpt.submit') }}" id="form">
                     {{ csrf_field() }}
                     <div id="addl_inputs">
-                        <input type="hidden" name="municipality" id="munic">
+                        {{-- <input type="hidden" name="municipality" id="munic">
                         <input type="hidden" name="start_date" id="start_date">
                         <input type="hidden" name="end_date" id="end_date">
                         <input type="hidden" name="report_no" id="report_num">
-                        <input type="hidden" name="report_date" id="report_date">
+                        <input type="hidden" name="report_date" id="report_date"> --}}
                         <input type="hidden" name="btn_pdf" id="btn_pdf">
                         <input type="hidden" name="isEdit" class="isEdit" value="0">
                     </div>
@@ -248,7 +251,7 @@
                     <br>
                     <div class="modal-footer" id="submit" style="display: none;">
                         <button class="btn btn-success pull-right" type="submit" name="view_report" class="submit_btn" style="margin: 0 0 0 1%"><i class="fa fa-eye"></i> View Report in PDF</button>
-                        <button class="btn btn-success pull-right" type="submit" name="save_report" class="submit_btn">Save Report</button>
+                        <button class="btn btn-success pull-right" type="submit" name="save_report" class="submit_btn"><i class="fa fa-spinner fa-spin" style="display:none">&nbsp</i> <i class="fa fa-save"></i> Save Report</button>
                     </div>
                 </form>
             </div>
@@ -259,17 +262,14 @@
 
 @section('js')
 <script>
-    $('.date').datepicker({
-        changeMonth:true,
-        changeYear:true,
-        showAnim:'slide'
-    });
+    
 
     $('button[name="view_report"]').click(function(){
         $('#form').attr('target', '_blank');
     });
 
     $('button[name="save_report"]').click(function(){
+        $(this).find('.fa-spinner').show();
         $('#form').attr('target', '');
     });
 
@@ -345,11 +345,7 @@
                 $('#report_content').empty();
                 if(typeof(data) == 'object') {
                     $('#submit').css('display', 'block');
-                    $('#munic').val(municipality);
-                    $('#start_date').val(start_date);
-                    $('#end_date').val(end_date);
-                    $('#report_num').val(report_no);
-                    $('#report_date').val(report_date);
+                    
                     $('#btn_pdf').val(button_pdf);
                     $('#report_content_modal').modal('show');
                     var content = '';
@@ -363,13 +359,27 @@
                             </tr>';
 
                     if(data.municipality != undefined && data.municipality != null) {
-                        content += '<tr>\
-                                <td>MUNICIPALITY OF '+data.municipality.name+'</td>\
+                        municipalities = JSON.parse('{!! $base['municipalities'] !!}');
+                        municipality_options = ``;
+                        console.log(municipalities);
+
+                        municipalities.forEach(element => {
+                            municipality_options += `
+                                <option value="`+element.id+`">`+element.name+`</option>
+                            `;
+                        });
+                        console.log(municipality_options);
+                        content += `<tr>\
+                                <td>MUNICIPALITY OF 
+                                    <select class="form-control-xs" name="municipality" id="munic" required>
+                                        `+municipality_options+`
+                                    </select> `+
+                                    '</td>\
                             </tr>';
                     }
                             
                     content += '<tr>\
-                                <td>'+data.date_range+'</td>\
+                                <td><input type="text" class="form-control-xs date" name="start_date" id="start_date" required> to <input type="text" class="form-control-xs date" name="end_date" id="end_date" required></td>\
                             </tr>\
                         </table>\
                         <table>\
@@ -387,7 +397,7 @@
                                 <td>A. COLLECTIONS</td>\
                                 <td></td>\
                                 <td>Date</td>\
-                                <td>'+report_date+'</td>\
+                                <td><input type="text" class="form-control-xs date" name="report_date" id="report_date" required></td>\
                             </tr>\
                         </table>';
 
@@ -1803,6 +1813,16 @@
                     
                             
                     $('#report_content').append(content);
+                    $('.date').datepicker({
+                        changeMonth:true,
+                        changeYear:true,
+                        showAnim:'slide'
+                    });
+                    $('#munic').val(municipality);
+                    $('#start_date').val(start_date);
+                    $('#end_date').val(end_date);
+                    $('#report_num').val(report_no);
+                    $('#report_date').val(report_date);
                 } else {
                     $('#submit').css('display', 'none');
                     $('#report_content_modal').modal('show');
@@ -2037,6 +2057,12 @@
         var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (2 || -1) + '})?');
         return num.toString().match(re)[0];
     }
+    $('.date').datepicker({
+            changeMonth:true,
+            changeYear:true,
+            showAnim:'slide'
+        });
 
+    
 </script>
 @endsection

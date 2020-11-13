@@ -70,6 +70,7 @@
     </style>
 @endsection
 
+
 @section('content')
 <h3>View/Edit Report</h3>
 <div class="row">
