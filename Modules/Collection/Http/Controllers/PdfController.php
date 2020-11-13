@@ -4586,7 +4586,7 @@ class PdfController extends Controller
                 'brgy_penalty_1991' => $req->brgy_prior_1991_penalties,
             ]
         );
-  
+        return redirect()->route('report.real_property');
         }
         $merged = array_merge($data, $req->all());
 

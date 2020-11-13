@@ -71,6 +71,9 @@
 @endsection
 
 @section('content')
+@if ()
+    
+@endif
 <h3>View/Edit Report</h3>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -227,7 +230,7 @@
                 <button type="button" class="close" data-dismiss="modal"><i>&times;</i></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('rpt.submit') }}" id="form" target="_blank">
+                <form method="POST" action="{{ route('rpt.submit') }}" id="form">
                     {{ csrf_field() }}
                     <div id="addl_inputs">
                         <input type="hidden" name="municipality" id="munic">
@@ -244,8 +247,8 @@
 
                     <br>
                     <div class="modal-footer" id="submit" style="display: none;">
-                        <button class="btn btn-success pull-right" type="submit" name="view_report" id="submit_btn" style="margin: 0 0 0 1%"><i class="fa fa-eye"></i> View/Generate Report</button>
-                        <button class="btn btn-success pull-right" type="submit" name="save_report" id="submit_btn">Save and Generate Report</button>
+                        <button class="btn btn-success pull-right" type="submit" name="view_report" class="submit_btn" style="margin: 0 0 0 1%"><i class="fa fa-eye"></i> View Report in PDF</button>
+                        <button class="btn btn-success pull-right" type="submit" name="save_report" class="submit_btn">Save Report</button>
                     </div>
                 </form>
             </div>
@@ -262,11 +265,12 @@
         showAnim:'slide'
     });
 
-    $('#report_content_modal').on('submit', 'form', function(e){
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
-        
+    $('button[name="view_report"]').click(function(){
+        $('#form').attr('target', '_blank');
+    });
+
+    $('button[name="save_report"]').click(function(){
+        $('#form').attr('target', '');
     });
 
     $('#search-report').click(function(){
@@ -1956,7 +1960,7 @@
         });
     }
 
-    $(document).on('click', '#submit_btn', function(e) {
+    $(document).on('click', '.submit_btn', function(e) {
         e.preventDefault();
         // basic
         var prv_adv_ammount = $('#prv_adv_ammount').val();
