@@ -40,6 +40,7 @@ class GroupPermissionController extends Controller
             ->join($this->permission_table, $this->permission_table.'.id', '=', $this->group_permission_table.'.permission_id')
             ->where('permissioncategory_id', $permissioncategory_id)
             ->get(['permission_id', 'value', 'description']);
+        // dd($this->base);
         return view('base.group_permissionview')->with('base', $this->base);
     }
     
