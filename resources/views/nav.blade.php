@@ -46,7 +46,7 @@
                         </li>
                     </ul>
                 </li>
-
+                
                 @foreach($base['navigation'] as $i => $nav)
                 @if (empty($nav['children']))
                 <li>
@@ -110,7 +110,6 @@
             @include('message')
 
             @yield('content')
-
         </div>
     </div>
 

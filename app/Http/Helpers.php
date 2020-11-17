@@ -128,4 +128,9 @@ Class convertx {
         return $num .= ' only';
     }
 
+    function zeroToDash($number, $length)
+    {
+        return $number > 0 ? number_format($number, $length) : '-';
+    }
+
  

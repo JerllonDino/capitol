@@ -12,9 +12,9 @@
             font-size: 16px;
         }
         #items {
-            width: 80%;
-            margin-right: auto;
-            margin-left: auto;
+            width: 90%;
+            /* margin-right: auto; */
+            margin-left: 20px;
         }
         .underline {
             border-bottom: 1px solid #000000;
@@ -149,8 +149,8 @@
                 <td>
                     <b>{{ $item->nature }}</b>
                 </td>
-                <td class="center">{{ ($count==0)? 'PHP' : '' }}</td>
-                <td class="val">
+                <td class="center" style="width:20px;">{{ ($count==0)? 'PHP' : '' }}</td>
+                <td class="val" style="width:150px;">
                 <span class="hidden">
                 {{ $total += $item->value }}
                 </span>

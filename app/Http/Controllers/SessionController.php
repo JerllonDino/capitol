@@ -34,7 +34,7 @@ class SessionController extends Controller
         # create backup here..
         # because scheduling doesn't work on windows
         $date = \Carbon\Carbon::now()->toDateString();
-        $filename = date('Y-m-d_H-i-s') . '_backup.sql';
+        $filename = date('Y-m-d') . '_backup.sql';
         $bk = Backup::where('location', 'storage/backups/'.$filename)->first();
         if (is_null($bk)) {
             $user = Config::get('database.connections.mysql.username');

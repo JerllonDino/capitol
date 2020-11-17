@@ -34,6 +34,7 @@ class NavigationController extends Controller
             ->get();
         
         $navigation = array();
+        
         foreach ($root_links as $root_link) {
             $permission_name = $root_link->Permission->name;
             
@@ -50,7 +51,7 @@ class NavigationController extends Controller
                 array_push($navigation, self::addlink($root_link));
             }
         }
-        
+        // dd($root_links);
         return $navigation;
     }
     

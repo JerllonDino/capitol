@@ -275,8 +275,8 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/municipal_receipts/receipts/certificate/{id}', 'MunicipalReceiptsController@mncpal_cert')->name('mncpal.cert');
     Route::get('/municipal_receipts/receipts/print_certificate/{id}/{gov}/{ppr_size}/{height?}/{width?}', 'MunicipalReceiptsController@mncpal_rcpt_cert')->name('mncpal.print.cert');
 
-    Route::get('/payment_transactions', 'PaymentTransactions@index')->name('payment_transactions');
-
+    Route::get('/payment_transactions', 'PaymentTransactionsController@index')->name('payment_transactions');
+    Route::get('/payment_transactions/store', 'PaymentTransactionsController@store')->name('payment_transactions.store');
 });
 
 

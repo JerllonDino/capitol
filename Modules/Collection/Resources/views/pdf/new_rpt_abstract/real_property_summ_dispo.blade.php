@@ -271,84 +271,84 @@
             <td colspan="2">{{ $type->name }}</td>
             <!-- BASIC -->
             <!-- advance -->
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_adv'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_adv_discount'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_adv'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_adv_discount'], 2) }}</td>
             <!-- current --> 
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_current'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_discount'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_current'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_discount'], 2) }}</td>
             <!-- immediate preceeding year --> 
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_previous'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_previous'], 2) }}</td>
             <!-- prior years -->
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_1992'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_1991'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_1992'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_1991'], 2) }}</td>
             <!-- penalties -->
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_penalty_current'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_penalty_previous'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_penalty_1992'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_penalty_1991'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_penalty_current'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_penalty_previous'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_penalty_1992'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_penalty_1991'], 2) }}</td>
             <!-- subtotal gross -->
-            <td class="border_all val">{{ number_format($class_basic_gross, 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_basic_gross, 2) }}</td>
             <!-- subtotal net -->
-            <td class="border_all val">{{ number_format($class_basic_net, 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_basic_net, 2) }}</td>
             <!-- SEF --> 
             <!-- advance -->
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_adv'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_adv_discount'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_adv'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_adv_discount'], 2) }}</td>
             <!-- current --> 
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_current'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_discount'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_current'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_discount'], 2) }}</td>
             <!-- immediate preceeding year --> 
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_previous'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_previous'], 2) }}</td>
             <!-- prior years -->
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_1992'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_1991'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_1992'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_1991'], 2) }}</td>
             <!-- penalties -->
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_penalty_current'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_penalty_previous'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_penalty_1992'], 2) }}</td>
-            <td class="border_all val">{{ number_format($class_amt[$type->id]['basic_prior_penalty_1991'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_penalty_current'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_penalty_previous'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_penalty_1992'], 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_prior_penalty_1991'], 2) }}</td>
             <!-- subtotal gross -->
-            <td class="border_all val">{{ number_format($class_basic_gross, 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_basic_gross, 2) }}</td>
             <!-- subtotal net -->
-            <td class="border_all val">{{ number_format($class_basic_net, 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_basic_net, 2) }}</td>
             <!-- grandtotal gross -->
-            <td class="border_all val">{{ number_format($class_total_gross, 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_total_gross, 2) }}</td>
             <!-- grandtotal net -->
-            <td class="border_all val">{{ number_format($class_total_net, 2) }}</td>
+            <td class="border_all val">{{ zeroToDash($class_total_net, 2) }}</td>
         </tr>
         @endforeach
 
         <tr>
             <td colspan="5"></td>
             <th class="border_all" colspan="2">TOTAL</th>
-            <th class="border_all val">{{ number_format($total_adv, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_adv_discount, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_current, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_discount, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_previous, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_prior_1992, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_prior_1991, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_penalty_current, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_penalty_previous, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_penalty_prior_1992, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_penalty_prior_1991, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_gross, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_net, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_adv, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_adv_discount, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_current, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_discount, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_previous, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_prior_1992, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_prior_1991, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_penalty_current, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_penalty_previous, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_penalty_prior_1992, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_penalty_prior_1991, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_gross, 2) }}</th>
-            <th class="border_all val">{{ number_format($total_basic_net, 2) }}</th>
-            <th class="border_all val">{{ number_format($gt_gross, 2) }}</th>
-            <th class="border_all val">{{ number_format($gt_net, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_adv, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_adv_discount, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_current, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_discount, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_previous, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_prior_1992, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_prior_1991, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_penalty_current, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_penalty_previous, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_penalty_prior_1992, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_penalty_prior_1991, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_gross, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_net, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_adv, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_adv_discount, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_current, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_discount, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_previous, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_prior_1992, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_prior_1991, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_penalty_current, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_penalty_previous, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_penalty_prior_1992, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_penalty_prior_1991, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_gross, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($total_basic_net, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($gt_gross, 2) }}</th>
+            <th class="border_all val">{{ zeroToDash($gt_net, 2) }}</th>
         </tr>
         <tr>
             <td colspan="5"></td>
@@ -466,116 +466,116 @@
                 <td colspan="3">Provincial Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">35%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_adv_ammount'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_adv_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_adv_ammount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_adv_discount'], 2) }}</td>
                 <!-- current --> 
                 <td class="border_all ctr">35%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_crnt_ammount'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_crnt_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_crnt_ammount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_crnt_discount'], 2) }}</td>
                 <!-- previous -->
                 <td class="border_all ctr">35%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_prvious_ammount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_prvious_ammount'], 2) }}</td>
                 <!-- 1992-above -->
                 <td class="border_all ctr">35%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['prv_prior_1992_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['prv_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all ctr">35%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['prv_prior_1991_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['prv_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all ctr">35%</td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['prv_pnalties_crnt'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_pnalties_prvious'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_prior_1992_penalties'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['prv_pnalties_crnt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_pnalties_prvious'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_prior_1992_penalties'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['prv_total_basic'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_total_basic'], 2) }}</td>
             </tr>
             <tr>
                 <th colspan="4"></th>
                 <td colspan="3">Municipal Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">40%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['mnc_adv_ammount'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['mnc_adv_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['mnc_adv_ammount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['mnc_adv_discount'], 2) }}</td>
                 <!-- current -->
                 <td class="border_all ctr">40%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['munshare_basic_current'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['munshare_basic_discount'], 2)  }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['munshare_basic_current'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['munshare_basic_discount'], 2)  }}</td>
                 <!-- previous -->
                 <td class="border_all ctr">40%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['munshare_basic_previous'], 2)  }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['munshare_basic_previous'], 2)  }}</td>
                 <!-- 1992-above -->
                 <td class="border_all ctr">40%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['mnc_prior_1992_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['mnc_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all ctr">40%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['mnc_prior_1991_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['mnc_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all ctr">40%</td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['munshare_basic_penalty_current'], 2)  }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['munshare_basic_penalty_previous'], 2)  }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['mnc_prior_1992_penalties'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['mnc_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['munshare_basic_penalty_current'], 2)  }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['munshare_basic_penalty_previous'], 2)  }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['mnc_prior_1992_penalties'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['mnc_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['mncpal_total_basic'], 2)  }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['mncpal_total_basic'], 2)  }}</td>
             </tr>      
             <tr>
                 <th colspan="4"></th>
                 <td colspan="3">Barangay Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">25%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgy_adv_ammount'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgy_adv_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgy_adv_ammount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgy_adv_discount'], 2) }}</td>
                 <!-- current --> 
                 <td class="border_all ctr">25%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgyshare_basic_current'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgyshare_basic_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgyshare_basic_current'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgyshare_basic_discount'], 2) }}</td>
                 <!-- previous -->
                 <td class="border_all ctr">25%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgyshare_basic_previous'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgyshare_basic_previous'], 2) }}</td>
                 <!-- 1992-above -->
                 <td class="border_all ctr">25%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['brgy_prior_1992_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['brgy_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all ctr">25%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['brgy_prior_1991_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['brgy_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all ctr">25%</td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['brgyshare_basic_penalty_current'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgyshare_basic_penalty_previous'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgy_prior_1992_penalties'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgy_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['brgyshare_basic_penalty_current'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgyshare_basic_penalty_previous'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgy_prior_1992_penalties'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgy_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['brgy_total_basic'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgy_total_basic'], 2) }}</td>
             </tr>     
             <tr>
                 <th colspan="4"></th>
                 <th colspan="3">TOTAL(S)</th>
                 <!-- advance -->
                 <td class="border_all"></td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['total_adv_amt'], 2) }}</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['total_adv_discount'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_adv_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_adv_discount'], 2) }}</td>
                 <!-- current -->
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['total_basic_current'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['total_basic_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['total_basic_current'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['total_basic_discount'], 2) }}</td>
                 <!-- previous -->
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['total_basic_previous'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['total_basic_previous'], 2) }}</td>
                 <!-- 1992-above -->
                 <td class="border_all"></td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['total_prior_1992_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all"></td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['total_prior_1991_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all"></td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['total_basic_penalty_current'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['total_basic_penalty_previous'], 2) }}</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['total_prior_1992_penalties'], 2) }}</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['total_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['total_basic_penalty_current'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['total_basic_penalty_previous'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_prior_1992_penalties'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['total_basic_net'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['total_basic_net'], 2) }}</td>
             </tr>            
             <tr>
                 <td colspan="7"></td>
@@ -718,87 +718,87 @@
                 <td colspan="3">Provincial Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_adv_amt'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_adv_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_adv_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_adv_discount'], 2) }}</td>
                 <!-- current -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_amt'], 2 )}}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_amt'], 2 )}}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_discount'], 2) }}</td>
                 <!-- previous -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prev_prv_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prev_prv_amt'], 2) }}</td>
                 <!-- 1992-above -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_prior_1992_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_prior_1991_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['sef_prv_penalty'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prev_prv_penalty'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_prior_1992_penalties'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['sef_prv_penalty'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prev_prv_penalty'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_prior_1992_penalties'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prv_net'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_net'], 2) }}</td>
             </tr>
             <tr>
                 <th colspan="4"></th>
                 <td colspan="3">Municipal Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">50%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['sef_mnc_adv_amt'], 2) }}</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['sef_mnc_adv_discount'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['sef_mnc_adv_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['sef_mnc_adv_discount'], 2) }}</td>
                 <!-- current -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_mncpl_crnt'],2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_mncpl_dscnt'],2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_mncpl_crnt'],2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_mncpl_dscnt'],2) }}</td>
                 <!-- previous -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_mncpl_prev'],2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_mncpl_prev'],2) }}</td>
                 <!-- 1992-above -->
                 <td class="border_all ctr">50%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['sef_mnc_prior_1992_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['sef_mnc_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all ctr">50%</td>
-                <td class="border_all val" colspan="2">{{ number_format($merged['sef_mnc_prior_1991_amt'], 2) }}</td>
+                <td class="border_all val" colspan="2">{{ zeroToDash($merged['sef_mnc_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all ctr">50%</td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['sef_mncpl_pen_crnt'],2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_mncpl_pen_crnt_prev'],2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_mnc_prior_1992_penalties'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_mnc_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['sef_mncpl_pen_crnt'],2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_mncpl_pen_crnt_prev'],2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_mnc_prior_1992_penalties'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_mnc_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_basic_net'],2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_basic_net'],2) }}</td>
             </tr>
             <tr>
                 <th colspan="4"></th>
                 <th colspan="3">TOTAL(S)</th>
                 <!-- advance --> 
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_adv_amt'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_adv_discount'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_adv_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_adv_discount'], 2) }}</td>
                 <!-- current -->
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_curr_total'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_curr_discount_total'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_curr_total'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_curr_discount_total'], 2) }}</td>
                 <!-- previous -->
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prev_total'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prev_total'], 2) }}</td>
                 <!-- 1992-above -->
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_prior_1992_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_prior_1992_amt'], 2) }}</td>
                 <!-- 1991-below -->
                 <td class="border_all"></td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_prior_1991_amt'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_prior_1991_amt'], 2) }}</td>
                 <!-- penalties -->
                 <td class="border_all"></td>
-                <td colspan="3" class="border_all val">{{ number_format($merged['sef_curr_pen_total'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_prev_penalty_total'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_prior_1992_penalties'], 2) }}</td>
-                <td colspan="2" class="border_all val">{{ number_format($merged['sef_total_prior_1991_penalties'], 2) }}</td>
+                <td colspan="3" class="border_all val">{{ zeroToDash($merged['sef_curr_pen_total'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prev_penalty_total'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_prior_1992_penalties'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_prior_1991_penalties'], 2) }}</td>
                 <!-- total -->
-                <td colspan="2" class="border_all val">{{ number_format($merged['gtotal_sef'], 2) }}</td>
+                <td colspan="2" class="border_all val">{{ zeroToDash($merged['gtotal_sef'], 2) }}</td>
             </tr>
             <tr>
                 <td colspan="7"></td>

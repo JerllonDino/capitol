@@ -90,7 +90,7 @@
             ?>
 
             {{-- @if($year <= $entry_year || (count($kk) == 1 && $year > $entry_year)) --}}
-                <table width="100%" class="border-hidden" style="margin: 0 ; background: ##dbba7d; position: absolute; top: -15px;">
+                <table width="100%" class="border-hidden" style="margin: 0 ; background: ##dbba7d; position: absolute; top: -5px;">
                     <tr>
                         <td colspan=2 rowspan=2 height='15%' style="padding: 0; margin: 0; background: ##a7e57b;">
                             <table width="100%" class="border-hidden" style="padding: 0; margin: 0;">
@@ -123,7 +123,7 @@
                                             }
                                         @endphp
                                         <div style="height:60px;margin-left: 140px; margin-top: -10px; background: ##b480fc;">
-                                            <table width="95%" style="margin-top:0px;" class="border-hidden">
+                                            <table width="95%" style="margin-top:0px;transform:translate(0, -3px)" class="border-hidden">
                                                 <tbody>
                                                     <tr>
                                                         <td colspan=2 height='25px' class="border-hidden text-right" style="font-size: 12px;" >
@@ -195,7 +195,7 @@
                             </div>
                         </td>
                         <td class="border-hidden" style="padding-left: -30px;">{{ $total_words }} only</td>
-                        <td class="border-hidden text-right" style="text-indent: 13px; padding-right: 25px; background: ##a7e57b;"><br />{{ number_format($form56['total'], 2) }}</td>
+                        <td class="border-hidden text-right" style="text-indent: 13px; padding-right: 25px; background: ##a7e57b;transform:translate(0, -7px)"><br />{{ number_format($form56['total'], 2) }}</td>
                     </tr>
                     <tr>
                         <td colspan=2 class="border-hidden" height="28">
@@ -302,7 +302,7 @@
                     </tr>
                 </table>
 
-                <table width="100%" style="margin: 4px 55px 0 8px; border-color: #ffffff00; background-color: ##42cbf4; position: absolute; top: 130px;" >
+                <table width="100%" style="margin: 0px 55px 0 8px; border-color: #ffffff00; background-color: ##42cbf4; position: absolute; top: 125px;" >
                     <tr style="text-align:center;">
                         <td class="border-hidden" style="width: 3.3cm;"><span class="text-hidden">Name Of <br>DECLARED OWNER</span></td>
                         <td class="border-hidden" style="width: 3.3cm;" ><span class="text-hidden">Location<br>No./Street/Barangay</span></td>
@@ -327,14 +327,14 @@
                     @endphp
 
                     <tr style="background: ##ef7385;">
-                        <td class="border-hidden text-left vertical-top" style="height: 155px; padding-left: 20px; padding-right: 10px; background: ##ef7865;">
+                        <td class="border-hidden text-left vertical-top" style="height: 155px; padding-left: 20px; padding-right: 0px; background: ##ef7865;">
                             @if(isset($annual_per_arp[$arp]['owner']))
                             {{ $annual_per_arp[$arp]['owner'] }}
                             @endif
                         </td>
 
                         <!-- width: 1.2cm; -->
-                        <td class="border-hidden text-left vertical-top" style="background: ##ef6585; padding-left: -15px;">
+                        <td class="border-hidden text-left vertical-top" style="background: ##ef6585; padding-left: 5px;transform:translate(10px, 0px)">
                             @if(!is_null($val['brgy']))
                                 {{ $val['brgy']->name }}
                             @endif
@@ -352,7 +352,8 @@
 
                         <!-- width: 1cm; -->
                         <!-- padding-left: -70px; -->
-                        <td class="border-hidden text-left vertical-top" style="background: ##689cf2; padding-left: -55px;" colspan="2">
+                        <td class="border-hidden text-left vertical-top" style="background: ##689cf2;width:2.2cm; padding-left: 95px;font-size: 9px;white-space: nowrap; padding-top: 5px;transform:translate(-38px, 0px)" colspan="2">
+                            
                             @if($limit_counter <= $limit) 
                                 @foreach($annual_arp as $this_arp => $data)
                                     <?php 
@@ -464,7 +465,7 @@
 
                         <!-- LAND -->
                         <!-- padding-left: -78px; -->
-                        <td class="border-hidden text-left vertical-top" style="width: 1.3cm; background: ##4cef9b; padding-left: -65px; padding-right: 10px;">
+                        <td class="border-hidden text-left vertical-top" style="width: 1.3cm; background: ##4cef9b; padding-left: 10px; padding-right: 0px;transform:translate(-48px, 0px);">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
@@ -507,7 +508,7 @@
                         </td>
 
                         <!-- padding-right: -25px; width: 1.5cm;  -->
-                        <td class="border-hidden text-left vertical-top text-right" style=" width: 2cm; background: ##f276c4; padding-right: -40px;">
+                        <td class="border-hidden text-left vertical-top text-right" style=" width: 2cm; position:absolute; background: ##f276c4; transform: translate(-108px, 0px); padding-left: -45px">
                             <!-- assessed value TOTAL -->
                             <?php 
                                 // $total_assess_val = 0; 
@@ -684,7 +685,7 @@
                                     @endphp
                             @endforeach
                             {{-- TAX DUE AND TYPE --}}
-                            <td class="border-hidden text-left vertical-top" style="width: 3cm; background: ##a276c4; position: relative; padding-left: 25px;">
+                            <td class="border-hidden text-left vertical-top" style="width: 3cm; background: ##a276c4; position: relative; padding-left: -90px; transform:translate(-83px, 0px)">
                                 <div style="margin: 0; padding: 0; text-align: right;"> 
                                     
 
@@ -811,7 +812,7 @@
                                 </div>
                             </td>
 
-                            <td class="border-hidden text-left vertical-top" style="width: 1.5cm; background: ##cde25f; text-align: center;">
+                            <td class="border-hidden text-left vertical-top" style="width: 1.5cm; background: ##cde25f; text-align: center;transform:translate(-83px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -932,7 +933,7 @@
                                 @endforeach
                             </td>
                             {{-- FULL PAYMENT --}}
-                            <td class="border-hidden text-right vertical-top" style="width: 1.1cm; background: ##e8aa4e; padding-right: 6px;">
+                            <td class="border-hidden text-right vertical-top" style="width: 1.1cm; background: ##e8aa4e; padding-right: 6px;transform:translate(-80px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1060,7 +1061,7 @@
                                                             
                             </td>
                             {{-- PENALTY OR DISCOUNT --}}
-                            <td class="border-hidden text-right vertical-top" style="width: 1cm; background: ##e56b60; padding-right: -15px;">
+                            <td class="border-hidden text-right vertical-top" style="width: 1cm; background: ##e56b60; padding-right: -5px;transform:translate(-85px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1184,7 +1185,7 @@
                                                             
                             </td>
                             {{-- TOTAL --}}
-                            <td class="border-hidden text-right vertical-top" style="width: 2.1cm; background: ##7fe83e; padding-left: 10px;">
+                            <td class="border-hidden text-right vertical-top" style="width: 2.1cm; background: ##7fe83e; padding-left: 10px;transform:translate(-85px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1336,7 +1337,7 @@
 
                     <tr class="" style="background: ##c542f5;">
                         <td colspan=5 rowspan="2"  style="border:0px ##ffffff00" >
-                            <table width="100%">
+                            <table width="100%" style="padding-top: 15px;transform:translate(-60px, 0px)">
                                 <tr>
                                     <td class="text-hidden">
                                         <div style="width:80%">
@@ -1362,7 +1363,7 @@
                                             </tr>
                                             <tr>
                                                 <td width="70%" height="15px" class="text-hidden">CASH</td>
-                                                <td style="padding-top: -10px; text-align: right; background: ##52aac7;">{{ number_format($form56['total'], 2) }}</td>
+                                                <td style="padding-top: -20px; text-align: right; background: ##52aac7;">{{ number_format($form56['total'], 2) }}</td>
                                             </tr>
                                             <tr>
                                                 <td height="15px" class="text-hidden">CHECK</td>
@@ -1384,7 +1385,7 @@
                                             </tr>
                                             <tr>
                                                 <td height="15px" class="text-hidden" >TOTAL</td>
-                                                <td style="padding-top: -25px; text-align: right; background-color: ##7fe83e;"> {{ number_format($form56['total'], 2) }}</td>
+                                                <td style="padding-top: -10px; text-align: right; background-color: ##7fe83e;"> {{ number_format($form56['total'], 2) }}</td>
                                                 <!-- padding-top: -15px; -->
                                             </tr>
                                         </table>
@@ -1393,18 +1394,20 @@
                             </table>
                         </td>
                         <!-- padding-top: -38px; -->
-                        <td colspan="7" class="border-hidden text-right" style="background-color: ##7fe83e; padding-top: -55px;"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
+                        <td colspan="7" class="border-hidden text-right" style="background-color: ##7fe83e; padding-top: -53px;transform:translate(-85px, 0px)"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
                     </tr>
                     <tr>
-                        <td colspan="3" class="border-hidden" style="padding-top: -15px; background-color: ##7fe83e;">
+                        <td colspan="3" class="border-hidden" style="width: 5.54cm;padding-top: -45px; padding-left: 40px; background-color: ##7fe83e;transform:translate(-60px, -2px)">
                             <div style="text-align: center; ">
                                 {{$sign ? $acctble_officer_name->value : ''}}
                                 <BR>
+                            <span style="white-space:nowrap">
                                 {{$sign ? $acctble_officer_position->value : ''}}
+                            </span>
                             </div>
                         </td>
-                        <td colspan="3" class="border-hidden" style="padding-top: -15px; background-color: ##7fe83e;">
-                            <div style="text-align: center; ">
+                        <td colspan="4" class="border-hidden" style="padding-top: -50px; background-color: ##7fe83e;transform:translate(-40px, -2px)">
+                            <div style="text-align: center;">
                                 <!-- IMELDA I. MACANES -->
                                 {{$sign ? 'IMELDA I. MACANES ' : ''}}
                                 <BR>
@@ -1442,5 +1445,6 @@
         @endif
         
     @endforeach
+
 </body>
 </html>

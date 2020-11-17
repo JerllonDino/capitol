@@ -358,156 +358,156 @@
                             <td>{{ $f56_detail->F56Type->abbrev }}</td>
                             <td>
                                 @if($f56_detail->period_covered >= $advance_yr)
-                                    {{-- number_format(($f56_detail->tdrp_assedvalue*.01), 2) --}}
-                                    {{ number_format($f56_detail->basic_current, 2) }}
+                                    {{-- zeroToDash(($f56_detail->tdrp_assedvalue*.01), 2) --}}
+                                    {{ zeroToDash($f56_detail->basic_current, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered >= $advance_yr)
-                                    {{-- number_format((($f56_detail->tdrp_assedvalue*.01)*.10), 2) --}}
-                                    {{ number_format($f56_detail->basic_discount, 2) }}
+                                    {{-- zeroToDash((($f56_detail->tdrp_assedvalue*.01)*.10), 2) --}}
+                                    {{ zeroToDash($f56_detail->basic_discount, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered == $current)
-                                    {{ number_format($f56_detail->basic_current, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_current, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered == $current)
-                                    {{ number_format($f56_detail->basic_discount, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_discount, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered == $preceeding)
-                                    {{ number_format($f56_detail->basic_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
-                                    {{ number_format($f56_detail->basic_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
-                                    {{ number_format($f56_detail->basic_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
-                            <td>{{ number_format($f56_detail->basic_penalty_current, 2) }}</td>
+                            <td>{{ zeroToDash($f56_detail->basic_penalty_current, 2) }}</td>
                             <td>
                                 @if($f56_detail->period_covered == $preceeding)
-                                    {{ number_format($f56_detail->basic_penalty_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_penalty_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
-                                    {{ number_format($f56_detail->basic_penalty_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_penalty_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
-                                    {{ number_format($f56_detail->basic_penalty_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_penalty_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
-                            <td>{{ number_format($basic_gross, 2) }}</td>
-                            <td>{{ number_format($basic_net, 2) }}</td>
+                            <td>{{ zeroToDash($basic_gross, 2) }}</td>
+                            <td>{{ zeroToDash($basic_net, 2) }}</td>
                             <td>
                                 @if($f56_detail->period_covered >= $advance_yr)
-                                    {{-- number_format(($f56_detail->tdrp_assedvalue*.01), 2) --}}
-                                    {{ number_format($f56_detail->basic_current, 2) }}
+                                    {{-- zeroToDash(($f56_detail->tdrp_assedvalue*.01), 2) --}}
+                                    {{ zeroToDash($f56_detail->basic_current, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered >= $advance_yr)
-                                    {{-- number_format((($f56_detail->tdrp_assedvalue*.01)*.10), 2) --}}
-                                    {{ number_format($f56_detail->basic_discount, 2) }}
+                                    {{-- zeroToDash((($f56_detail->tdrp_assedvalue*.01)*.10), 2) --}}
+                                    {{ zeroToDash($f56_detail->basic_discount, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered == $current)
-                                    {{ number_format($f56_detail->basic_current, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_current, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered == $current)
-                                    {{ number_format($f56_detail->basic_discount, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_discount, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered == $preceeding)
-                                    {{ number_format($f56_detail->basic_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
-                                    {{ number_format($f56_detail->basic_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
-                                    {{ number_format($f56_detail->basic_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
-                            <td>{{ number_format($f56_detail->basic_penalty_current, 2) }}</td>
+                            <td>{{ zeroToDash($f56_detail->basic_penalty_current, 2) }}</td>
                             <td>
                                 @if($f56_detail->period_covered == $preceeding)
-                                    {{ number_format($f56_detail->basic_penalty_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_penalty_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered >= 1992)
-                                    {{ number_format($f56_detail->basic_penalty_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_penalty_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
                             <td>
                                 @if($f56_detail->period_covered <= $prior_start && $f56_detail->period_covered <= 1991)
-                                    {{ number_format($f56_detail->basic_penalty_previous, 2) }}
+                                    {{ zeroToDash($f56_detail->basic_penalty_previous, 2) }}
                                 @else
-                                    0.00
+                                    -
                                 @endif
                             </td>
-                            <td>{{ number_format($basic_gross, 2) }}</td>
-                            <td>{{ number_format($basic_net, 2) }}</td>
-                            <td>{{ number_format($basic_gross*2, 2) }}</td>
-                            <td>{{ number_format($basic_net*2, 2) }}</td>
+                            <td>{{ zeroToDash($basic_gross, 2) }}</td>
+                            <td>{{ zeroToDash($basic_net, 2) }}</td>
+                            <td>{{ zeroToDash($basic_gross*2, 2) }}</td>
+                            <td>{{ zeroToDash($basic_net*2, 2) }}</td>
                         @endif
                     </tr>
                     @endforeach
@@ -515,34 +515,34 @@
             @endforeach
             <tr>
                 <th colspan="7">TOTAL COLLECTION</th>
-                <th>{{ number_format($total_adv, 2) }}</th>
-                <th>{{ number_format($total_adv_discount, 2) }}</th>
-                <th>{{ number_format($total_basic_current, 2) }}</th>
-                <th>{{ number_format($total_basic_discount, 2) }}</th>
-                <th>{{ number_format($total_basic_previous, 2) }}</th>
-                <th>{{ number_format($total_prior_1992, 2) }}</th>
-                <th>{{ number_format($total_prior_1991, 2) }}</th>
-                <th>{{ number_format($total_basic_penalty_current, 2) }}</th>
-                <th>{{ number_format($total_basic_penalty_previous, 2) }}</th>
-                <th>{{ number_format($total_penalty_prior_1992, 2) }}</th>
-                <th>{{ number_format($total_penalty_prior_1991, 2) }}</th>
-                <th>{{ number_format($total_basic_gross, 2) }}</th>
-                <th>{{ number_format($total_basic_net, 2) }}</th>
-                <th>{{ number_format($total_adv, 2) }}</th>
-                <th>{{ number_format($total_adv_discount, 2) }}</th>
-                <th>{{ number_format($total_basic_current, 2) }}</th>
-                <th>{{ number_format($total_basic_discount, 2) }}</th>
-                <th>{{ number_format($total_basic_previous, 2) }}</th>
-                <th>{{ number_format($total_prior_1992, 2) }}</th>
-                <th>{{ number_format($total_prior_1991, 2) }}</th>
-                <th>{{ number_format($total_basic_penalty_current, 2) }}</th>
-                <th>{{ number_format($total_basic_penalty_previous, 2) }}</th>
-                <th>{{ number_format($total_penalty_prior_1992, 2) }}</th>
-                <th>{{ number_format($total_penalty_prior_1991, 2) }}</th>
-                <th>{{ number_format($total_basic_gross, 2) }}</th>
-                <th>{{ number_format($total_basic_net, 2) }}</th>
-                <th>{{ number_format($gt_gross, 2) }}</th>
-                <th>{{ number_format($gt_net, 2) }}</th>
+                <th>{{ zeroToDash($total_adv, 2) }}</th>
+                <th>{{ zeroToDash($total_adv_discount, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_current, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_discount, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_previous, 2) }}</th>
+                <th>{{ zeroToDash($total_prior_1992, 2) }}</th>
+                <th>{{ zeroToDash($total_prior_1991, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_penalty_current, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_penalty_previous, 2) }}</th>
+                <th>{{ zeroToDash($total_penalty_prior_1992, 2) }}</th>
+                <th>{{ zeroToDash($total_penalty_prior_1991, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_gross, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_net, 2) }}</th>
+                <th>{{ zeroToDash($total_adv, 2) }}</th>
+                <th>{{ zeroToDash($total_adv_discount, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_current, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_discount, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_previous, 2) }}</th>
+                <th>{{ zeroToDash($total_prior_1992, 2) }}</th>
+                <th>{{ zeroToDash($total_prior_1991, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_penalty_current, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_penalty_previous, 2) }}</th>
+                <th>{{ zeroToDash($total_penalty_prior_1992, 2) }}</th>
+                <th>{{ zeroToDash($total_penalty_prior_1991, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_gross, 2) }}</th>
+                <th>{{ zeroToDash($total_basic_net, 2) }}</th>
+                <th>{{ zeroToDash($gt_gross, 2) }}</th>
+                <th>{{ zeroToDash($gt_net, 2) }}</th>
             </tr>
             <tr>
                 <td colspan="35"></td>
