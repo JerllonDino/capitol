@@ -16,7 +16,7 @@
         "smalot/pdfparser": "^0.16.1",
         "mikehaertl/php-pdftk": "^0.9.0",
         "phpoffice/phpword": "^0.17.0",
-        "phpoffice/phpexcel": "^1.8"
+        "phpoffice/phpspreadsheet": "^1.12"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

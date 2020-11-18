@@ -36,6 +36,7 @@ use Modules\Collection\Entities\PreviousTaxType;
 use Carbon\Carbon,PDF,DB,Datatables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Smalot\PdfParser\Parser;
 
 class Form56Controller extends Controller
@@ -53,9 +54,9 @@ class Form56Controller extends Controller
     public function importEx(Request $request)
     {
         $path = $request->file('imports')->getRealPath();
-        
-        $excel = Excel::load($path)->withHeadingRow();
-        dd($excel);
+        $excel = IOFactory::load($path);
+        $worksheet = $excel->getActiveSheet()->getCell('B18')->getValue();
+        dd(Date $worksheet);
     }
 
 
