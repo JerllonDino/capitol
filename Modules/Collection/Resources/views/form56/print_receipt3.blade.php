@@ -29,6 +29,7 @@
         }
         table{
             border-collapse: collapse;
+            
         }
        
         .text-center{
@@ -476,7 +477,7 @@
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) != 1)
-                                            {{ number_format($val['assess_val'],2) }}<br>
+                                            123{{ number_format($val['assess_val'],2) }}<br>
                                         @else
                                             <br>
                                         @endif

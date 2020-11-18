@@ -15,7 +15,8 @@
         "maatwebsite/excel": "~2.1.0",
         "smalot/pdfparser": "^0.16.1",
         "mikehaertl/php-pdftk": "^0.9.0",
-        "phpoffice/phpword": "^0.17.0"
+        "phpoffice/phpword": "^0.17.0",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

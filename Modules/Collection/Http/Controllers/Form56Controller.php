@@ -50,6 +50,14 @@ class Form56Controller extends Controller
         $this->base['host'] = request()->getHttpHost();
     }
 
+    public function importEx(Request $request)
+    {
+        $path = $request->file('imports')->getRealPath();
+        
+        $excel = Excel::load($path)->withHeadingRow();
+        dd($excel);
+    }
+
 
     public function index()
     {

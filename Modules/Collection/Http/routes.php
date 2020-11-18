@@ -215,6 +215,7 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     /* formm 56*/
     Route::get('/form56','Form56Controller@index')->name('form56.index');
     Route::post('/form56','Form56Controller@store')->name('form56.store');
+    Route::post('/tests/import','Form56Controller@importEx')->name('test_import');
 
     Route::get('/form56_view/{id}','Form56Controller@view')->name('form56.view');
 

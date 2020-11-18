@@ -66,6 +66,10 @@
             padding: 0;
             margin: 0;
         }
+        .summary-table td{
+            width: 37.15px;
+            /* white-space: nowrap; */
+        }
     </style>
 </head>
 <body>
@@ -196,7 +200,7 @@
         @endif
     @endforeach
 
-    <table class="table">
+    <table class="table summary-table">
         <tr>
             <th colspan="4"></th>
             <td><b>Summary</b></td>
