@@ -18,7 +18,7 @@
         }
 
         .text-hidden{
-            color: #FFFF !important;
+            color: rgba(rgba(255, 255, 255, 0), green, blue, alpha);
             /*color: #000 !important;*/
         }
 
@@ -339,7 +339,6 @@
                             @if(!is_null($val['brgy']))
                                 {{ $val['brgy']->name }}
                             @endif
-                            <br><br>
                             @php
                                 $data_array = [];   
                             @endphp
@@ -353,7 +352,7 @@
 
                         <!-- width: 1cm; -->
                         <!-- padding-left: -70px; -->
-                        <td class="border-hidden text-left vertical-top" style="background: ##689cf2;width:2.2cm; padding-left: 95px;font-size: 9px;white-space: nowrap; padding-top: 5px;transform:translate(-38px, 0px)" colspan="2">
+                        <td class="border-hidden text-left vertical-top" style="background: ##689cf2;width:2.2cm; padding-left: 70px;white-space: nowrap; transform:translate(-50px, 0px)" colspan="2">
                             
                             @if($limit_counter <= $limit) 
                                 @foreach($annual_arp as $this_arp => $data)
@@ -466,18 +465,18 @@
 
                         <!-- LAND -->
                         <!-- padding-left: -78px; -->
-                        <td class="border-hidden text-left vertical-top" style="width: 1.3cm; background: ##4cef9b; padding-left: 10px; padding-right: 0px;transform:translate(-48px, 0px);">
+                        <td class="border-hidden text-left vertical-top" style="width: 1.4cm; background: ##4cef9b; padding-left: 10px; padding-right: 0px;transform:translate(-48px, 0px);">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
                                         @if(preg_match('/building/i', $val['kind']) != 1)
-                                            {{ number_format($val['assess_val'],2) }}<br>
+                                            {{ number_format($val['assess_val'],2) }}<br><br>
                                         @else
                                             <br>
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) != 1)
-                                            123{{ number_format($val['assess_val'],2) }}<br>
+                                            {{ number_format($val['assess_val'],2) }}<br><br>
                                         @else
                                             <br>
                                         @endif
@@ -488,18 +487,18 @@
 
                         <!--  padding-right: 5px; -->
                         <!-- IMPROVEMENT (BUILDING/MACHINE) -->
-                        <td class="border-hidden text-right vertical-top" style="width: 1.3cm; background: ##4287f5; padding-right: 15px; padding-left: -250px;">
+                        <td class="border-hidden text-right vertical-top" style="width: 1.3cm; background: ##4287f5; padding-left: 10px;;transform:translate(-100px, 0px)">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
                                         @if(preg_match('/building/i', $val['kind']) == 1)
-                                            {{ number_format($val['assess_val'],2) }}<br>
+                                            {{ number_format($val['assess_val'],2) }}<br><br>
                                         @else
                                             <br>
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) == 1)
-                                            {{ number_format($val['assess_val'],2) }}<br>
+                                            {{ number_format($val['assess_val'],2) }}<br><br>
                                         @else
                                             <br>
                                         @endif
@@ -539,10 +538,10 @@
                                         @if($this_arp_next != false)
                                             @if(isset($annual_per_arp[$this_arp_next]))
                                                 @if($annual_per_arp[$this_arp]['prev_tax_dec_no'] == $this_arp_next || $annual_per_arp[$this_arp_next]['prev_tax_dec_no'] == $this_arp)
-                                                    {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br>
-                                                    {{ number_format($annual_per_arp[$this_arp_next]['assess_val'], 2) }}<br>
+                                                    {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br>
+                                                    {{ number_format($annual_per_arp[$this_arp_next]['assess_val'], 2) }}<br><br>
                                                 @elseif($annual_per_arp[$this_arp]['prev_tax_dec_no'] != $this_arp_next || $annual_per_arp[$this_arp_next]['prev_tax_dec_no'] != $this_arp)
-                                                    {{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br>
+                                                    {{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br>
                                                 @endif
                                             @else
                                                 {{ number_format($val['assess_val'], 2) }}
@@ -550,10 +549,10 @@
                                         @elseif($this_arp_prev != false)
                                             @if(isset($annual_per_arp[$this_arp_prev]))
                                                 @if($annual_per_arp[$this_arp]['prev_tax_dec_no'] == $this_arp_prev || $annual_per_arp[$this_arp_prev]['prev_tax_dec_no'] == $this_arp)
-                                                    {{ number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2) }}<br>
-                                                    {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br>
+                                                    {{ number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2) }}<br><br>
+                                                    {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br>
                                                 @elseif($annual_per_arp[$this_arp]['prev_tax_dec_no'] != $this_arp_prev || $annual_per_arp[$this_arp_prev]['prev_tax_dec_no'] != $this_arp)
-                                                    {{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br>
+                                                    {{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br>
                                                 @endif
                                             @else
                                                 {{ number_format($val['assess_val'], 2) }}
@@ -564,7 +563,7 @@
                                             {{-- @else --}}
                                                 @if(isset($annual_per_arp[$this_arp]['assess_val_class']))
                                                     @foreach($annual_per_arp[$this_arp]['assess_val_class'] as $i => $val)
-                                                        {{ number_format($val['assess_val'], 2) }}
+                                                        {{ number_format($val['assess_val'], 2) }}<br><br>
                                                     @endforeach
                                                 @endif
                                             {{-- @endif --}}
@@ -695,11 +694,11 @@
                                             $computedValue=0;
                                             $dates = [];
                                             
-                                            if ($payment_type == 7) {
+                                            // if ($payment_type == 7) {
 
-                                                echo(number_format($lumped[0]['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$lumped[0]['period_covered'] . (count($lumped) > 1 ? "-".$lumped[count($lumped)-1]['period_covered'] : "").")<br>");
-                                                continue;
-                                            }
+                                            //     echo(number_format($lumped[0]['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$lumped[0]['period_covered'] . (count($lumped) > 1 ? "-".$lumped[count($lumped)-1]['period_covered'] : "").")<br>");
+                                            //     continue;
+                                            // }
                                         @endphp
                                         @foreach ($lumped as $key => $data)
                                             @php
@@ -707,7 +706,7 @@
                                                     echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>(". $data['period_covered'] .")<br>");
                                                 }else{
                                                     if(isset($lumped[$key-1])){
-                                                        if ($data['discount'] == 0 and $data['penalty'] != 0) {
+                                                        if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
                                                             if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                                 array_push($dates, $data['period_covered']);
                                                             }else{
@@ -715,7 +714,7 @@
                                                                 array_push($dates, $data['period_covered']);
                                                             }
                                                         }
-                                                        if ($data['penalty'] == 0 and $data['discount'] != 0) {
+                                                        if ($data['penalty'] == 0 and $data['discount'] != 0 and $key < count($lumped)-1) {
                                                             
                                                             if ($data['discount'] == $lumped[$key-1]['discount']) {
                                                                 array_push($dates, $data['period_covered'] and $data['assess_val'] == $lumped[$key-1]['assess_val']);
@@ -724,7 +723,7 @@
                                                                 array_push($dates, $data['period_covered']);
                                                             }
                                                         }
-                                                        if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                        if ($data['penalty'] == 0 and $data['discount'] == 0 and $key < count($lumped)-1) {
                                                             if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                                 array_push($dates, $data['period_covered']);
                                                             }else{
@@ -817,11 +816,11 @@
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
-                                        if ($payment_type == 7) {
-                                            echo("BASIC<br>");
-                                            echo("SEF<br>");
-                                            continue;
-                                        }
+                                        // if ($payment_type == 7) {
+                                        //     echo("BASIC<br>");
+                                        //     echo("SEF<br>");
+                                        //     continue;
+                                        // }
                                     @endphp
                                     @foreach ($lumped as $key => $data)
                                         @php
@@ -830,21 +829,21 @@
                                                 echo("SEF<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue = $data['sef'];
                                                         }else{
                                                             $computedValue = $data['sef'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0 and $key < count($lumped)-1) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue = $data['sef'];
                                                         }else{
                                                             $computedValue = $data['sef'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0 and $key < count($lumped)-1) {
                                                         if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue = $data['sef'];
                                                         }else{
@@ -938,12 +937,18 @@
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
-                                        if ($payment_type == 7) {
-                                            echo(number_format($lumped[0]['sef'],2)."<br>");
-                                            echo(number_format($lumped[0]['sef'],2)."<br>");
-                                            continue;
-                                        }
+                                        // if ($payment_type == 7) {
+                                        //     $sum = 0;
+                                        //     foreach ($lumped as $key => $value) {
+                                        //         $sum += $value['sef'];
+                                        //     }
+                                        //     echo(number_format($sum,2)."<br>");
+                                        //     echo(number_format($sum,2)."<br>");
+                                        //     continue;
+                                        // }
+                                        // dd($display);
                                     @endphp
+
                                     @foreach ($lumped as $key => $data)
                                         @php
                                             if(count($lumped) == 1){
@@ -951,23 +956,24 @@
                                                 echo(number_format($data['sef'],2)."<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
-                                                            $computedValue = $data['sef'];
+                                                            $computedValue += $data['sef'];
                                                         }else{
                                                             $computedValue = $data['sef'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0 and $key < count($lumped)-1) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
-                                                            $computedValue = $data['sef'];
+                                                            $computedValue += $data['sef'];
                                                         }else{
                                                             $computedValue = $data['sef'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0 and $key < count($lumped)-1) {
                                                         if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
-                                                            $computedValue = $data['sef'];
+                                                            $computedValue += $data['sef'];
+                                                            
                                                         }else{
                                                             $computedValue = $data['sef'];
                                                         }
@@ -1016,7 +1022,7 @@
                                                     
                                                     if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
-                                                            $computedValue = $data['sef'];
+                                                            $computedValue += $data['sef'];
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             echo(number_format($computedValue, 2)."<br>");
                                                         }else{
@@ -1024,12 +1030,10 @@
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             echo(number_format($computedValue, 2)."<br>");
                                                         }
-                                                        
-                                                        
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
-                                                            $computedValue = $data['sef'];
+                                                            $computedValue += $data['sef'];
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             echo(number_format($computedValue, 2)."<br>");
                                                         }else{
@@ -1043,7 +1047,7 @@
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
                                                         
                                                         if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
-                                                            $computedValue = $data['sef'];
+                                                            $computedValue += $data['sef'];
                                                             echo(number_format($computedValue, 2)."<br>");
                                                             echo(number_format($computedValue, 2)."<br>");
                                                         }else{
@@ -1066,11 +1070,11 @@
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
-                                        if ($payment_type == 7) {
-                                            echo(number_format($lumped[0]['penalty'],2)."<br>");
-                                            echo(number_format($lumped[0]['penalty'],2)."<br>");
-                                            continue;
-                                        }
+                                        // if ($payment_type == 7) {
+                                        //     echo(number_format($lumped[0]['penalty'],2)."<br>");
+                                        //     echo(number_format($lumped[0]['penalty'],2)."<br>");
+                                        //     continue;
+                                        // }
                                     @endphp
                                     @foreach ($lumped as $key => $data)
                                         @php
@@ -1086,7 +1090,7 @@
                                                 
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
                                                         
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             
@@ -1095,14 +1099,14 @@
                                                             $computedValue = $data['penalty'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0 and $key < count($lumped)-1) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['discount'];
                                                         }else{
                                                             $computedValue = $data['discount'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0 and $key < count($lumped)-1) {
                                                         if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue = 0;
                                                         }else{
@@ -1190,15 +1194,15 @@
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
-                                        if ($payment_type == 7) {
-                                            $sum = 0;
-                                            foreach ($lumped as $key => $value) {
-                                                $sum += $value['total'];
-                                            }
-                                            echo(number_format($sum,2)."<br>");
-                                            echo(number_format($sum,2)."<br>");
-                                            continue;
-                                        }
+                                        // if ($payment_type == 7) {
+                                        //     $sum = 0;
+                                        //     foreach ($lumped as $key => $value) {
+                                        //         $sum += $value['total'];
+                                        //     }
+                                        //     echo(number_format($sum,2)."<br>");
+                                        //     echo(number_format($sum,2)."<br>");
+                                        //     continue;
+                                        // }
                                     @endphp
                                     @foreach ($lumped as $key => $data)
                                         @php
@@ -1207,7 +1211,7 @@
                                                 echo(number_format($data['total'],2)."<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
-                                                    if ($data['discount'] == 0 and $data['penalty'] != 0) {
+                                                    if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
                                                         
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['total'];
@@ -1215,14 +1219,14 @@
                                                             $computedValue = $data['total'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] != 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] != 0 and $key < count($lumped)-1) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['total'];
                                                         }else{
                                                             $computedValue = $data['total'];
                                                         }
                                                     }
-                                                    if ($data['penalty'] == 0 and $data['discount'] == 0) {
+                                                    if ($data['penalty'] == 0 and $data['discount'] == 0 and $key < count($lumped)-1) {
                                                         if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['total'];
                                                         }else{

@@ -78,7 +78,11 @@ hr{
 @endsection
 
 @section('content')
-
+@if (session('htmlExcel'))
+    @php
+        echo (session('htmlExcel'))
+    @endphp
+@endif
 {{ Form::open(['method' => 'POST', 'route' => ['test_import'], 'enctype' => "multipart/form-data"]) }}
     <input type="file" name="imports" id="imports" class="btn btn-success">
     <input type="submit" value="Import Excel" class="btn btn-primary">
