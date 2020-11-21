@@ -11,7 +11,8 @@ use Modules\Collection\Entities\{Customer,Receipt,ReceiptItems,CashDivision,Cash
 use Modules\Collection\Entities\SandGravelTypes as sg_types;
 use Carbon\Carbon,PDF,DB,Datatables;
 use Smalot\PdfParser\Parser;
-use mikehaertl\pdftk\Pdf as Pdftk; 
+use mikehaertl\pdftk\Pdf as Pdftk;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class CustomerController extends Controller
 {
@@ -65,6 +66,53 @@ class CustomerController extends Controller
             'address' => $request['address'],
         ]);
         return redirect()->route('customer.index');
+    }
+
+    public function importEx(Request $request)
+    {
+        $path = $request->imports;
+        // $excel = IOFactory::load($this->decodeBase64($path)['contents']);
+        // $worksheet = $excel->getActiveSheet();
+        // // $iterators = [];
+        // $html = '<table class="table table-bordered table-sm">' . PHP_EOL;
+        // foreach ($worksheet->getRowIterator() as $i => $row) {
+        //     $html = $html . '<tr>' . PHP_EOL;
+        //     $cellIterator = $row->getCellIterator();
+        //     $cellIterator->setIterateOnlyExistingCells(FALSE);
+        //     $iter = 0;
+        //     if($i > 14){
+        //         foreach ($cellIterator as $cell) {
+                    
+        //             // array_push($iterators, $cell);
+        //             $html = $html . '<td>' .
+        //                 ($iter == 1 ? $cell->getFormattedValue() : $cell->getFormattedValue()) .
+        //                 '</td>' . PHP_EOL;
+        //                 $iter = $iter+1;
+        //         }
+        //     }
+        //     $html = $html . '</tr>' . PHP_EOL;
+        // }
+        // // dd($iterators);
+        // $html = $html . '</table>' . PHP_EOL;
+        
+        return response()->json([
+            'html' => $this->decodeBase64($path)
+        ]);
+    }
+
+    private function decodeBase64($base64)
+    {
+        // get file type
+        // $pos = strpos($base64, ';');
+        // $type = explode('/', substr($base64, 0, $pos))[1];
+
+        // decode base64
+        $base64_str = substr($base64, strpos($base64, ',') +  1);
+        $file = base64_decode($base64_str);
+
+        return array(
+            'contents' => $file
+        );
     }
 
     public function show($id,Request $request)

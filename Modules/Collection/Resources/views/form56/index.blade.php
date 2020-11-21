@@ -78,15 +78,7 @@ hr{
 @endsection
 
 @section('content')
-@if (session('htmlExcel'))
-    @php
-        echo (session('htmlExcel'))
-    @endphp
-@endif
-{{ Form::open(['method' => 'POST', 'route' => ['test_import'], 'enctype' => "multipart/form-data"]) }}
-    <input type="file" name="imports" id="imports" class="btn btn-success">
-    <input type="submit" value="Import Excel" class="btn btn-primary">
-{{ Form::close() }}
+
 @if ( Session::get('permission')['col_field_land_tax'] & $base['can_write'] )
 <div class="row">
     {{ Form::open(['method' => 'POST', 'route' => ['form56.store']]) }}
@@ -418,6 +410,26 @@ Please indicate if 'Paid under protest' or 'Held in trust' when necessary."><i c
 
   </div>
 </div>
+
+<div id="excelModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+           
+       </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
 
 
 

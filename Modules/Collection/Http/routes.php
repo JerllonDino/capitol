@@ -215,7 +215,7 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     /* formm 56*/
     Route::get('/form56','Form56Controller@index')->name('form56.index');
     Route::post('/form56','Form56Controller@store')->name('form56.store');
-    Route::post('/tests/import','Form56Controller@importEx')->name('test_import');
+    
 
     Route::get('/form56_view/{id}','Form56Controller@view')->name('form56.view');
 
@@ -240,6 +240,7 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/customer/rpt_record_get/{id}/{td}/{isPdf?}', 'CustomerController@rpt_record_get')->name('rpt_record_get');
     Route::get('/real_property_tax/payment_records/index', 'CustomerController@rpt_record_index')->name('rpt.records_index');
     Route::get('/real_property_tax/payment_records/dt', 'CustomerController@rpt_record_dt')->name('rpt.records_dt');
+    Route::post('/real_property_tax/payment_records/import','CustomerController@importEx')->name('rpt.import_excel_report');
 
     /*RPT delinquents*/
     Route::get('/form56/delinquent_payors', 'Form56Controller@rpt_delinquent')->name('rpt.delinquent');

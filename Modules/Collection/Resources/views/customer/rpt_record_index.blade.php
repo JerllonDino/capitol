@@ -1,6 +1,14 @@
 @extends('nav')
 
 @section('content')
+<h4>Import Municipality RPT Report</h4>
+
+<form enctype="multipart/form-data" id="importExcel" method="post" action="">
+	{{ csrf_field() }}
+	<input type="hidden" name="base64">
+    <input type="file" name="imports" id="imports" class="btn btn-success">
+    <input type="submit" value="Import Excel" class="btn btn-primary">
+</form>
 	<div class="form-inline">
 		<label>MUNICIPALITY </label>
 		<select name="mun" id="mun" class="form-control">
@@ -64,6 +72,13 @@
 			</div>
 		</div>
 	</div> -->
+	<div class="modal fade bd-example-modal-lg excelModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+		  <div class="modal-content">
+			...
+		  </div>
+		</div>
+	  </div>
 @endsection
 
 @section('js')
@@ -101,6 +116,43 @@
 		});
 	}
 	$.fn.getRecords();
+	$excelImport = $('#importExcel');
+	$excelImport.submit(function(e){
+        e.preventDefault();
+		data = $(this).serializeArray();
+		fileBase = $("[name='base64']").data('base64');
+		
+		data.push(
+			{ name: 'imports', value: JSON.stringify(fileBase) },
+		);
+        $.ajax({
+            url: '{{ route("rpt.import_excel_report") }}',
+			method: 'POST',
+            data: data,
+            beforeSend: function(){
+                
+            },
+        }).done(function(data){
+			console.log(data);
+            // $('.excelModal').find('.modal-content').html(data);
+			// $('.excelModal').modal('show');
+        }).fail(function(){
+
+        });
+	});
+	
+	$excelImport.on('change', '[name="imports"]', function () {
+		var file = $(this);
+		let reader = new FileReader();
+		let fileName = file[0].files[0].name;
+		
+		reader.addEventListener("load", function (e) {
+			base64 = e.currentTarget.result;
+			$("[name='base64']").data('base64', base64);
+			
+		});
+		reader.readAsDataURL(file[0].files[0]);
+	});
 
 	// $(document).on('click', '#rpt_rec', function() {
 	// 	// $('#mnth_year').modal('toggle');

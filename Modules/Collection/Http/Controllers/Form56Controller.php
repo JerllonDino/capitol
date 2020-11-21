@@ -51,36 +51,6 @@ class Form56Controller extends Controller
         $this->base['host'] = request()->getHttpHost();
     }
 
-    public function importEx(Request $request)
-    {
-        $path = $request->file('imports')->getRealPath();
-        $excel = IOFactory::load($path);
-        $worksheet = $excel->getActiveSheet();
-        $iterators = [];
-        $html = '<table class="table table-bordered table-sm">' . PHP_EOL;
-        foreach ($worksheet->getRowIterator() as $i => $row) {
-            $html = $html . '<tr>' . PHP_EOL;
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(FALSE);
-            $iter = 0;
-            if($i > 14){
-                foreach ($cellIterator as $cell) {
-                    
-                    // array_push($iterators, $cell);
-                    $html = $html . '<td>' .
-                        ($iter == 1 ? $cell->getFormattedValue() : $cell->getFormattedValue()) .
-                        '</td>' . PHP_EOL;
-                        $iter = $iter+1;
-                }
-            }
-            $html = $html . '</tr>' . PHP_EOL;
-        }
-        // dd($iterators);
-        $html = $html . '</table>' . PHP_EOL;
-        return redirect()->route('form56.index')->with('htmlExcel', $html);
-    }
-
-
     public function index()
     {
         $this->base['f56_types'] = F56Type::get();
