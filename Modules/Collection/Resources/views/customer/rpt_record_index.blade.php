@@ -1,5 +1,25 @@
 @extends('nav')
 
+@section('css')
+<style>
+	.modal-content{
+		padding: 1%;
+		overflow: scroll;
+	}
+
+	.modal .table td{
+		padding:2px;
+		font-size: 10px;
+		margin:0;
+	}
+	@media (min-width: 1200px) {
+	.modal-xlg {
+		width: 100%; 
+	}
+	}
+</style>
+@endsection
+
 @section('content')
 <h4>Import Municipality RPT Report</h4>
 
@@ -7,7 +27,7 @@
 	{{ csrf_field() }}
 	<input type="hidden" name="base64">
     <input type="file" name="imports" id="imports" class="btn btn-success">
-    <input type="submit" value="Import Excel" class="btn btn-primary">
+    <input type="submit" value="Import Excel" class="btn btn-primary" id="submitExcel">
 </form>
 	<div class="form-inline">
 		<label>MUNICIPALITY </label>
@@ -73,7 +93,7 @@
 		</div>
 	</div> -->
 	<div class="modal fade bd-example-modal-lg excelModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-lg modal-xlg">
 		  <div class="modal-content">
 			...
 		  </div>
@@ -119,23 +139,27 @@
 	$excelImport = $('#importExcel');
 	$excelImport.submit(function(e){
         e.preventDefault();
-		data = $(this).serializeArray();
-		fileBase = $("[name='base64']").data('base64');
-		
-		data.push(
-			{ name: 'imports', value: JSON.stringify(fileBase) },
-		);
+		data = new FormData(this);
+
         $.ajax({
             url: '{{ route("rpt.import_excel_report") }}',
 			method: 'POST',
             data: data,
+			contentType: false,
+			cache: false,
+			processData:false,
             beforeSend: function(){
                 
             },
         }).done(function(data){
-			console.log(data);
-            // $('.excelModal').find('.modal-content').html(data);
-			// $('.excelModal').modal('show');
+			// console.log(data.html);
+			if (data.html) {
+				$('.excelModal').find('.modal-content').html(data.html);
+			}else{
+				$('.excelModal').find('.modal-content').html(data.message);
+			}
+            
+			$('.excelModal').modal('show');
         }).fail(function(){
 
         });

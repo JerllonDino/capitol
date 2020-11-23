@@ -33,25 +33,25 @@ class SessionController extends Controller
     public function login(Request $request) {
         # create backup here..
         # because scheduling doesn't work on windows
-        $date = \Carbon\Carbon::now()->toDateString();
-        $filename = date('Y-m-d') . '_backup.sql';
-        $bk = Backup::where('location', 'storage/backups/'.$filename)->first();
-        if (is_null($bk)) {
-            $user = Config::get('database.connections.mysql.username');
-            $password = Config::get('database.connections.mysql.password');
-            $host = Config::get('database.connections.mysql.host');
-            $database_name = Config::get('database.connections.mysql.database');
-            $root_f = storage_path().'/backups/'.$filename;
-            exec('(mysqldump --opt  --skip-extended-insert --complete-insert --user="'.$user.'" --password="'.$password.'" '.$database_name.' > '.$root_f.' ) 2>&1', $output3, $result3);
+        // $date = \Carbon\Carbon::now()->toDateString();
+        // $filename = date('Y-m-d') . '_backup.sql';
+        // $bk = Backup::where('location', 'storage/backups/'.$filename)->first();
+        // if (is_null($bk)) {
+        //     $user = Config::get('database.connections.mysql.username');
+        //     $password = Config::get('database.connections.mysql.password');
+        //     $host = Config::get('database.connections.mysql.host');
+        //     $database_name = Config::get('database.connections.mysql.database');
+        //     $root_f = storage_path().'/backups/'.$filename;
+        //     exec('(mysqldump --opt  --skip-extended-insert --complete-insert --user="'.$user.'" --password="'.$password.'" '.$database_name.' > '.$root_f.' ) 2>&1', $output3, $result3);
             
-            Backup::create(array(
-                'date_of_entry' => \Carbon\Carbon::now()->toDateTimeString(),
-                'remark' => 'Automated backup for ' . $date,
-                'location' => 'storage/backups/'.$filename,
-            ));
-            // exec('"../../../mysql/bin/mysqldump" --opt --user='.$user.' --password='.$password.' --host='.$host.' capitol > "../storage/backups/'.$filename.'" 2>&1');
+        //     Backup::create(array(
+        //         'date_of_entry' => \Carbon\Carbon::now()->toDateTimeString(),
+        //         'remark' => 'Automated backup for ' . $date,
+        //         'location' => 'storage/backups/'.$filename,
+        //     ));
+        //     // exec('"../../../mysql/bin/mysqldump" --opt --user='.$user.' --password='.$password.' --host='.$host.' capitol > "../storage/backups/'.$filename.'" 2>&1');
 
-        }
+        // }
         
         $validator = Validator::make($request->all(), [
             'username' => 'required',
@@ -97,20 +97,20 @@ class SessionController extends Controller
     }
 
     public function logout() {
-        $date = \Carbon\Carbon::now()->toDateString();
-        $filename = date('Y-m-d_H-i-s') . '_backup.sql';
-        $user = Config::get('database.connections.mysql.username');
-        $password = Config::get('database.connections.mysql.password');
-        $host = Config::get('database.connections.mysql.host');
-        $database_name = Config::get('database.connections.mysql.database');
-        Backup::create(array(
-            'date_of_entry' => \Carbon\Carbon::now()->toDateTimeString(),
-            'remark' => 'Automated backup for ' . $date,
-            'location' => 'storage/backups/'.$filename,
-        ));
-        $root_f = storage_path().'/backups/'.$filename;
-        // exec('"../../../mysql/bin/mysqldump" --opt --user='.$user.' --password='.$password.' --host='.$host.' capitol > "../storage/backups/'.$filename.'" 2>&1');
-        exec('(mysqldump --opt  --skip-extended-insert --complete-insert --user="'.$user.'" --password="'.$password.'" '.$database_name.' > '.$root_f.' ) 2>&1', $output3, $result3);
+        // $date = \Carbon\Carbon::now()->toDateString();
+        // $filename = date('Y-m-d_H-i-s') . '_backup.sql';
+        // $user = Config::get('database.connections.mysql.username');
+        // $password = Config::get('database.connections.mysql.password');
+        // $host = Config::get('database.connections.mysql.host');
+        // $database_name = Config::get('database.connections.mysql.database');
+        // Backup::create(array(
+        //     'date_of_entry' => \Carbon\Carbon::now()->toDateTimeString(),
+        //     'remark' => 'Automated backup for ' . $date,
+        //     'location' => 'storage/backups/'.$filename,
+        // ));
+        // $root_f = storage_path().'/backups/'.$filename;
+        // // exec('"../../../mysql/bin/mysqldump" --opt --user='.$user.' --password='.$password.' --host='.$host.' capitol > "../storage/backups/'.$filename.'" 2>&1');
+        // exec('(mysqldump --opt  --skip-extended-insert --complete-insert --user="'.$user.'" --password="'.$password.'" '.$database_name.' > '.$root_f.' ) 2>&1', $output3, $result3);
 
         Auth::logout();
         Session::flush();

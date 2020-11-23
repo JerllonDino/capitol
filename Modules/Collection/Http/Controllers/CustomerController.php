@@ -70,49 +70,41 @@ class CustomerController extends Controller
 
     public function importEx(Request $request)
     {
-        $path = $request->imports;
-        // $excel = IOFactory::load($this->decodeBase64($path)['contents']);
-        // $worksheet = $excel->getActiveSheet();
-        // // $iterators = [];
-        // $html = '<table class="table table-bordered table-sm">' . PHP_EOL;
-        // foreach ($worksheet->getRowIterator() as $i => $row) {
-        //     $html = $html . '<tr>' . PHP_EOL;
-        //     $cellIterator = $row->getCellIterator();
-        //     $cellIterator->setIterateOnlyExistingCells(FALSE);
-        //     $iter = 0;
-        //     if($i > 14){
-        //         foreach ($cellIterator as $cell) {
-                    
-        //             // array_push($iterators, $cell);
-        //             $html = $html . '<td>' .
-        //                 ($iter == 1 ? $cell->getFormattedValue() : $cell->getFormattedValue()) .
-        //                 '</td>' . PHP_EOL;
-        //                 $iter = $iter+1;
-        //         }
-        //     }
-        //     $html = $html . '</tr>' . PHP_EOL;
-        // }
-        // // dd($iterators);
-        // $html = $html . '</table>' . PHP_EOL;
-        
-        return response()->json([
-            'html' => $this->decodeBase64($path)
-        ]);
-    }
-
-    private function decodeBase64($base64)
-    {
-        // get file type
-        // $pos = strpos($base64, ';');
-        // $type = explode('/', substr($base64, 0, $pos))[1];
-
-        // decode base64
-        $base64_str = substr($base64, strpos($base64, ',') +  1);
-        $file = base64_decode($base64_str);
-
-        return array(
-            'contents' => $file
-        );
+        $file = $request->file('imports');
+        if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
+            $path = $file->getRealPath();
+            $excel = IOFactory::load($path);
+            $worksheet = $excel->getActiveSheet();
+            // $iterators = [];
+            $html = '<table class="table table-bordered table-hover">' . PHP_EOL;
+            foreach ($worksheet->getRowIterator() as $i => $row) {
+                $html = $html . '<tr>' . PHP_EOL;
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE);
+                $iter = 0;
+                $dat = [];
+                    foreach ($cellIterator as $it => $cell) {
+                        array_push($dat, $it);
+                        // array_push($iterators, $cell);
+                        $html = $html . '<td>' .
+                            ($iter == 1 ? $cell->getFormattedValue() : $cell->getFormattedValue()) .
+                            '</td>' . PHP_EOL;
+                            $iter = $iter+1;
+                    }
+                
+                $html = $html . '</tr>' . PHP_EOL;
+            }
+            // dd($iterators);
+            $html = $html . '</table>' . PHP_EOL;
+            
+            return response()->json([
+                'html' => $html
+            ]);
+        }else{
+            return response()->json([
+                'message' => '<div class="alert alert-danger">Sorry. The file you uploaded is not an excel file. Please upload a valid excel file.</div>'
+            ]);
+        }
     }
 
     public function show($id,Request $request)
