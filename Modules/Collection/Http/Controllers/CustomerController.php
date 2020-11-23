@@ -13,6 +13,7 @@ use Carbon\Carbon,PDF,DB,Datatables;
 use Smalot\PdfParser\Parser;
 use mikehaertl\pdftk\Pdf as Pdftk;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class CustomerController extends Controller
 {
@@ -73,7 +74,9 @@ class CustomerController extends Controller
         $file = $request->file('imports');
         if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
             $path = $file->getRealPath();
-            $excel = IOFactory::load($path);
+            $reader = IOFactory::createReader('Xls');
+            $reader->setReadDataOnly(TRUE);
+            $excel = $reader->load($path);
             $sheets = $excel->getSheetNames();
             $worksheet = $excel->getActiveSheet();
             $html = '<table class="table table-bordered table-hover">' . PHP_EOL;
@@ -88,6 +91,9 @@ class CustomerController extends Controller
                 // array_push($iterators, $i);
                     foreach ($cellIterator as $it => $cell) {
                         if($it == 'AD'){
+                            break;
+                        }
+                        if($it == 'A' && !is_int($cell->getValue())){
                             break;
                         }
                         
@@ -108,7 +114,6 @@ class CustomerController extends Controller
             // dd($dat);
             // dd($iterators);
             $html = $html . '</table>' . PHP_EOL;
-            
             return response()->json([
                 'html' => $html
             ]);
