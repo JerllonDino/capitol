@@ -74,26 +74,38 @@ class CustomerController extends Controller
         if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
             $path = $file->getRealPath();
             $excel = IOFactory::load($path);
+            $sheets = $excel->getSheetNames();
             $worksheet = $excel->getActiveSheet();
-            // $iterators = [];
             $html = '<table class="table table-bordered table-hover">' . PHP_EOL;
+            $dataByOwners = [];
             foreach ($worksheet->getRowIterator() as $i => $row) {
                 $html = $html . '<tr>' . PHP_EOL;
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(FALSE);
-                $iter = 0;
-                $dat = [];
-                    foreach ($cellIterator as $it => $cell) {
-                        array_push($dat, $it);
-                        // array_push($iterators, $cell);
-                        $html = $html . '<td>' .
-                            ($iter == 1 ? $cell->getFormattedValue() : $cell->getFormattedValue()) .
-                            '</td>' . PHP_EOL;
-                            $iter = $iter+1;
-                    }
+                $columns = '';
                 
+                $emptyCounter = 0;
+                // array_push($iterators, $i);
+                    foreach ($cellIterator as $it => $cell) {
+                        if($it == 'AD'){
+                            break;
+                        }
+                        
+                        if(empty($cell->getFormattedValue())){
+                            $emptyCounter = $emptyCounter + 1;
+                        }
+                        if($emptyCounter > 25){
+                            $columns = "";
+                            continue;
+                        }
+                        $columns = $columns . '<td>' .
+                            ($it == 'A' ? $cell->getFormattedValue() : ( $cell->getFormattedValue() == "0" ? '-' : $cell->getFormattedValue() )) .
+                            '</td>' . PHP_EOL;
+                    }
+                $html = $html . $columns;
                 $html = $html . '</tr>' . PHP_EOL;
             }
+            // dd($dat);
             // dd($iterators);
             $html = $html . '</table>' . PHP_EOL;
             

@@ -13,21 +13,33 @@
 		margin:0;
 	}
 	@media (min-width: 1200px) {
-	.modal-xlg {
-		width: 100%; 
+		.modal-xlg {
+			width: 100%; 
+		}
 	}
+	.popup {
+		background-color: #38c172 !important;
+		color: #fff !important;
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		padding: 0.75rem 1.25rem;
+		border-radius: 0.25rem;
+		margin: 0.75rem;
+		z-index: 1030;
 	}
 </style>
 @endsection
 
 @section('content')
+<div class="popup" style="display:none"></div>
 <h4>Import Municipality RPT Report</h4>
 
 <form enctype="multipart/form-data" id="importExcel" method="post" action="">
 	{{ csrf_field() }}
 	<input type="hidden" name="base64">
     <input type="file" name="imports" id="imports" class="btn btn-success">
-    <input type="submit" value="Import Excel" class="btn btn-primary" id="submitExcel">
+    <button type="submit" class="btn btn-primary" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
 </form>
 	<div class="form-inline">
 		<label>MUNICIPALITY </label>
@@ -137,6 +149,7 @@
 	}
 	$.fn.getRecords();
 	$excelImport = $('#importExcel');
+	$importButton = $('#submitExcel');
 	$excelImport.submit(function(e){
         e.preventDefault();
 		data = new FormData(this);
@@ -149,7 +162,7 @@
 			cache: false,
 			processData:false,
             beforeSend: function(){
-                
+                $importButton.find('.fa-spinner').removeAttr('style');
             },
         }).done(function(data){
 			// console.log(data.html);
@@ -162,7 +175,9 @@
 			$('.excelModal').modal('show');
         }).fail(function(){
 
-        });
+        }).always(function(){
+			$importButton.find('.fa-spinner').css('display', 'none');
+		});
 	});
 	
 	$excelImport.on('change', '[name="imports"]', function () {
