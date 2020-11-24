@@ -80,23 +80,25 @@ class CustomerController extends Controller
             $sheets = $excel->getSheetNames();
             $worksheet = $excel->getActiveSheet();
             $html = '<table class="table table-bordered table-hover">' . PHP_EOL;
-            $dataByOwners = [];
+            $arrayData = [];
             foreach ($worksheet->getRowIterator() as $i => $row) {
                 $html = $html . '<tr>' . PHP_EOL;
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(FALSE);
                 $columns = '';
-                
                 $emptyCounter = 0;
-                // array_push($iterators, $i);
+                $subArrayData = [];
                     foreach ($cellIterator as $it => $cell) {
                         if($it == 'AD'){
                             break;
                         }
-                        if($it == 'A' && !is_int($cell->getValue())){
-                            break;
+                        if($it == 'A'){
+                            if(!is_int($cell->getValue())){
+                                $columns = "";
+                                break;
+                            }
                         }
-                        
+
                         if(empty($cell->getFormattedValue())){
                             $emptyCounter = $emptyCounter + 1;
                         }
@@ -104,13 +106,17 @@ class CustomerController extends Controller
                             $columns = "";
                             continue;
                         }
+                        $tdData = ($it == 'A' ? ( is_int($cell->getValue()) ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : $cell->getValue() ) : $cell->getFormattedValue() );
+                        array_push($subArrayData, $tdData);
                         $columns = $columns . '<td>' .
-                            ($it == 'A' ? $cell->getFormattedValue() : ( $cell->getFormattedValue() == "0" ? '-' : $cell->getFormattedValue() )) .
+                            $tdData .
                             '</td>' . PHP_EOL;
                     }
+                array_push($arrayData, $subArrayData);
                 $html = $html . $columns;
                 $html = $html . '</tr>' . PHP_EOL;
             }
+            
             // dd($dat);
             // dd($iterators);
             $html = $html . '</table>' . PHP_EOL;
@@ -122,6 +128,11 @@ class CustomerController extends Controller
                 'message' => '<div class="alert alert-danger">Sorry. The file you uploaded is not an excel file. Please upload a valid excel file.</div>'
             ]);
         }
+    }
+
+    private function saveImportedExcel($data)
+    {
+        
     }
 
     public function show($id,Request $request)

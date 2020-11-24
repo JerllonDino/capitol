@@ -11,12 +11,14 @@
 		padding:2px;
 		font-size: 10px;
 		margin:0;
+		width: 50px;
 	}
 	@media (min-width: 1200px) {
 		.modal-xlg {
 			width: 100%; 
 		}
 	}
+	
 	.popup {
 		background-color: #38c172 !important;
 		color: #fff !important;
