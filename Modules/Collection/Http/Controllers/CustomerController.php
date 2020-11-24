@@ -71,6 +71,106 @@ class CustomerController extends Controller
 
     public function importEx(Request $request)
     {
+        $tableHeaders = `<thead>
+        <tr>
+            <th rowspan="4">Date</th>
+            <th rowspan="4">Name of Tax Payor</th>
+            <th rowspan="4">Period Covered</th>
+            <th rowspan="4">Official Receipt Number</th>
+            <th rowspan="4">TD/ARP No.</th>
+            <th rowspan="4">Name of Brgy.</th>
+            <th rowspan="4">Classifi <br> cation</th>
+            <th colspan="11">BASIC TAX</th>
+            <th rowspan="4">Sub-total Gross Collection</th>
+            <th rowspan="4">Sub-total Net Collection</th>
+            <th colspan="11">SPECIAL EDUCATION FUND</th>
+            <th rowspan="4">Sub-total Gross Collection</th>
+            <th rowspan="4">Sub-total Net Collection</th>
+            <th rowspan="4">Grand Total Gross Collection</th>
+            <th rowspan="4">Grand Total Net Collection</th>
+        </tr>
+        <tr>
+            <!-- basic --> 
+            <th colspan="2" rowspan="2">Advance</th>
+            <th colspan="2" rowspan="2">Current Year</th>
+            <th rowspan="3">{{ $preceeding }}</th>
+            <th colspan="2" rowspan="2">PRIOR YEARS</th>
+            <th colspan="4">PENALTIES</th>
+            <!-- sef --> 
+            <th colspan="2" rowspan="2">Advance</th>
+            <th colspan="2" rowspan="2">Current Year</th>
+            <th rowspan="3">{{ $preceeding }}</th>
+            <th colspan="2" rowspan="2">PRIOR YEARS</th>
+            <th colspan="4">PENALTIES</th>
+        </tr> 
+        <tr>
+            <!-- basic -->
+            <th rowspan="2">Current Year</th>
+            <th rowspan="2">{{ $preceeding }}</th>
+            <th colspan="2">PRIOR YEARS</th>
+            <!-- sef -->
+            <th rowspan="2">Current Year</th>
+            <th rowspan="2">{{ $preceeding }}</th>
+            <th colspan="2">PRIOR YEARS</th>
+        </tr>
+        <tr>
+            <!-- basic -->
+            <th>Gross Amount</th>
+            <th>
+                D<br>
+                I<br>
+                S<br>
+                C<br>
+                O<br>
+                U<br>
+                N<br>
+                T<br>
+            </th>
+            <th>Gross Amount</th>
+            <th>
+                D<br>
+                I<br>
+                S<br>
+                C<br>
+                O<br>
+                U<br>
+                N<br>
+                T<br>
+            </th>
+            <th>{{ $prior_start }}-1992</th>
+            <th>1991 & Below</th>
+            <th>{{ $prior_start }}-1992</th>
+            <th>1991 & Below</th>
+
+            <!-- sef -->
+            <th>Gross Amount</th>
+            <th>
+                D<br>
+                I<br>
+                S<br>
+                C<br>
+                O<br>
+                U<br>
+                N<br>
+                T<br>
+            </th>
+            <th>Gross Amount</th>
+            <th>
+                D<br>
+                I<br>
+                S<br>
+                C<br>
+                O<br>
+                U<br>
+                N<br>
+                T<br>
+            </th>
+            <th>{{ $prior_start }}-1992</th>
+            <th>1991 & Below</th>
+            <th>{{ $prior_start }}-1992</th>
+            <th>1991 & Below</th>
+        </tr>
+    </thead>`;
         $file = $request->file('imports');
         if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
             $path = $file->getRealPath();
@@ -98,7 +198,6 @@ class CustomerController extends Controller
                                 break;
                             }
                         }
-
                         if(empty($cell->getFormattedValue())){
                             $emptyCounter = $emptyCounter + 1;
                         }
@@ -116,9 +215,7 @@ class CustomerController extends Controller
                 $html = $html . $columns;
                 $html = $html . '</tr>' . PHP_EOL;
             }
-            
-            // dd($dat);
-            // dd($iterators);
+            // $this->saveImportedExcel(array_filter($arrayData));
             $html = $html . '</table>' . PHP_EOL;
             return response()->json([
                 'html' => $html
@@ -130,9 +227,20 @@ class CustomerController extends Controller
         }
     }
 
-    private function saveImportedExcel($data)
+    private function saveImportedExcel($datas)
     {
-        
+        $newSortedData = [];
+        $prevOr = 0;
+        foreach($datas as $i => $data)
+        {
+            if(empty($data[3])){
+                $newSortedData[$prevOr][$data[4]] = $data;
+            }else{
+                $prevOr = $data[3];
+                $newSortedData[$data[3]][$data[4]] = $data; 
+            }
+        }
+        dd($newSortedData);
     }
 
     public function show($id,Request $request)

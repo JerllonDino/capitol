@@ -167,32 +167,17 @@
                 $importButton.find('.fa-spinner').removeAttr('style');
             },
         }).done(function(data){
-			// console.log(data.html);
 			if (data.html) {
 				$('.excelModal').find('.modal-content').html(data.html);
 			}else{
 				$('.excelModal').find('.modal-content').html(data.message);
 			}
-            
 			$('.excelModal').modal('show');
         }).fail(function(){
 
         }).always(function(){
 			$importButton.find('.fa-spinner').css('display', 'none');
 		});
-	});
-	
-	$excelImport.on('change', '[name="imports"]', function () {
-		var file = $(this);
-		let reader = new FileReader();
-		let fileName = file[0].files[0].name;
-		
-		reader.addEventListener("load", function (e) {
-			base64 = e.currentTarget.result;
-			$("[name='base64']").data('base64', base64);
-			
-		});
-		reader.readAsDataURL(file[0].files[0]);
 	});
 
 	// $(document).on('click', '#rpt_rec', function() {
