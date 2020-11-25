@@ -8,13 +8,17 @@
 	}
 
 	.modal .table td{
-		padding:2px;
+		padding:2px !important;
 		font-size: 10px;
 		margin:0;
 		width: 50px;
 	}
-	.modal .table th{
+	.modal .table thead tr th{
+		padding:2px !important;
 		font-size: 10px;
+		background: white;
+		position: sticky;
+		top:0;
 	}
 	@media (min-width: 1200px) {
 		.modal-xlg {
@@ -23,12 +27,11 @@
 	}
 	.modal-dialog,
 	.modal-content {
-		/* 80% of window height */
 		height: 95%;
 	}
 	.modal-body {
 		/* 100% = dialog height, 120px = header + footer */
-		max-height: 100%;
+		max-height: calc(100% + 120px);
 		overflow-y: scroll;
 	}
 </style>
@@ -36,13 +39,17 @@
 
 @section('content')
 <div class="popup" style="display:none"></div>
-<h4>Import Municipality RPT Report</h4>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h4>Import Municipality RPT Report</h4>
 
-<form enctype="multipart/form-data" id="importExcel" method="post" action="">
-	{{ csrf_field() }}
-    <input type="file" name="imports" id="imports" class="btn btn-success">
-    <button type="submit" class="btn btn-primary" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
-</form>
+		<form enctype="multipart/form-data" id="importExcel" method="post" action="">
+			{{ csrf_field() }}
+			<input type="file" name="imports" id="imports" class="btn btn-success">
+			<button type="submit" class="btn btn-primary" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
+		</form>
+	</div>
+</div>
 	<div class="form-inline">
 		<label>MUNICIPALITY </label>
 		<select name="mun" id="mun" class="form-control">

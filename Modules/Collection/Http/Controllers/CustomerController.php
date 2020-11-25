@@ -92,59 +92,45 @@ class CustomerController extends Controller
         <tr>
             <!-- basic --> 
             
-            <th colspan="2" rowspan="2">Current Year</th>
-            <th rowspan="3">'.(date("Y")-1).'</th>
-            <th colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th colspan="3">PENALTIES</th>
+            <th style="top: 20px" colspan="2" rowspan="2">Current Year</th>
+            <th style="top: 20px" rowspan="3">'.(date("Y")-1).'</th>
+            <th style="top: 20px" colspan="2" rowspan="2">PRIOR YEARS</th>
+            <th style="top: 20px" colspan="3">PENALTIES</th>
             <!-- sef --> 
             
-            <th colspan="2" rowspan="2">Current Year</th>
-            <th rowspan="3">'.(date("Y")-1).'</th>
-            <th colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th colspan="3">PENALTIES</th>
+            <th style="top: 20px" colspan="2" rowspan="2">Current Year</th>
+            <th style="top: 20px" rowspan="3">'.(date("Y")-1).'</th>
+            <th style="top: 20px" colspan="2" rowspan="2">PRIOR YEARS</th>
+            <th style="top: 20px" colspan="3">PENALTIES</th>
         </tr> 
         <tr>
             <!-- basic -->
-            <th rowspan="2">'.(date("Y")-1).'</th>
-            <th colspan="2">PRIOR YEARS</th>
+            <th style="top: 40px" rowspan="2">'.(date("Y")-1).'</th>
+            <th style="top: 40px" colspan="2">PRIOR YEARS</th>
             <!-- sef -->
-            <th rowspan="2">'.(date("Y")-1).'</th>
-            <th colspan="2">PRIOR YEARS</th>
+            <th style="top: 40px" rowspan="2">'.(date("Y")-1).'</th>
+            <th style="top: 40px" colspan="2">PRIOR YEARS</th>
         </tr>
         <tr>
             <!-- basic -->
-            <th>Gross Amount</th>
-            <th>
-                D<br>
-                I<br>
-                S<br>
-                C<br>
-                O<br>
-                U<br>
-                N<br>
-                T<br>
+            <th style="top: 60px">Gross Amount</th>
+            <th style="top: 60px">
+               Disc
             </th>
-            <th>'.(date("Y")-2).'-1992</th>
-            <th>1991 & Below</th>
-            <th>'.(date("Y")-2).'-1992</th>
-            <th>1991 & Below</th>
+            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 60px">1991 & Below</th>
+            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 60px">1991 & Below</th>
 
             <!-- sef -->
-            <th>Gross Amount</th>
-            <th>
-                D<br>
-                I<br>
-                S<br>
-                C<br>
-                O<br>
-                U<br>
-                N<br>
-                T<br>
+            <th style="top: 60px">Gross Amount</th>
+            <th style="top: 60px">
+                Disc
             </th>
-            <th>'.(date("Y")-2).'-1992</th>
-            <th>1991 & Below</th>
-            <th>'.(date("Y")-2).'-1992</th>
-            <th>1991 & Below</th>
+            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 60px">1991 & Below</th>
+            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 60px">1991 & Below</th>
         </tr>
     </thead>';
         $file = $request->file('imports');
@@ -182,10 +168,10 @@ class CustomerController extends Controller
                             $columns = "";
                             continue;
                         }
-                        $tdData = ($it == 'A' ? ( is_int($cell->getValue()) ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : $cell->getValue() ) : $cell->getFormattedValue() );
-                        array_push($subArrayData, $tdData);
+                        $tdData = $cell->getFormattedValue() || $cell->getFormattedValue() != 0 ? ($it == 'A' ? ( is_int($cell->getValue()) ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : $cell->getFormattedValue() ) : ($cell->getOldCalculatedValue() ? $cell->getOldCalculatedValue() : $cell->getFormattedValue()) ) : '';
+                        array_push($subArrayData, (is_numeric($tdData) ? ( $it != 'C' ? number_format($tdData, 2) : $tdData) : $tdData));
                         $columns = $columns . '<td>' .
-                            $tdData .
+                            (is_numeric($tdData) ? ( $it != 'C' ? number_format($tdData, 2) : $tdData) : $tdData) .
                             '</td>' . PHP_EOL;
                     }
                 array_push($arrayData, $subArrayData);

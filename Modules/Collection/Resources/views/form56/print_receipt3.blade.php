@@ -56,41 +56,6 @@
         .vertical-top{
             vertical-align: top;
         }
-
-        table.fixed {
-            width: 100%; 
-            table-layout:fixed;
-        }
-        table.fixed td { 
-            overflow: visible;
-        }
-
-        table.fixed th { 
-            border-collapse: collapse;
-            
-        }
-  
-        
-        table.main-values {
-            /* margin: 0px 55px 0 8px; */
-            /* border-color: #ffffff00; */
-            /* background-color: ##42cbf4;  */
-            position: absolute;
-            top: 110px;
-            left: 30px;
-        }
-
-        table.signatories{
-            table-layout:fixed;
-            width: 70%;
-            position: absolute;
-            top: 66.5%;
-            left: 26.4%;
-        }
-
-        table.signatories td{
-            overflow: visible;
-        }
     </style>
 </head>
 <body>
@@ -338,24 +303,23 @@
                     </tr>
                 </table>
 
-                <table class="fixed main-values">
-                    <thead>
-                        <tr style="text-align:center;">
-                            <th class="border-hidden" style="width: 12.7%;"><span class="text-hidden">Name Of <br>DECLARED OWNER</span></th>
-                            <th class="border-hidden" style="width: 12.7%" ><span class="text-hidden">Location<br>No./Street/Barangay</span></th>
-                            <th class="border-hidden" style="width: 6.8%; text-align: left;"><span class="text-hidden">LOT<br>BLOCK NO.</span></th>
-                            <th class="border-hidden" style="width: 6.8%; text-align: left;"><span class="text-hidden">TAX<br>DEC. NO</span></th>
-                            <th class="border-hidden" style="width: 6%;"><span class="text-hidden">Land</span></th>
-                            <th class="border-hidden" style="width: 6%"><span class="text-hidden">Improvement</span></th>
-                            <th class="border-hidden" style="width: 6.4%"><span class="text-hidden">Total</span></th>
-                            <th class="border-hidden" style="width: 9.5%"><span class="text-hidden">TAX DUE</span></th>
-                            <th class="border-hidden" style="width: 6%"><span class="text-hidden">NO.</span></th>
-                            <th class="border-hidden" style="width: 5.2%"><span class="text-hidden">Payment</span></th>
-                            <th class="border-hidden" style="width: 6.2%"><span class="text-hidden">Full Payment</span></th>
-                            <th class="border-hidden" style="width: 9%"><span class="text-hidden">Penalty</span></th>
-                            <th class="border-hidden" style="width: 6.7%"><span class="text-hidden">TOTAL</span></th>
-                        </tr>
-                    </thead>
+                <table width="100%" style="margin: 0px 55px 0 8px; border-color: #ffffff00; background-color: ##42cbf4; position: absolute; top: 125px;" >
+                    <tr style="text-align:center;">
+                        <td class="border-hidden" style="width: 3.3cm;"><span class="text-hidden">Name Of <br>DECLARED OWNER</span></td>
+                        <td class="border-hidden" style="width: 3.3cm;" ><span class="text-hidden">Location<br>No./Street/Barangay</span></td>
+                        <td class="border-hidden"><span class="text-hidden">LOT<br>BLOCK NO.</span></td>
+                        <td class="border-hidden"><span class="text-hidden">TAX<br>DEC. NO</span></td>
+                        <td class="border-hidden"><span class="text-hidden">Land</span></td>
+                        <td class="border-hidden"><span class="text-hidden">Improvement</span></td>
+                        <td class="border-hidden"><span class="text-hidden">Total</span></td>
+                        <td class="border-hidden"><span class="text-hidden">TAX DUE</span></td>
+                        <td class="border-hidden"><span class="text-hidden">NO.</span></td>
+                        <td class="border-hidden"><span class="text-hidden">Payment</span></td>
+                        <td class="border-hidden"><span class="text-hidden">Full Payment</span></td>
+                        <td class="border-hidden"><span class="text-hidden">Penalty</span></td>
+                        <td class="border-hidden"><span class="text-hidden">TOTAL</span></td>
+                    </tr>
+
                     @php
                         $count_tr = 0;
                         $period_covered  = '';
@@ -364,14 +328,14 @@
                     @endphp
 
                     <tr style="background: ##ef7385;">
-                        <td class="border-hidden text-left vertical-top">
+                        <td class="border-hidden text-left vertical-top" style="height: 155px; padding-left: 20px; padding-right: 0px; background: ##ef7865;">
                             @if(isset($annual_per_arp[$arp]['owner']))
                             {{ $annual_per_arp[$arp]['owner'] }}
                             @endif
                         </td>
 
                         <!-- width: 1.2cm; -->
-                        <td class="border-hidden text-left vertical-top">
+                        <td class="border-hidden text-left vertical-top" style="background: ##ef6585; padding-left: 5px;transform:translate(10px, 0px)">
                             @if(!is_null($val['brgy']))
                                 {{ $val['brgy']->name }}
                             @endif
@@ -388,7 +352,7 @@
 
                         <!-- width: 1cm; -->
                         <!-- padding-left: -70px; -->
-                        <td class="border-hidden text-left vertical-top" colspan="2">
+                        <td class="border-hidden text-left vertical-top" style="background: ##689cf2;width:2.2cm; padding-left: 70px;white-space: nowrap; transform:translate(-50px, 0px)" colspan="2">
                             
                             @if($limit_counter <= $limit) 
                                 @foreach($annual_arp as $this_arp => $data)
@@ -501,7 +465,7 @@
 
                         <!-- LAND -->
                         <!-- padding-left: -78px; -->
-                        <td class="border-hidden text-left vertical-top">
+                        <td class="border-hidden text-left vertical-top" style="width: 1.4cm; background: ##4cef9b; padding-left: 10px; padding-right: 0px;transform:translate(-48px, 0px);">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
@@ -523,7 +487,7 @@
 
                         <!--  padding-right: 5px; -->
                         <!-- IMPROVEMENT (BUILDING/MACHINE) -->
-                        <td class="border-hidden text-right vertical-top">
+                        <td class="border-hidden text-right vertical-top" style="width: 1.3cm; background: ##4287f5; padding-left: 10px;;transform:translate(-100px, 0px)">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
@@ -544,7 +508,7 @@
                         </td>
 
                         <!-- padding-right: -25px; width: 1.5cm;  -->
-                        <td class="border-hidden text-left vertical-top text-right">
+                        <td class="border-hidden text-left vertical-top text-right" style=" width: 2cm; position:absolute; background: ##f276c4; transform: translate(-108px, 0px); padding-left: -45px">
                             <!-- assessed value TOTAL -->
                             <?php 
                                 // $total_assess_val = 0; 
@@ -721,7 +685,7 @@
                                     @endphp
                             @endforeach
                             {{-- TAX DUE AND TYPE --}}
-                            <td class="border-hidden text-left vertical-top">
+                            <td class="border-hidden text-left vertical-top" style="width: 3cm; background: ##a276c4; position: relative; padding-left: -90px; transform:translate(-83px, 0px)">
                                 <div style="margin: 0; padding: 0; text-align: right;"> 
                                     
 
@@ -848,7 +812,7 @@
                                 </div>
                             </td>
 
-                            <td class="border-hidden text-left vertical-top" style="text-align: center">
+                            <td class="border-hidden text-left vertical-top" style="width: 1.5cm; background: ##cde25f; text-align: center;transform:translate(-83px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -969,7 +933,7 @@
                                 @endforeach
                             </td>
                             {{-- FULL PAYMENT --}}
-                            <td class="border-hidden text-right vertical-top" style="text-align: center">
+                            <td class="border-hidden text-right vertical-top" style="width: 1.1cm; background: ##e8aa4e; padding-right: 6px;transform:translate(-80px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1102,7 +1066,7 @@
                                                             
                             </td>
                             {{-- PENALTY OR DISCOUNT --}}
-                            <td class="border-hidden text-right vertical-top" style="text-align: center">
+                            <td class="border-hidden text-right vertical-top" style="width: 1cm; background: ##e56b60; padding-right: -5px;transform:translate(-85px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1226,7 +1190,7 @@
                                                             
                             </td>
                             {{-- TOTAL --}}
-                            <td class="border-hidden text-right vertical-top" style="text-align: center">
+                            <td class="border-hidden text-right vertical-top" style="width: 2.1cm; background: ##7fe83e; padding-left: 10px;transform:translate(-85px, 0px)">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1357,8 +1321,6 @@
                             </td>
                         
                     </tr>
-                </table>
-                <table class="signatories">
 
                     <tr style="background: ##d68db8;">
                         <td style="width: 2.5cm;">
@@ -1378,9 +1340,9 @@
                         </td>
                     </tr> 
 
-                    <tr>
+                    <tr class="" style="background: ##c542f5;">
                         <td colspan=5 rowspan="2"  style="border:0px ##ffffff00" >
-                            <table width="100%" style="padding-top: 15px;transform:translate(-10px, 15px)">
+                            <table width="100%" style="padding-top: 15px;transform:translate(-60px, 0px)">
                                 <tr>
                                     <td class="text-hidden">
                                         <div style="width:80%">
@@ -1399,18 +1361,18 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td width="70%" class="" style="background: ##52aac7; padding-top: -23px;">
-                                        <table width="100%" id="payment_dets" style="table-layout: fixed;">
+                                    <td width="70%" class="" style="background: ##52aac7; padding-top: -24px;">
+                                        <table width="100%" id="payment_dets">
                                             <tr>
                                                 <td colspan="2" class="text-hidden" ><!-- MODE OF PAYMENT --></td>
                                             </tr>
                                             <tr>
                                                 <td width="70%" height="15px" class="text-hidden">CASH</td>
-                                                <td>{{ number_format($form56['total'], 2) }}</td>
+                                                <td style="padding-top: -20px; text-align: right; background: ##52aac7;">{{ number_format($form56['total'], 2) }}</td>
                                             </tr>
                                             <tr>
                                                 <td height="15px" class="text-hidden">CHECK</td>
-                                                <td>
+                                                <td style="padding-top: -10px; padding-left: -50px; text-align: right;">
                                                     @if($receipt->bank_number != null || $receipt->bank_number != '')
                                                         {{ $receipt->bank_number }}<br>
                                                     @endif
@@ -1426,9 +1388,9 @@
                                                 <td height="15px" class="text-hidden">TW/PMO</td>
                                                 <td></td>
                                             </tr>
-                                            <tr style="transform:translate(0px, 5px)">
+                                            <tr>
                                                 <td height="15px" class="text-hidden" >TOTAL</td>
-                                                <td> {{ number_format($form56['total'], 2) }}</td>
+                                                <td style="padding-top: -10px; text-align: right; background-color: ##7fe83e;"> {{ number_format($form56['total'], 2) }}</td>
                                                 <!-- padding-top: -15px; -->
                                             </tr>
                                         </table>
@@ -1437,11 +1399,11 @@
                             </table>
                         </td>
                         <!-- padding-top: -38px; -->
-                        <td colspan="7" class="border-hidden text-right"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
+                        <td colspan="7" class="border-hidden text-right" style="background-color: ##7fe83e; padding-top: -53px;transform:translate(-85px, 0px)"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
                     </tr>
-                    <tr style="transform:translate(31px, 0px)">
-                        <td colspan="3" class="border-hidden">
-                            <div style="text-align: center;">
+                    <tr>
+                        <td colspan="3" class="border-hidden" style="width: 5.54cm;padding-top: -45px; padding-left: 40px; background-color: ##7fe83e;transform:translate(-60px, -2px)">
+                            <div style="text-align: center; ">
                                 {{$sign ? $acctble_officer_name->value : ''}}
                                 <BR>
                             <span style="white-space:nowrap">
@@ -1449,7 +1411,7 @@
                             </span>
                             </div>
                         </td>
-                        <td colspan="4" class="border-hidden" style="transform:translate(25px, 0px)">
+                        <td colspan="4" class="border-hidden" style="padding-top: -50px; background-color: ##7fe83e;transform:translate(-40px, -2px)">
                             <div style="text-align: center;">
                                 <!-- IMELDA I. MACANES -->
                                 {{$sign ? 'IMELDA I. MACANES ' : ''}}
