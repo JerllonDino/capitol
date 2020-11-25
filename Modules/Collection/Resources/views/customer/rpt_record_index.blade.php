@@ -13,22 +13,23 @@
 		margin:0;
 		width: 50px;
 	}
+	.modal .table th{
+		font-size: 10px;
+	}
 	@media (min-width: 1200px) {
 		.modal-xlg {
 			width: 100%; 
 		}
 	}
-	
-	.popup {
-		background-color: #38c172 !important;
-		color: #fff !important;
-		position: fixed;
-		bottom: 0;
-		right: 0;
-		padding: 0.75rem 1.25rem;
-		border-radius: 0.25rem;
-		margin: 0.75rem;
-		z-index: 1030;
+	.modal-dialog,
+	.modal-content {
+		/* 80% of window height */
+		height: 95%;
+	}
+	.modal-body {
+		/* 100% = dialog height, 120px = header + footer */
+		max-height: 100%;
+		overflow-y: scroll;
 	}
 </style>
 @endsection
@@ -39,7 +40,6 @@
 
 <form enctype="multipart/form-data" id="importExcel" method="post" action="">
 	{{ csrf_field() }}
-	<input type="hidden" name="base64">
     <input type="file" name="imports" id="imports" class="btn btn-success">
     <button type="submit" class="btn btn-primary" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
 </form>
@@ -109,7 +109,10 @@
 	<div class="modal fade bd-example-modal-lg excelModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-xlg">
 		  <div class="modal-content">
-			...
+			
+		  </div>
+		  <div class="modal-footer">
+			  <button class="btn btn-success">Save Excel</button>
 		  </div>
 		</div>
 	  </div>

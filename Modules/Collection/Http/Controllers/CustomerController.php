@@ -71,7 +71,7 @@ class CustomerController extends Controller
 
     public function importEx(Request $request)
     {
-        $tableHeaders = `<thead>
+        $tableHeaders = '<thead>
         <tr>
             <th rowspan="4">Date</th>
             <th rowspan="4">Name of Tax Payor</th>
@@ -80,10 +80,10 @@ class CustomerController extends Controller
             <th rowspan="4">TD/ARP No.</th>
             <th rowspan="4">Name of Brgy.</th>
             <th rowspan="4">Classifi <br> cation</th>
-            <th colspan="11">BASIC TAX</th>
+            <th colspan="8">BASIC TAX</th>
             <th rowspan="4">Sub-total Gross Collection</th>
             <th rowspan="4">Sub-total Net Collection</th>
-            <th colspan="11">SPECIAL EDUCATION FUND</th>
+            <th colspan="8">SPECIAL EDUCATION FUND</th>
             <th rowspan="4">Sub-total Gross Collection</th>
             <th rowspan="4">Sub-total Net Collection</th>
             <th rowspan="4">Grand Total Gross Collection</th>
@@ -91,26 +91,24 @@ class CustomerController extends Controller
         </tr>
         <tr>
             <!-- basic --> 
-            <th colspan="2" rowspan="2">Advance</th>
+            
             <th colspan="2" rowspan="2">Current Year</th>
-            <th rowspan="3">{{ $preceeding }}</th>
+            <th rowspan="3">'.(date("Y")-1).'</th>
             <th colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th colspan="4">PENALTIES</th>
+            <th colspan="3">PENALTIES</th>
             <!-- sef --> 
-            <th colspan="2" rowspan="2">Advance</th>
+            
             <th colspan="2" rowspan="2">Current Year</th>
-            <th rowspan="3">{{ $preceeding }}</th>
+            <th rowspan="3">'.(date("Y")-1).'</th>
             <th colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th colspan="4">PENALTIES</th>
+            <th colspan="3">PENALTIES</th>
         </tr> 
         <tr>
             <!-- basic -->
-            <th rowspan="2">Current Year</th>
-            <th rowspan="2">{{ $preceeding }}</th>
+            <th rowspan="2">'.(date("Y")-1).'</th>
             <th colspan="2">PRIOR YEARS</th>
             <!-- sef -->
-            <th rowspan="2">Current Year</th>
-            <th rowspan="2">{{ $preceeding }}</th>
+            <th rowspan="2">'.(date("Y")-1).'</th>
             <th colspan="2">PRIOR YEARS</th>
         </tr>
         <tr>
@@ -126,20 +124,9 @@ class CustomerController extends Controller
                 N<br>
                 T<br>
             </th>
-            <th>Gross Amount</th>
-            <th>
-                D<br>
-                I<br>
-                S<br>
-                C<br>
-                O<br>
-                U<br>
-                N<br>
-                T<br>
-            </th>
-            <th>{{ $prior_start }}-1992</th>
+            <th>'.(date("Y")-2).'-1992</th>
             <th>1991 & Below</th>
-            <th>{{ $prior_start }}-1992</th>
+            <th>'.(date("Y")-2).'-1992</th>
             <th>1991 & Below</th>
 
             <!-- sef -->
@@ -154,23 +141,12 @@ class CustomerController extends Controller
                 N<br>
                 T<br>
             </th>
-            <th>Gross Amount</th>
-            <th>
-                D<br>
-                I<br>
-                S<br>
-                C<br>
-                O<br>
-                U<br>
-                N<br>
-                T<br>
-            </th>
-            <th>{{ $prior_start }}-1992</th>
+            <th>'.(date("Y")-2).'-1992</th>
             <th>1991 & Below</th>
-            <th>{{ $prior_start }}-1992</th>
+            <th>'.(date("Y")-2).'-1992</th>
             <th>1991 & Below</th>
         </tr>
-    </thead>`;
+    </thead>';
         $file = $request->file('imports');
         if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
             $path = $file->getRealPath();
@@ -180,6 +156,7 @@ class CustomerController extends Controller
             $sheets = $excel->getSheetNames();
             $worksheet = $excel->getActiveSheet();
             $html = '<table class="table table-bordered table-hover">' . PHP_EOL;
+            $html = $html . $tableHeaders;
             $arrayData = [];
             foreach ($worksheet->getRowIterator() as $i => $row) {
                 $html = $html . '<tr>' . PHP_EOL;

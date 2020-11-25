@@ -4403,7 +4403,7 @@ class PdfController extends Controller
             
         if($request['isEdit'] == 0 and count($report_exist) > 0){
             return 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!';
-            return redirect()->route('report.real_property')->with('isExist', 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!');
+            // return redirect()->route('report.real_property')->with('isExist', 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!');
         }
 
         $this->base['sef_exist'] = $report_exist;
@@ -4496,6 +4496,7 @@ class PdfController extends Controller
         $request = new Request($req->all()); 
         $data = $this->rpr_report_edit($request);
         $this->base['mun'] = Municipality::find($req->municipality);
+
         if(isset($req['save_report'])){
           
         $insert = RptSefAdjustments::updateOrCreate(
@@ -4582,6 +4583,7 @@ class PdfController extends Controller
         );
         return redirect()->route('report.real_property')->with('isSaved', 'Report '.$req->report_no.' in '.$this->base['mun']->name.' succesfully saved!');
         }
+        dd($data);
         $merged = array_merge($data, $req->all());
 
         $this->base['merged'] = $merged;
