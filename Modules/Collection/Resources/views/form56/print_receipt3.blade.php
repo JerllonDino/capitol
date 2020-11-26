@@ -56,6 +56,41 @@
         .vertical-top{
             vertical-align: top;
         }
+
+        table.fixed {
+            width: 100%; 
+            table-layout:fixed;
+        }
+        table.fixed td { 
+            overflow: visible;
+        }
+
+        table.fixed th { 
+            border-collapse: collapse;
+            
+        }
+  
+        
+        table.main-values {
+            /* margin: 0px 55px 0 8px; */
+            /* border-color: #ffffff00; */
+            /* background-color: ##42cbf4;  */
+            position: absolute;
+            top: 110px;
+            left: 30px;
+        }
+
+        table.signatories{
+            table-layout:fixed;
+            width: 70%;
+            position: absolute;
+            top: 66.5%;
+            left: 26.4%;
+        }
+
+        table.signatories td{
+            overflow: visible;
+        }
     </style>
 </head>
 <body>
@@ -140,7 +175,7 @@
                                                         <td height="28px"  width="100" class="border-hidden text-center"  style="font-size: 12px; background: ##4287f5;  vertical-align: bottom;">
                                                             {{  $prev_date }} 
                                                         </td>
-                                                        <td class="border-hidden text-center" style="font-size: 12px; width:2.7cm; background: ##5af542; vertical-align: bottom;">
+                                                        <td class="border-hidden text-center" style="font-size: 12px; width:2.7cm; vertical-align: bottom; transform: translate(4px, 0)">
                                                             <!-- FOR THE YEAR -->
                                                             {{ $prev_year }}
                                                         </td>
@@ -303,23 +338,24 @@
                     </tr>
                 </table>
 
-                <table width="100%" style="margin: 0px 55px 0 8px; border-color: #ffffff00; background-color: ##42cbf4; position: absolute; top: 125px;" >
-                    <tr style="text-align:center;">
-                        <td class="border-hidden" style="width: 3.3cm;"><span class="text-hidden">Name Of <br>DECLARED OWNER</span></td>
-                        <td class="border-hidden" style="width: 3.3cm;" ><span class="text-hidden">Location<br>No./Street/Barangay</span></td>
-                        <td class="border-hidden"><span class="text-hidden">LOT<br>BLOCK NO.</span></td>
-                        <td class="border-hidden"><span class="text-hidden">TAX<br>DEC. NO</span></td>
-                        <td class="border-hidden"><span class="text-hidden">Land</span></td>
-                        <td class="border-hidden"><span class="text-hidden">Improvement</span></td>
-                        <td class="border-hidden"><span class="text-hidden">Total</span></td>
-                        <td class="border-hidden"><span class="text-hidden">TAX DUE</span></td>
-                        <td class="border-hidden"><span class="text-hidden">NO.</span></td>
-                        <td class="border-hidden"><span class="text-hidden">Payment</span></td>
-                        <td class="border-hidden"><span class="text-hidden">Full Payment</span></td>
-                        <td class="border-hidden"><span class="text-hidden">Penalty</span></td>
-                        <td class="border-hidden"><span class="text-hidden">TOTAL</span></td>
-                    </tr>
-
+                <table class="fixed main-values">
+                    <thead>
+                        <tr style="text-align:center;">
+                            <th class="border-hidden" style="width: 12.7%;"><span class="text-hidden">Name Of <br>DECLARED OWNER</span></th>
+                            <th class="border-hidden" style="width: 13%" ><span class="text-hidden">Location<br>No./Street/Barangay</span></th>
+                            <th class="border-hidden" style="width: 6.7%; text-align: left;"><span class="text-hidden">LOT<br>BLOCK NO.</span></th>
+                            <th class="border-hidden" style="width: 6.7%; text-align: left;"><span class="text-hidden">TAX<br>DEC. NO</span></th>
+                            <th class="border-hidden" style="width: 6%;"><span class="text-hidden">Land</span></th>
+                            <th class="border-hidden" style="width: 6%"><span class="text-hidden">Improvement</span></th>
+                            <th class="border-hidden" style="width: 6.4%"><span class="text-hidden">Total</span></th>
+                            <th class="border-hidden" style="width: 9.5%"><span class="text-hidden">TAX DUE</span></th>
+                            <th class="border-hidden" style="width: 6%"><span class="text-hidden">NO.</span></th>
+                            <th class="border-hidden" style="width: 5.2%"><span class="text-hidden">Payment</span></th>
+                            <th class="border-hidden" style="width: 6.2%"><span class="text-hidden">Full Payment</span></th>
+                            <th class="border-hidden" style="width: 9%"><span class="text-hidden">Penalty</span></th>
+                            <th class="border-hidden" style="width: 6.7%"><span class="text-hidden">TOTAL</span></th>
+                        </tr>
+                    </thead>
                     @php
                         $count_tr = 0;
                         $period_covered  = '';
@@ -328,14 +364,14 @@
                     @endphp
 
                     <tr style="background: ##ef7385;">
-                        <td class="border-hidden text-left vertical-top" style="height: 155px; padding-left: 20px; padding-right: 0px; background: ##ef7865;">
+                        <td class="border-hidden text-left vertical-top">
                             @if(isset($annual_per_arp[$arp]['owner']))
                             {{ $annual_per_arp[$arp]['owner'] }}
                             @endif
                         </td>
 
                         <!-- width: 1.2cm; -->
-                        <td class="border-hidden text-left vertical-top" style="background: ##ef6585; padding-left: 5px;transform:translate(10px, 0px)">
+                        <td class="border-hidden text-left vertical-top">
                             @if(!is_null($val['brgy']))
                                 {{ $val['brgy']->name }}
                             @endif
@@ -352,7 +388,7 @@
 
                         <!-- width: 1cm; -->
                         <!-- padding-left: -70px; -->
-                        <td class="border-hidden text-left vertical-top" style="background: ##689cf2;width:2.2cm; padding-left: 70px;white-space: nowrap; transform:translate(-50px, 0px)" colspan="2">
+                        <td class="border-hidden text-left vertical-top" colspan="2">
                             
                             @if($limit_counter <= $limit) 
                                 @foreach($annual_arp as $this_arp => $data)
@@ -465,7 +501,7 @@
 
                         <!-- LAND -->
                         <!-- padding-left: -78px; -->
-                        <td class="border-hidden text-left vertical-top" style="width: 1.4cm; background: ##4cef9b; padding-left: 10px; padding-right: 0px;transform:translate(-48px, 0px);">
+                        <td class="border-hidden text-left vertical-top">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
@@ -487,7 +523,7 @@
 
                         <!--  padding-right: 5px; -->
                         <!-- IMPROVEMENT (BUILDING/MACHINE) -->
-                        <td class="border-hidden text-right vertical-top" style="width: 1.3cm; background: ##4287f5; padding-left: 10px;;transform:translate(-100px, 0px)">
+                        <td class="border-hidden text-right vertical-top">
                             @if(isset($annual_per_arp[$arp]['assess_val_class']))
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
@@ -508,7 +544,7 @@
                         </td>
 
                         <!-- padding-right: -25px; width: 1.5cm;  -->
-                        <td class="border-hidden text-left vertical-top text-right" style=" width: 2cm; position:absolute; background: ##f276c4; transform: translate(-108px, 0px); padding-left: -45px">
+                        <td class="border-hidden text-left vertical-top text-right">
                             <!-- assessed value TOTAL -->
                             <?php 
                                 // $total_assess_val = 0; 
@@ -685,25 +721,25 @@
                                     @endphp
                             @endforeach
                             {{-- TAX DUE AND TYPE --}}
-                            <td class="border-hidden text-left vertical-top" style="width: 3cm; background: ##a276c4; position: relative; padding-left: -90px; transform:translate(-83px, 0px)">
-                                <div style="margin: 0; padding: 0; text-align: right;"> 
+                            <td class="border-hidden vertical-top">
+                                <div style="margin: 0; padding: 0; text-align: center;"> 
                                     
 
                                     @foreach ($display as $payment_type => $lumped)
                                         @php
-                                            $computedValue=0;
+                                            $printedSef='';
                                             $dates = [];
                                             
                                             // if ($payment_type == 7) {
 
-                                            //     echo(number_format($lumped[0]['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$lumped[0]['period_covered'] . (count($lumped) > 1 ? "-".$lumped[count($lumped)-1]['period_covered'] : "").")<br>");
+                                            //     echo(number_format($lumped[0]['sef'], 2)."<br>"."(".$lumped[0]['period_covered'] . (count($lumped) > 1 ? "-".$lumped[count($lumped)-1]['period_covered'] : "").")<br>");
                                             //     continue;
                                             // }
                                         @endphp
                                         @foreach ($lumped as $key => $data)
                                             @php
                                                 if(count($lumped) == 1){
-                                                    echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>(". $data['period_covered'] .")<br>");
+                                                    echo(number_format($data['sef'], 2)."<br>(". $data['period_covered'] .")<br>");
                                                 }else{
                                                     if(isset($lumped[$key-1])){
                                                         if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
@@ -750,35 +786,35 @@
                                                             if ($data['penalty'] == $lumped[$key+1]['penalty'] and $data['assess_val'] == $lumped[$key+1]['assess_val']) {
                                                                 continue;
                                                             }else{
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
-                                                            
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                $printedSef = $data['sef'];
                                                             }
                                                         }if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                             if ($data['discount'] == $lumped[$key+1]['discount'] and $data['assess_val'] == $lumped[$key+1]['assess_val']) {
                                                                 continue;
                                                             }else{
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
-                                                                
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                $printedSef = $data['sef'];
                                                             }
                                                         }
                                                         if ($data['penalty'] == 0 and $data['discount'] == 0) {
                                                             if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount'] == 0 and $data['assess_val'] == $lumped[$key+1]['assess_val']) {
                                                                 continue;
                                                             }else{
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                $printedSef = $data['sef'];
                                                             }
-                                                            
                                                         }
                                                         
                                                     }else{
                                                         if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                             if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                                 array_push($dates, $data['period_covered']);
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }else{
                                                                 $dates = [];
                                                                 array_push($dates, $data['period_covered']);
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }
                                                             
                                                             
@@ -786,21 +822,21 @@
                                                         if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                             if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                                 array_push($dates, $data['period_covered']);
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }else{
                                                                 $dates = [];
                                                                 array_push($dates, $data['period_covered']);
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }
                                                         }
                                                         if ($data['penalty'] == 0 and $data['discount'] == 0) {
                                                             if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                                 array_push($dates, $data['period_covered']);
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }else{
                                                                 $dates = [];
                                                                 array_push($dates, $data['period_covered']);
-                                                                echo(number_format($data['sef'], 2)."<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>full<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
+                                                                echo(( $printedSef == $data['sef'] ? '' : number_format($data['sef'], 2))."<br>"."(".$dates[0] . (count($dates) > 1 ? "-".$dates[count($dates)-1] : "").")<br>");
                                                             }
                                                         }
                                                     }
@@ -812,7 +848,7 @@
                                 </div>
                             </td>
 
-                            <td class="border-hidden text-left vertical-top" style="width: 1.5cm; background: ##cde25f; text-align: center;transform:translate(-83px, 0px)">
+                            <td class="border-hidden text-left vertical-top" style="text-align: center">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -933,7 +969,7 @@
                                 @endforeach
                             </td>
                             {{-- FULL PAYMENT --}}
-                            <td class="border-hidden text-right vertical-top" style="width: 1.1cm; background: ##e8aa4e; padding-right: 6px;transform:translate(-80px, 0px)">
+                            <td class="border-hidden text-right vertical-top" style="text-align: center">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1066,7 +1102,7 @@
                                                             
                             </td>
                             {{-- PENALTY OR DISCOUNT --}}
-                            <td class="border-hidden text-right vertical-top" style="width: 1cm; background: ##e56b60; padding-right: -5px;transform:translate(-85px, 0px)">
+                            <td class="border-hidden text-right vertical-top" style="text-align: center">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1190,7 +1226,7 @@
                                                             
                             </td>
                             {{-- TOTAL --}}
-                            <td class="border-hidden text-right vertical-top" style="width: 2.1cm; background: ##7fe83e; padding-left: 10px;transform:translate(-85px, 0px)">
+                            <td class="border-hidden text-right vertical-top" style="text-align: center">
                                 @foreach ($display as $payment_type => $lumped)
                                     @php
                                         $computedValue = 0;
@@ -1321,8 +1357,10 @@
                             </td>
                         
                     </tr>
+                </table>
+                <table class="signatories">
 
-                    <tr style="background: ##d68db8;">
+                    <tr style="background: ##d68db8; transform: translate(0px, 5px)">
                         <td style="width: 2.5cm;">
                             @if($receipt->bank_number != null || $receipt->bank_number != '')
                             {{ $receipt->bank_number }}
@@ -1340,9 +1378,9 @@
                         </td>
                     </tr> 
 
-                    <tr class="" style="background: ##c542f5;">
+                    <tr>
                         <td colspan=5 rowspan="2"  style="border:0px ##ffffff00" >
-                            <table width="100%" style="padding-top: 15px;transform:translate(-60px, 0px)">
+                            <table width="100%" style="position: absolute; top: 34px; left: -9px">
                                 <tr>
                                     <td class="text-hidden">
                                         <div style="width:80%">
@@ -1361,18 +1399,18 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td width="70%" class="" style="background: ##52aac7; padding-top: -24px;">
-                                        <table width="100%" id="payment_dets">
+                                    <td width="70%" class="" style="background: ##52aac7; padding-top: -23px;">
+                                        <table width="100%" id="payment_dets" style="table-layout: fixed;">
                                             <tr>
                                                 <td colspan="2" class="text-hidden" ><!-- MODE OF PAYMENT --></td>
                                             </tr>
                                             <tr>
                                                 <td width="70%" height="15px" class="text-hidden">CASH</td>
-                                                <td style="padding-top: -20px; text-align: right; background: ##52aac7;">{{ number_format($form56['total'], 2) }}</td>
+                                                <td>{{ number_format($form56['total'], 2) }}</td>
                                             </tr>
                                             <tr>
                                                 <td height="15px" class="text-hidden">CHECK</td>
-                                                <td style="padding-top: -10px; padding-left: -50px; text-align: right;">
+                                                <td>
                                                     @if($receipt->bank_number != null || $receipt->bank_number != '')
                                                         {{ $receipt->bank_number }}<br>
                                                     @endif
@@ -1388,9 +1426,9 @@
                                                 <td height="15px" class="text-hidden">TW/PMO</td>
                                                 <td></td>
                                             </tr>
-                                            <tr>
+                                            <tr style="transform:translate(0px, 5px)">
                                                 <td height="15px" class="text-hidden" >TOTAL</td>
-                                                <td style="padding-top: -10px; text-align: right; background-color: ##7fe83e;"> {{ number_format($form56['total'], 2) }}</td>
+                                                <td> {{ number_format($form56['total'], 2) }}</td>
                                                 <!-- padding-top: -15px; -->
                                             </tr>
                                         </table>
@@ -1399,11 +1437,11 @@
                             </table>
                         </td>
                         <!-- padding-top: -38px; -->
-                        <td colspan="7" class="border-hidden text-right" style="background-color: ##7fe83e; padding-top: -53px;transform:translate(-85px, 0px)"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
+                        <td colspan="7" class="border-hidden text-right" style="transform:translate(0px, 13px)"><span class="text-hidden">TOTAL ></span> {{ number_format($form56['total'], 2) }}</td> 
                     </tr>
-                    <tr>
-                        <td colspan="3" class="border-hidden" style="width: 5.54cm;padding-top: -45px; padding-left: 40px; background-color: ##7fe83e;transform:translate(-60px, -2px)">
-                            <div style="text-align: center; ">
+                    <tr style="transform:translate(31px, 32px)">
+                        <td colspan="3" class="border-hidden">
+                            <div style="text-align: center;">
                                 {{$sign ? $acctble_officer_name->value : ''}}
                                 <BR>
                             <span style="white-space:nowrap">
@@ -1411,7 +1449,7 @@
                             </span>
                             </div>
                         </td>
-                        <td colspan="4" class="border-hidden" style="padding-top: -50px; background-color: ##7fe83e;transform:translate(-40px, -2px)">
+                        <td colspan="4" class="border-hidden" style="transform:translate(25px, 0px)">
                             <div style="text-align: center;">
                                 <!-- IMELDA I. MACANES -->
                                 {{$sign ? 'IMELDA I. MACANES ' : ''}}

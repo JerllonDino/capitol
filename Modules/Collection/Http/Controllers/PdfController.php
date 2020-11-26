@@ -4583,7 +4583,6 @@ class PdfController extends Controller
         );
         return redirect()->route('report.real_property')->with('isSaved', 'Report '.$req->report_no.' in '.$this->base['mun']->name.' succesfully saved!');
         }
-        dd($data);
         $merged = array_merge($data, $req->all());
 
         $this->base['merged'] = $merged;

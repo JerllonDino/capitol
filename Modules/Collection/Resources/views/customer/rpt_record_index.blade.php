@@ -20,6 +20,11 @@
 		position: sticky;
 		top:0;
 	}
+
+	.modal .table thead{
+		background-color: white;
+	}
+	
 	@media (min-width: 1200px) {
 		.modal-xlg {
 			width: 100%; 
@@ -30,9 +35,24 @@
 		height: 95%;
 	}
 	.modal-body {
-		/* 100% = dialog height, 120px = header + footer */
 		max-height: calc(100% + 120px);
 		overflow-y: scroll;
+	}
+	#imports{
+		background-color: rgb(189, 182, 173);
+		padding:10px;
+		border-radius: 20px;
+	}
+
+	#imports{
+		cursor: pointer;
+		outline:none;
+	}
+
+	.form-inline {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
 	}
 </style>
 @endsection
@@ -42,11 +62,10 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<h4>Import Municipality RPT Report</h4>
-
-		<form enctype="multipart/form-data" id="importExcel" method="post" action="">
+		<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
 			{{ csrf_field() }}
-			<input type="file" name="imports" id="imports" class="btn btn-success">
-			<button type="submit" class="btn btn-primary" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
+			<input type="file" name="imports" id="imports">
+			<button type="submit" class="btn btn-primary" style="margin-left: 5%; border-radius: 20px; outline: none;" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
 		</form>
 	</div>
 </div>
