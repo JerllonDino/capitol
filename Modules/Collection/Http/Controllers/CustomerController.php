@@ -134,7 +134,9 @@ class CustomerController extends Controller
         </tr>
     </thead>';
         $file = $request->file('imports');
+        $non_numeric_cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
         if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
+            
             $path = $file->getRealPath();
             $reader = IOFactory::createReader('Xls');
             $reader->setReadDataOnly(TRUE);
@@ -168,17 +170,21 @@ class CustomerController extends Controller
                             $columns = "";
                             continue;
                         }
+                        
                         $tdData = $cell->getFormattedValue() || $cell->getFormattedValue() != 0 ? ($it == 'A' ? ( is_int($cell->getValue()) ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : $cell->getFormattedValue() ) : ($cell->getOldCalculatedValue() ? $cell->getOldCalculatedValue() : $cell->getFormattedValue()) ) : '';
-                        array_push($subArrayData, (is_numeric($tdData) ? ( $it != 'C' ? number_format($tdData, 2) : $tdData) : $tdData));
-                        $columns = $columns . '<td>' .
-                            (is_numeric($tdData) ? ( $it != 'C' ? number_format($tdData, 2) : $tdData) : $tdData) .
-                            '</td>' . PHP_EOL;
+                        $tdValues = (array_search($it, $non_numeric_cells) === false ? number_format( floatval($tdData), 2) : $tdData);
+                        
+                        array_push($subArrayData, $tdValues);
+                        $columns = $columns . '<td>' . ( $tdValues === "0.00" ? '' : $tdValues )  . '</td>' . PHP_EOL;
+                        // dd($tdValues);
                     }
+                     
                 array_push($arrayData, $subArrayData);
                 $html = $html . $columns;
                 $html = $html . '</tr>' . PHP_EOL;
             }
             // $this->saveImportedExcel(array_filter($arrayData));
+            // $this->excelSummary(array_filter($arrayData));
             $html = $html . '</table>' . PHP_EOL;
             return response()->json([
                 'html' => $html
@@ -204,6 +210,63 @@ class CustomerController extends Controller
             }
         }
         dd($newSortedData);
+    }
+
+    private function excelSummary($datas)
+    {
+        $computedValues = [];
+        foreach($datas as $i => $data){
+            switch($data[6]){
+                case 'R':
+
+                break;
+                
+                case 'A':
+                break;
+
+                case 'C':
+                break;
+
+                case 'I':
+                break;
+
+                case 'M':
+                break;
+
+                case 'S':
+                break;
+
+                default:
+
+                break;
+            }
+        }
+    }
+
+    private function computeDisposition($type, $data, $computedValues)
+    {
+        $computedValues[$type]['basic_current_gross'] += $data[7];
+        $computedValues[$type]['basic_current_discount'] += $data[8];
+        $computedValues[$type]['basic_immediate'] += $data[9];
+        $computedValues[$type]['basic_prior_1992'] += $data[10];
+        $computedValues[$type]['basic_prior_1991'] += $data[11];
+        $computedValues[$type]['basic_penalty_immediate'] += $data[12];
+        $computedValues[$type]['basic_penalty_prior_1992'] += $data[13];
+        $computedValues[$type]['basic_penalty_prior_1991'] += $data[14];
+        $computedValues[$type]['basic_subtotal_gross'] += $data[16];
+        $computedValues[$type]['basic_subtotal_net'] += $data[14];
+        $computedValues[$type]['sef_current_gross'] += $data[15];
+        $computedValues[$type]['sef_current_discount'] += $data[16];
+        $computedValues[$type]['sef_immediate'] += $data[17];
+        $computedValues[$type]['sef_prior_1992'] += $data[18];
+        $computedValues[$type]['sef_prior_1991'] += $data[19];
+        $computedValues[$type]['sef_penalty_immediate'] += $data[20];
+        $computedValues[$type]['sef_penalty_prior_1992'] += $data[21];
+        $computedValues[$type]['sef_penalty_prior_1991'] += $data[22];
+        $computedValues[$type]['sef_subtotal_gross'] += $data[23];
+        $computedValues[$type]['sef_subtotal_net'] += $data[25];
+        $computedValues[$type]['grandtotal_gross'] += $data[26];
+        $computedValues[$type]['grandtotal_net'] += $data[27];
     }
 
     public function show($id,Request $request)

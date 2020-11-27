@@ -62,7 +62,8 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<h4>Import Municipality RPT Report</h4>
-		<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
+	<form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline">
+		{{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline"> --}}
 			{{ csrf_field() }}
 			<input type="file" name="imports" id="imports">
 			<button type="submit" class="btn btn-primary" style="margin-left: 5%; border-radius: 20px; outline: none;" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
@@ -181,33 +182,33 @@
 	$.fn.getRecords();
 	$excelImport = $('#importExcel');
 	$importButton = $('#submitExcel');
-	$excelImport.submit(function(e){
-        e.preventDefault();
-		data = new FormData(this);
+	// $excelImport.submit(function(e){
+    //     e.preventDefault();
+	// 	data = new FormData(this);
 
-        $.ajax({
-            url: '{{ route("rpt.import_excel_report") }}',
-			method: 'POST',
-            data: data,
-			contentType: false,
-			cache: false,
-			processData:false,
-            beforeSend: function(){
-                $importButton.find('.fa-spinner').removeAttr('style');
-            },
-        }).done(function(data){
-			if (data.html) {
-				$('.excelModal').find('.modal-content').html(data.html);
-			}else{
-				$('.excelModal').find('.modal-content').html(data.message);
-			}
-			$('.excelModal').modal('show');
-        }).fail(function(){
+    //     $.ajax({
+    //         url: '{{ route("rpt.import_excel_report") }}',
+	// 		method: 'POST',
+    //         data: data,
+	// 		contentType: false,
+	// 		cache: false,
+	// 		processData:false,
+    //         beforeSend: function(){
+    //             $importButton.find('.fa-spinner').removeAttr('style');
+    //         },
+    //     }).done(function(data){
+	// 		if (data.html) {
+	// 			$('.excelModal').find('.modal-content').html(data.html);
+	// 		}else{
+	// 			$('.excelModal').find('.modal-content').html(data.message);
+	// 		}
+	// 		$('.excelModal').modal('show');
+    //     }).fail(function(){
 
-        }).always(function(){
-			$importButton.find('.fa-spinner').css('display', 'none');
-		});
-	});
+    //     }).always(function(){
+	// 		$importButton.find('.fa-spinner').css('display', 'none');
+	// 	});
+	// });
 
 	// $(document).on('click', '#rpt_rec', function() {
 	// 	// $('#mnth_year').modal('toggle');

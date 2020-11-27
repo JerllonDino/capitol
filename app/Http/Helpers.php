@@ -133,4 +133,29 @@ Class convertx {
         return $number > 0 ? number_format($number, $length) : '-';
     }
 
+    function changeFontSizeByDigits($number)
+    {
+        $assess_length = strlen($number);
+        $fontSize = "13px";
+        switch ($assess_length) {
+            // 10,000.00
+            case 9:
+                $fontSize = "12px";
+                break;
+            // 100,000.00
+            case 10:
+                $fontSize = "11px";
+                break;
+            // 1,000,000.00
+            case 12:
+                $fontSize = "10px";
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        return $fontSize;
+    }
+
  

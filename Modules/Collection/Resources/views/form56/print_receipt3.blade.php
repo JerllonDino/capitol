@@ -76,7 +76,7 @@
             /* border-color: #ffffff00; */
             /* background-color: ##42cbf4;  */
             position: absolute;
-            top: 110px;
+            top: 113px;
             left: 30px;
         }
 
@@ -506,13 +506,13 @@
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
                                         @if(preg_match('/building/i', $val['kind']) != 1)
-                                            {{ number_format($val['assess_val'],2) }}<br><br>
+                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
                                         @else
                                             <br>
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) != 1)
-                                            {{ number_format($val['assess_val'],2) }}<br><br>
+                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
                                         @else
                                             <br>
                                         @endif
@@ -528,13 +528,13 @@
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
                                         @if(preg_match('/building/i', $val['kind']) == 1)
-                                            {{ number_format($val['assess_val'],2) }}<br><br>
+                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
                                         @else
                                             <br>
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) == 1)
-                                            {{ number_format($val['assess_val'],2) }}<br><br>
+                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
                                         @else
                                             <br>
                                         @endif
@@ -545,10 +545,12 @@
 
                         <!-- padding-right: -25px; width: 1.5cm;  -->
                         <td class="border-hidden text-left vertical-top text-right">
+                            
                             <!-- assessed value TOTAL -->
                             <?php 
                                 // $total_assess_val = 0; 
                                 $limit_counter = 0; 
+                                
                             ?>
                             @if($limit_counter <= $limit)
                                 @foreach($annual_arp as $this_arp => $data)
@@ -569,15 +571,17 @@
                                                 // $this_arp_prev = isset($array_keys[$i-1]) ? $array_keys[$i-1] : null;
                                             }
                                         }
+                                        
                                     ?>
                                     @if(isset($annual_per_arp['yearly'][$this_arp][$year]))
                                         @if($this_arp_next != false)
                                             @if(isset($annual_per_arp[$this_arp_next]))
                                                 @if($annual_per_arp[$this_arp]['prev_tax_dec_no'] == $this_arp_next || $annual_per_arp[$this_arp_next]['prev_tax_dec_no'] == $this_arp)
-                                                    {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br>
-                                                    {{ number_format($annual_per_arp[$this_arp_next]['assess_val'], 2) }}<br><br>
+
+                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$this_arp]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br></span>
+                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$this_arp_next]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$this_arp_next]['assess_val'], 2) }}<br><br></span>
                                                 @elseif($annual_per_arp[$this_arp]['prev_tax_dec_no'] != $this_arp_next || $annual_per_arp[$this_arp_next]['prev_tax_dec_no'] != $this_arp)
-                                                    {{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br>
+                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$arp]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br></span>
                                                 @endif
                                             @else
                                                 {{ number_format($val['assess_val'], 2) }}
@@ -585,13 +589,13 @@
                                         @elseif($this_arp_prev != false)
                                             @if(isset($annual_per_arp[$this_arp_prev]))
                                                 @if($annual_per_arp[$this_arp]['prev_tax_dec_no'] == $this_arp_prev || $annual_per_arp[$this_arp_prev]['prev_tax_dec_no'] == $this_arp)
-                                                    {{ number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2) }}<br><br>
+                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2) }}<br><br></span>
                                                     {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br>
                                                 @elseif($annual_per_arp[$this_arp]['prev_tax_dec_no'] != $this_arp_prev || $annual_per_arp[$this_arp_prev]['prev_tax_dec_no'] != $this_arp)
-                                                    {{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br>
+                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$arp]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br></span>
                                                 @endif
                                             @else
-                                                {{ number_format($val['assess_val'], 2) }}
+                                                <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'], 2)) }}">{{ number_format($val['assess_val'], 2) }}</span>
                                             @endif
                                         @elseif($this_arp == $arp)
                                             {{-- @if($this_arp_next == null && $this_arp_prev == null && count(array_keys($annual_arp[$arp])) == 1)  --}}
@@ -599,7 +603,7 @@
                                             {{-- @else --}}
                                                 @if(isset($annual_per_arp[$this_arp]['assess_val_class']))
                                                     @foreach($annual_per_arp[$this_arp]['assess_val_class'] as $i => $val)
-                                                        {{ number_format($val['assess_val'], 2) }}<br><br>
+                                                        <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'], 2)) }}">{{ number_format($val['assess_val'], 2) }}<br><br></span>
                                                     @endforeach
                                                 @endif
                                             {{-- @endif --}}
@@ -1176,7 +1180,6 @@
                                                         }else{
                                                             echo("(".number_format($computedValue, 2).")<br>");
                                                             echo("(".number_format($computedValue, 2).")<br>");
-                                                            
                                                         }
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] == 0) {
@@ -1380,7 +1383,7 @@
 
                     <tr>
                         <td colspan=5 rowspan="2"  style="border:0px ##ffffff00" >
-                            <table width="100%" style="position: absolute; top: 34px; left: -9px">
+                            <table width="100%" style="position: absolute; top: 36px; left: -9px">
                                 <tr>
                                     <td class="text-hidden">
                                         <div style="width:80%">
