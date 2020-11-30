@@ -80,10 +80,10 @@ class CustomerController extends Controller
             <th rowspan="4">TD/ARP No.</th>
             <th rowspan="4">Name of Brgy.</th>
             <th rowspan="4">Classifi <br> cation</th>
-            <th colspan="8">BASIC TAX</th>
+            <th colspan="9">BASIC TAX</th>
             <th rowspan="4">Sub-total Gross Collection</th>
             <th rowspan="4">Sub-total Net Collection</th>
-            <th colspan="8">SPECIAL EDUCATION FUND</th>
+            <th colspan="9">SPECIAL EDUCATION FUND</th>
             <th rowspan="4">Sub-total Gross Collection</th>
             <th rowspan="4">Sub-total Net Collection</th>
             <th rowspan="4">Grand Total Gross Collection</th>
@@ -95,19 +95,21 @@ class CustomerController extends Controller
             <th style="top: 20px" colspan="2" rowspan="2">Current Year</th>
             <th style="top: 20px" rowspan="3">'.(date("Y")-1).'</th>
             <th style="top: 20px" colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th style="top: 20px" colspan="3">PENALTIES</th>
+            <th style="top: 20px" colspan="4">PENALTIES</th>
             <!-- sef --> 
             
             <th style="top: 20px" colspan="2" rowspan="2">Current Year</th>
             <th style="top: 20px" rowspan="3">'.(date("Y")-1).'</th>
             <th style="top: 20px" colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th style="top: 20px" colspan="3">PENALTIES</th>
+            <th style="top: 20px" colspan="4">PENALTIES</th>
         </tr> 
         <tr>
             <!-- basic -->
+            <th style="top: 40px" rowspan="2">'.date("Y").'</th>
             <th style="top: 40px" rowspan="2">'.(date("Y")-1).'</th>
             <th style="top: 40px" colspan="2">PRIOR YEARS</th>
             <!-- sef -->
+            <th style="top: 40px" rowspan="2">'.date("Y").'</th>
             <th style="top: 40px" rowspan="2">'.(date("Y")-1).'</th>
             <th style="top: 40px" colspan="2">PRIOR YEARS</th>
         </tr>
@@ -154,7 +156,7 @@ class CustomerController extends Controller
                 $emptyCounter = 0;
                 $subArrayData = [];
                     foreach ($cellIterator as $it => $cell) {
-                        if($it == 'AD'){
+                        if($it == 'AF'){
                             break;
                         }
                         if($it == 'A'){
@@ -163,7 +165,7 @@ class CustomerController extends Controller
                                 break;
                             }
                         }
-                        if(empty($cell->getFormattedValue())){
+                        if(empty($cell->getValue())){
                             $emptyCounter = $emptyCounter + 1;
                         }
                         if($emptyCounter > 25){
@@ -171,10 +173,10 @@ class CustomerController extends Controller
                             continue;
                         }
                         
-                        $tdData = $cell->getFormattedValue() || $cell->getFormattedValue() != 0 ? ($it == 'A' ? ( is_int($cell->getValue()) ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : $cell->getFormattedValue() ) : ($cell->getOldCalculatedValue() ? $cell->getOldCalculatedValue() : $cell->getFormattedValue()) ) : '';
+                        $tdData = $it == 'A' ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : ($cell->getOldCalculatedValue() ? $cell->getOldCalculatedValue() : $cell->getFormattedValue());
                         $tdValues = (array_search($it, $non_numeric_cells) === false ? number_format( floatval($tdData), 2) : $tdData);
                         
-                        array_push($subArrayData, $tdValues);
+                        array_push($subArrayData, (array_search($it, $non_numeric_cells) === false ? floatval($tdData) : $tdData) );
                         $columns = $columns . '<td>' . ( $tdValues === "0.00" ? '' : $tdValues )  . '</td>' . PHP_EOL;
                         // dd($tdValues);
                     }
@@ -184,8 +186,9 @@ class CustomerController extends Controller
                 $html = $html . '</tr>' . PHP_EOL;
             }
             // $this->saveImportedExcel(array_filter($arrayData));
-            // $this->excelSummary(array_filter($arrayData));
+            $html = $html . $this->excelSummary(array_filter($arrayData));
             $html = $html . '</table>' . PHP_EOL;
+            
             return response()->json([
                 'html' => $html
             ]);
@@ -218,22 +221,27 @@ class CustomerController extends Controller
         foreach($datas as $i => $data){
             switch($data[6]){
                 case 'R':
-
+                    $computedValues = $this->computeDisposition('residential', $data, $computedValues);
                 break;
                 
                 case 'A':
+                    $computedValues = $this->computeDisposition('agricultural', $data, $computedValues);
                 break;
 
                 case 'C':
+                    $computedValues = $this->computeDisposition('commercial', $data, $computedValues);
                 break;
 
                 case 'I':
+                    $computedValues = $this->computeDisposition('industrial', $data, $computedValues);
                 break;
 
                 case 'M':
+                    $computedValues = $this->computeDisposition('mineral', $data, $computedValues);
                 break;
 
                 case 'S':
+                    $computedValues = $this->computeDisposition('special', $data, $computedValues);
                 break;
 
                 default:
@@ -241,32 +249,64 @@ class CustomerController extends Controller
                 break;
             }
         }
+        $html = '';
+        $sum = [];
+        foreach($computedValues as $type => $data){
+            $sum = isset($sum) ? array_map(function () {
+                return array_sum(func_get_args());
+            }, $sum, $data) : $sum = $data;
+            $html = $html . '<tr>'  . PHP_EOL;
+            $html = $html . '
+                <td colspan=7 style="text-align: right">'.ucwords($type).'</td>' . PHP_EOL;
+                foreach($data as $value){
+                    $html = $html . '<td>'. (number_format(floatval($value), 2) === '0.00' ? '' : number_format(floatval($value), 2)) .'</td>' . PHP_EOL;
+                }
+            $html = $html . '</tr>' . PHP_EOL;
+        }
+        $html = $html . '<tr>
+            <td colspan=7 style="text-align: right"><b>Total</b></td>
+        ' . PHP_EOL;
+        $provincial = '';
+        $excemp = [9,10,20,21,22];
+        $provincialTotal = 0;
+        foreach($sum as  $iterator => $value){
+            $html = $html . '<td><b>'. (number_format(floatval($value), 2) === '0.00' ? '' : number_format(floatval($value), 2)) . '</b></td>' . PHP_EOL;
+            $provincialTotal += (array_search($iterator, $excemp) !== false || $iterator == '23' ? 0 : (floatval($value) * ($iterator > 10 ? .5 : .35 )));
+            $provincial = $provincial . '<td>' . (number_format(floatval($value), 2) === '0.00' || array_search($iterator, $excemp) !== false ? '' : ($iterator == '23' ? number_format(floatval($provincialTotal), 2) : number_format((floatval($value) * ($iterator > 10 ? .5 : .35 )), 2))) . '</td>' . PHP_EOL;
+        }
+        $html = $html . '</tr>' . PHP_EOL;
+        $html = $html . '<tr>' . PHP_EOL . '<td colspan=7 style="text-align: right">Provincial Share</td>' . $provincial . PHP_EOL . '</tr>'. PHP_EOL;
+        
+        return $html;
     }
 
     private function computeDisposition($type, $data, $computedValues)
     {
-        $computedValues[$type]['basic_current_gross'] += $data[7];
-        $computedValues[$type]['basic_current_discount'] += $data[8];
-        $computedValues[$type]['basic_immediate'] += $data[9];
-        $computedValues[$type]['basic_prior_1992'] += $data[10];
-        $computedValues[$type]['basic_prior_1991'] += $data[11];
-        $computedValues[$type]['basic_penalty_immediate'] += $data[12];
-        $computedValues[$type]['basic_penalty_prior_1992'] += $data[13];
-        $computedValues[$type]['basic_penalty_prior_1991'] += $data[14];
-        $computedValues[$type]['basic_subtotal_gross'] += $data[16];
-        $computedValues[$type]['basic_subtotal_net'] += $data[14];
-        $computedValues[$type]['sef_current_gross'] += $data[15];
-        $computedValues[$type]['sef_current_discount'] += $data[16];
-        $computedValues[$type]['sef_immediate'] += $data[17];
-        $computedValues[$type]['sef_prior_1992'] += $data[18];
-        $computedValues[$type]['sef_prior_1991'] += $data[19];
-        $computedValues[$type]['sef_penalty_immediate'] += $data[20];
-        $computedValues[$type]['sef_penalty_prior_1992'] += $data[21];
-        $computedValues[$type]['sef_penalty_prior_1991'] += $data[22];
-        $computedValues[$type]['sef_subtotal_gross'] += $data[23];
-        $computedValues[$type]['sef_subtotal_net'] += $data[25];
-        $computedValues[$type]['grandtotal_gross'] += $data[26];
-        $computedValues[$type]['grandtotal_net'] += $data[27];
+        isset($computedValues[$type]['basic_current_gross']) ? $computedValues[$type]['basic_current_gross'] += floatval($data[7]) : $computedValues[$type]['basic_current_gross'] = floatval($data[7]);
+        isset($computedValues[$type]['basic_current_discount']) ? $computedValues[$type]['basic_current_discount'] += floatval($data[8]) : $computedValues[$type]['basic_current_discount'] = floatval($data[8]);
+        isset($computedValues[$type]['basic_immediate']) ? $computedValues[$type]['basic_immediate'] += floatval($data[9]) : $computedValues[$type]['basic_immediate'] = floatval($data[9]);
+        isset($computedValues[$type]['basic_prior_1992']) ? $computedValues[$type]['basic_prior_1992'] += floatval($data[10]) : $computedValues[$type]['basic_prior_1992'] = floatval($data[10]);
+        isset($computedValues[$type]['basic_prior_1991']) ? $computedValues[$type]['basic_prior_1991'] += floatval($data[11]) : $computedValues[$type]['basic_prior_1991'] = floatval($data[11]);
+        isset($computedValues[$type]['basic_penalty_current']) ? $computedValues[$type]['basic_penalty_current'] += floatval($data[12]) : $computedValues[$type]['basic_penalty_current'] = floatval($data[12]);
+        isset($computedValues[$type]['basic_penalty_immediate']) ? $computedValues[$type]['basic_penalty_immediate'] += floatval($data[13]) : $computedValues[$type]['basic_penalty_immediate'] = floatval($data[13]);
+        isset($computedValues[$type]['basic_penalty_prior_1992']) ? $computedValues[$type]['basic_penalty_prior_1992'] += floatval($data[14]) : $computedValues[$type]['basic_penalty_prior_1992'] = floatval($data[14]);
+        isset($computedValues[$type]['basic_penalty_prior_1991']) ? $computedValues[$type]['basic_penalty_prior_1991'] += floatval($data[15]) : $computedValues[$type]['basic_penalty_prior_1991'] = floatval($data[15]);
+        isset($computedValues[$type]['basic_subtotal_gross']) ? $computedValues[$type]['basic_subtotal_gross'] += floatval($data[16]) : $computedValues[$type]['basic_subtotal_gross'] = floatval($data[16]);
+        isset($computedValues[$type]['basic_subtotal_net']) ? $computedValues[$type]['basic_subtotal_net'] += floatval($data[17]) : $computedValues[$type]['basic_subtotal_net'] = floatval($data[17]);
+        isset($computedValues[$type]['sef_current_gross']) ? $computedValues[$type]['sef_current_gross'] += floatval($data[18]) : $computedValues[$type]['sef_current_gross'] = floatval($data[18]);
+        isset($computedValues[$type]['sef_current_discount']) ? $computedValues[$type]['sef_current_discount'] += floatval($data[19]) : $computedValues[$type]['sef_current_discount'] = floatval($data[19]);
+        isset($computedValues[$type]['sef_immediate']) ? $computedValues[$type]['sef_immediate'] += floatval($data[20]) : $computedValues[$type]['sef_immediate'] = floatval($data[20]);
+        isset($computedValues[$type]['sef_prior_1992']) ? $computedValues[$type]['sef_prior_1992'] += floatval($data[21]) : $computedValues[$type]['sef_prior_1992'] = floatval($data[21]);
+        isset($computedValues[$type]['sef_prior_1991']) ? $computedValues[$type]['sef_prior_1991'] += floatval($data[22]) : $computedValues[$type]['sef_prior_1991'] = floatval($data[22]);
+        isset($computedValues[$type]['sef_penalty_current']) ? $computedValues[$type]['sef_penalty_current'] += floatval($data[23]) : $computedValues[$type]['sef_penalty_current'] = floatval($data[23]);
+        isset($computedValues[$type]['sef_penalty_immediate']) ? $computedValues[$type]['sef_penalty_immediate'] += floatval($data[24]) : $computedValues[$type]['sef_penalty_immediate'] = floatval($data[24]);
+        isset($computedValues[$type]['sef_penalty_prior_1992']) ? $computedValues[$type]['sef_penalty_prior_1992'] += floatval($data[25]) : $computedValues[$type]['sef_penalty_prior_1992'] = floatval($data[25]);
+        isset($computedValues[$type]['sef_penalty_prior_1991']) ? $computedValues[$type]['sef_penalty_prior_1991'] += floatval($data[26]) : $computedValues[$type]['sef_penalty_prior_1991'] = floatval($data[26]);
+        isset($computedValues[$type]['sef_subtotal_gross']) ? $computedValues[$type]['sef_subtotal_gross'] += floatval($data[27]) : $computedValues[$type]['sef_subtotal_gross'] = floatval($data[27]);
+        isset($computedValues[$type]['sef_subtotal_net']) ? $computedValues[$type]['sef_subtotal_net'] += floatval($data[28]) : $computedValues[$type]['sef_subtotal_net'] = floatval($data[28]);
+        isset($computedValues[$type]['grandtotal_gross']) ? $computedValues[$type]['grandtotal_gross'] += floatval($data[29]) : $computedValues[$type]['grandtotal_gross'] = floatval($data[29]);
+        isset($computedValues[$type]['grandtotal_net']) ? $computedValues[$type]['grandtotal_net'] += floatval($data[30]) : $computedValues[$type]['grandtotal_net'] = floatval($data[30]);
+        return $computedValues;
     }
 
     public function show($id,Request $request)

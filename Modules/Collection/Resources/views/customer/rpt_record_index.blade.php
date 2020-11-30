@@ -25,19 +25,18 @@
 		background-color: white;
 	}
 	
+	
 	@media (min-width: 1200px) {
 		.modal-xlg {
-			width: 100%; 
+			width: 95%; 
 		}
 	}
+	
 	.modal-dialog,
 	.modal-content {
-		height: 95%;
+		height: 98%;
 	}
-	.modal-body {
-		max-height: calc(100% + 120px);
-		overflow-y: scroll;
-	}
+	
 	#imports{
 		background-color: rgb(189, 182, 173);
 		padding:10px;
@@ -62,8 +61,8 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<h4>Import Municipality RPT Report</h4>
-	<form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline">
-		{{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline"> --}}
+	{{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline"> --}}
+		<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
 			{{ csrf_field() }}
 			<input type="file" name="imports" id="imports">
 			<button type="submit" class="btn btn-primary" style="margin-left: 5%; border-radius: 20px; outline: none;" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
@@ -136,10 +135,18 @@
 	<div class="modal fade bd-example-modal-lg excelModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-xlg">
 		  <div class="modal-content">
-			
-		  </div>
-		  <div class="modal-footer">
-			  <button class="btn btn-success">Save Excel</button>
+			<div class="modal-header" style="padding:0">
+				<h5 class="modal-title">Excel Import</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			<div class="modal-body">
+
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success">Save Excel</button>
+			</div>
 		  </div>
 		</div>
 	  </div>
@@ -182,33 +189,33 @@
 	$.fn.getRecords();
 	$excelImport = $('#importExcel');
 	$importButton = $('#submitExcel');
-	// $excelImport.submit(function(e){
-    //     e.preventDefault();
-	// 	data = new FormData(this);
+	$excelImport.submit(function(e){
+        e.preventDefault();
+		data = new FormData(this);
 
-    //     $.ajax({
-    //         url: '{{ route("rpt.import_excel_report") }}',
-	// 		method: 'POST',
-    //         data: data,
-	// 		contentType: false,
-	// 		cache: false,
-	// 		processData:false,
-    //         beforeSend: function(){
-    //             $importButton.find('.fa-spinner').removeAttr('style');
-    //         },
-    //     }).done(function(data){
-	// 		if (data.html) {
-	// 			$('.excelModal').find('.modal-content').html(data.html);
-	// 		}else{
-	// 			$('.excelModal').find('.modal-content').html(data.message);
-	// 		}
-	// 		$('.excelModal').modal('show');
-    //     }).fail(function(){
+        $.ajax({
+            url: '{{ route("rpt.import_excel_report") }}',
+			method: 'POST',
+            data: data,
+			contentType: false,
+			cache: false,
+			processData:false,
+            beforeSend: function(){
+                $importButton.find('.fa-spinner').removeAttr('style');
+            },
+        }).done(function(data){
+			if (data.html) {
+				$('.excelModal').find('.modal-body').html(data.html);
+			}else{
+				$('.excelModal').find('.modal-body').html(data.message);
+			}
+			$('.excelModal').modal('show');
+        }).fail(function(){
 
-    //     }).always(function(){
-	// 		$importButton.find('.fa-spinner').css('display', 'none');
-	// 	});
-	// });
+        }).always(function(){
+			$importButton.find('.fa-spinner').css('display', 'none');
+		});
+	});
 
 	// $(document).on('click', '#rpt_rec', function() {
 	// 	// $('#mnth_year').modal('toggle');
