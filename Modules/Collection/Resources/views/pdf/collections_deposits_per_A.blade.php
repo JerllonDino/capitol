@@ -26,12 +26,12 @@
         }
 
         #collections>thead>tr>th,#collections>tbody>tr>td, #collections>tbody>tr>th{
-            font-size: 9px;
+            font-size: 9px !important;
             padding: 1px;
         }
 
         .small-launay>thead>tr>th,.small-launay>tbody>tr>th,.small-launay>tbody>tr>td{
-            font-size: 9px;
+            font-size: 9px !important;
             padding: 1px;
         }
 
@@ -113,7 +113,11 @@
             word-wrap: break-word;
         }
 
+        
+
     </style>
+
+
 
 </head>
 <body>

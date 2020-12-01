@@ -48,7 +48,7 @@
 		outline:none;
 	}
 
-	.form-inline {
+	#importExcel {
 		display: flex;
 		flex-flow: row wrap;
 		align-items: center;
@@ -65,7 +65,12 @@
 		<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
 			{{ csrf_field() }}
 			<input type="file" name="imports" id="imports">
-			<button type="submit" class="btn btn-primary" style="margin-left: 5%; border-radius: 20px; outline: none;" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> Import Excel</button>
+			<select name="excel_municipality" id="excel-municipality" class="form-control" style="margin-left: 3%; border-radius: 20px; outline: none;">
+				@foreach($base['municipality'] as $m)
+					<option value="{{ $m->id }}">{{ $m->name }}</option>
+				@endforeach
+			</select>
+			<button type="submit" class="btn btn-primary" style="margin-left: 3%; border-radius: 20px; outline: none; padding: 10px" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> &nbsp;<i class="fa fa-upload"></i> Import Excel</button>
 		</form>
 	</div>
 </div>

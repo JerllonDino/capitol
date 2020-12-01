@@ -3714,6 +3714,7 @@ class PdfController extends Controller
                         ->setPaper("legal", 'portrait');
                     }else{
                         if($typex === 'type_A'){
+                            // dd($this->base);
                             $pdf = PDF::loadView('collection::pdf.collections_deposits_per_A', $this->base)
                         // ->setPaper("legal", 'Landscape');
                             ->setPaper("legal", 'Landscape');
@@ -4583,7 +4584,7 @@ class PdfController extends Controller
         );
         return redirect()->route('report.real_property')->with('isSaved', 'Report '.$req->report_no.' in '.$this->base['mun']->name.' succesfully saved!');
         }
-        $merged = array_merge($data, $req->all());
+        $merged = $data ? array_merge($data, $req->all()) : $req->all();
 
         $this->base['merged'] = $merged;
 

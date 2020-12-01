@@ -137,7 +137,7 @@ class CustomerController extends Controller
     </thead>';
         $file = $request->file('imports');
         $non_numeric_cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-        if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv') {
+        if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv' and $file->isValid()) {
             
             $path = $file->getRealPath();
             $reader = IOFactory::createReader('Xls');
@@ -257,14 +257,14 @@ class CustomerController extends Controller
             }, $sum, $data) : $sum = $data;
             $html = $html . '<tr>'  . PHP_EOL;
             $html = $html . '
-                <td colspan=7 style="text-align: right">'.ucwords($type).'</td>' . PHP_EOL;
+                <td colspan=7 style="text-align: right">'.ucwords($type).':</td>' . PHP_EOL;
                 foreach($data as $value){
                     $html = $html . '<td>'. (number_format(floatval($value), 2) === '0.00' ? '' : number_format(floatval($value), 2)) .'</td>' . PHP_EOL;
                 }
             $html = $html . '</tr>' . PHP_EOL;
         }
         $html = $html . '<tr>
-            <td colspan=7 style="text-align: right"><b>Total</b></td>
+            <td colspan=7 style="text-align: right"><b>Total:</b></td>
         ' . PHP_EOL;
         $provincial = '';
         $excemp = [9,10,20,21,22];
@@ -1091,49 +1091,7 @@ class CustomerController extends Controller
             $tax_decs = collect($tax_decs);
             $owners = [];
             foreach($tax_decs as $det) {
-// pdf parser
-// $pdf_link = DB::connection('mysql2')->select(DB::raw('select path_img from tax_dec_archive_docs where tax_dec_id = '.$det->taxdec_id));
-// $path = str_replace("public", "", $pdf_link[0]->path_img);
-// $parser = new Parser();
-// $text = '';
-// dd($path);
-// // START for local copy ONLY
-// $replace = str_replace('public/storage', 'storage/app/public', asset('storage').$path);
-// // END for local copy ONLY
-// try {
-//     // change file permission
-//     $file = str_replace('capitol', 'capitol_rpt', storage_path().'\app\public\tax_decs\225997');
-//     chmod($file, 777);
-
-//     // pdftk
-//     $pdf_local = str_replace('\\', '/', str_replace('capitol', 'capitol_rpt', storage_path().'\app\public\tax_decs\225997\ChSSk1KC92ev38MZiIRME4oPacmr827iC968WTnB.pdf'));
-//     $pdf = new Pdftk($pdf_local, [
-//         'command' => 'C:\Program Files (x86)\PDFtk\bin\pdftk.exe',
-//         'useExec' => true,  // May help on Windows systems if execution fails
-//     ]);
-//     if(file_exists(storage_path().'\app\temp')) {
-//         // chmod(storage_path(), 777);
-//         // chmod(storage_path().'\app', 777);
-//         chmod(storage_path().'\app\temp', 777);
-//     } else {
-//         mkdir(storage_path().'\app\temp');
-//         chmod(storage_path().'\app\temp', 777);
-//     }
-//     $pdf->tempDir = str_replace('\\', '/', storage_path().'\app\temp');
-//     $pdf->allow('AllFeatures')->saveAs(str_replace('\\', '/', str_replace('capitol', 'capitol_rpt', storage_path().'\app\public\tax_decs\225997\test.pdf')));
-//     // pdftk "A"="C:/xampp5/htdocs/capitol_rpt/storage/app/public/tax_decs/225997/ChSSk1KC92ev38MZiIRME4oPacmr827iC968WTnB.pdf" "output" "C:\Users\Administrator\AppData\Local\Temp\tmp124E.tmp.pdf" allow AllFeatures  // command works! install pdftk for command line
-
-//     // test files
-//     // $pdf = $parser->parseFile('http://localhost/capitol_rpt/storage/app/public/tax_decs/225997/ChSSk1KC92ev38MZiIRME4oPacmr827iC968WTnB.pdf'); // secured file
-//     $pdf = $parser->parseFile('http://localhost/capitol_rpt/storage/app/public/tax_decs/225997/test.pdf');
-//     $text = $pdf->getText();
-
-//     // delete parsed secured pdf
-//     unlink(str_replace('\\', '/', str_replace('capitol', 'capitol_rpt', storage_path().'\app\public\tax_decs\225997\test.pdf')));
-// } catch(\Exception $e) {
-//     // dd($e);
-// }
-// dd($text);                
+               
                 $owner_name = '';
                 $loc_mnc = Municipality::find($det->municipality);
                 $loc_brgy = Barangay::find($det->brgy);
