@@ -26,12 +26,12 @@
         }
 
         #collections>thead>tr>th,#collections>tbody>tr>td, #collections>tbody>tr>th{
-            font-size: 9px !important;
+            font-size: 9px;
             padding: 1px;
         }
 
         .small-launay>thead>tr>th,.small-launay>tbody>tr>th,.small-launay>tbody>tr>td{
-            font-size: 9px !important;
+            font-size: 9px;
             padding: 1px;
         }
 
@@ -113,8 +113,19 @@
             word-wrap: break-word;
         }
 
-        
+        @if ($total_columns >= 18 and $papr_size === 'legal')
 
+        #collections>thead>tr>th,#collections>tbody>tr>td, #collections>tbody>tr>th{
+            font-size: 9px !important;
+            padding: 1px;
+        }
+
+        .small-launay>thead>tr>th,.small-launay>tbody>tr>th,.small-launay>tbody>tr>td{
+            font-size: 9px !important;
+            padding: 1px;
+        }
+        @endif;
+            
     </style>
 
 
@@ -292,19 +303,8 @@
             @else
 
                 <td style="vertical-align: middle; font-size: 12px;" class="detail_payor val">
-                    @if($count_accts > 15)
-                        <?php
-                            $brk_word  = [];
-                            // if(strlen($receipt->customer->name) <= 40) {
-                                $brk_word = explode(" ", $receipt->customer->name);
-                            // }
-                        ?>
-                            @foreach($brk_word as $word)
-                                {{ $word }} <br>
-                            @endforeach
-                    @else
-                        {{ $receipt->customer->name }}
-                    @endif
+                    
+                    {{ $receipt->customer->name }}
                 </td>
                 @foreach($accounts as $i => $account)
                     <!-- per client type -->

@@ -185,13 +185,19 @@ class CustomerController extends Controller
                 $html = $html . $columns;
                 $html = $html . '</tr>' . PHP_EOL;
             }
-            // $this->saveImportedExcel(array_filter($arrayData));
-            $html = $html . $this->excelSummary(array_filter($arrayData));
-            $html = $html . '</table>' . PHP_EOL;
-            
-            return response()->json([
-                'html' => $html
-            ]);
+
+            if(array_filter($arrayData)){
+                // $this->saveImportedExcel(array_filter($arrayData));
+                $html = $html . $this->excelSummary(array_filter($arrayData));
+                $html = $html . '</table>' . PHP_EOL;
+                return response()->json([
+                    'html' => $html
+                ]);
+            }else{
+                return response()->json([
+                    'message' => '<div class="alert alert-danger">Hmmm. Seems like no data was recognized. Please check if columns in "A" of the excel file has dates.</div>'
+                ]);
+            }
         }else{
             return response()->json([
                 'message' => '<div class="alert alert-danger">Sorry. The file you uploaded is not an excel file. Please upload a valid excel file.</div>'
@@ -266,23 +272,27 @@ class CustomerController extends Controller
         $html = $html . '<tr>
             <td colspan=7 style="text-align: right"><b>Total:</b></td>
         ' . PHP_EOL;
-        $provincial = '';
+        $provincialHtml = '';
         $excemp = [9,10,20,21,22];
         $provincialTotal = 0;
+        $provincial = 0;
         foreach($sum as  $iterator => $value){
             $html = $html . '<td><b>'. (number_format(floatval($value), 2) === '0.00' ? '' : number_format(floatval($value), 2)) . '</b></td>' . PHP_EOL;
-            $provincialTotal += (array_search($iterator, $excemp) !== false || $iterator == '23' ? 0 : (floatval($value) * ($iterator > 10 ? .5 : .35 )));
-            $provincial = $provincial . '<td>' . (number_format(floatval($value), 2) === '0.00' || array_search($iterator, $excemp) !== false ? '' : ($iterator == '23' ? number_format(floatval($provincialTotal), 2) : number_format((floatval($value) * ($iterator > 10 ? .5 : .35 )), 2))) . '</td>' . PHP_EOL;
+            $provincial = (array_search($iterator, $excemp) !== false || $iterator == '23' ? 0 : (floatval($value) * ($iterator > 10 ? .5 : .35 )));
+            $provincialTotal = ($iterator == "1" || $iterator == "12" ? $provincialTotal - $provincial : $provincialTotal + $provincial);
+            $provincialHtml .= '<td>' . (number_format(floatval($value), 2) === '0.00' || array_search($iterator, $excemp) !== false ? '' : ($iterator == '23' ? number_format(floatval($provincialTotal), 2) : number_format((floatval($value) * ($iterator > 10 ? .5 : .35 )), 2))) . '</td>' . PHP_EOL;
         }
         $html = $html . '</tr>' . PHP_EOL;
-        $html = $html . '<tr>' . PHP_EOL . '<td colspan=7 style="text-align: right">Provincial Share</td>' . $provincial . PHP_EOL . '</tr>'. PHP_EOL;
+        $html = $html . '<tr>' . PHP_EOL . '<td colspan=7 style="text-align: right">Provincial Share</td>' . $provincialHtml . PHP_EOL . '</tr>'. PHP_EOL;
         
         return $html;
     }
 
     private function computeDisposition($type, $data, $computedValues)
     {
-        isset($computedValues[$type]['basic_current_gross']) ? $computedValues[$type]['basic_current_gross'] += floatval($data[7]) : $computedValues[$type]['basic_current_gross'] = floatval($data[7]);
+        isset($computedValues[$type]['basic_advance_gross']) ? $computedValues[$type]['basic_advance_gross'] += floatval($data[7]) : $computedValues[$type]['basic_advance_gross'] = floatval($data[7]);
+        isset($computedValues[$type]['basic_advance_discount']) ? $computedValues[$type]['basic_advance_discount'] += floatval($data[8]) : $computedValues[$type]['basic_advance_discount'] = floatval($data[8]);
+        isset($computedValues[$type]['basic_current_gross']) ? $computedValues[$type]['basic_current_gross'] += floatval($data[9]) : $computedValues[$type]['basic_current_gross'] = floatval($data[9]);
         isset($computedValues[$type]['basic_current_discount']) ? $computedValues[$type]['basic_current_discount'] += floatval($data[8]) : $computedValues[$type]['basic_current_discount'] = floatval($data[8]);
         isset($computedValues[$type]['basic_immediate']) ? $computedValues[$type]['basic_immediate'] += floatval($data[9]) : $computedValues[$type]['basic_immediate'] = floatval($data[9]);
         isset($computedValues[$type]['basic_prior_1992']) ? $computedValues[$type]['basic_prior_1992'] += floatval($data[10]) : $computedValues[$type]['basic_prior_1992'] = floatval($data[10]);
@@ -293,6 +303,8 @@ class CustomerController extends Controller
         isset($computedValues[$type]['basic_penalty_prior_1991']) ? $computedValues[$type]['basic_penalty_prior_1991'] += floatval($data[15]) : $computedValues[$type]['basic_penalty_prior_1991'] = floatval($data[15]);
         isset($computedValues[$type]['basic_subtotal_gross']) ? $computedValues[$type]['basic_subtotal_gross'] += floatval($data[16]) : $computedValues[$type]['basic_subtotal_gross'] = floatval($data[16]);
         isset($computedValues[$type]['basic_subtotal_net']) ? $computedValues[$type]['basic_subtotal_net'] += floatval($data[17]) : $computedValues[$type]['basic_subtotal_net'] = floatval($data[17]);
+        isset($computedValues[$type]['sef_advance_gross']) ? $computedValues[$type]['sef_advance_gross'] += floatval($data[18]) : $computedValues[$type]['sef_advance_gross'] = floatval($data[18]);
+        isset($computedValues[$type]['sef_advance_discount']) ? $computedValues[$type]['sef_advance_discount'] += floatval($data[18]) : $computedValues[$type]['sef_advance_discount'] = floatval($data[18]);
         isset($computedValues[$type]['sef_current_gross']) ? $computedValues[$type]['sef_current_gross'] += floatval($data[18]) : $computedValues[$type]['sef_current_gross'] = floatval($data[18]);
         isset($computedValues[$type]['sef_current_discount']) ? $computedValues[$type]['sef_current_discount'] += floatval($data[19]) : $computedValues[$type]['sef_current_discount'] = floatval($data[19]);
         isset($computedValues[$type]['sef_immediate']) ? $computedValues[$type]['sef_immediate'] += floatval($data[20]) : $computedValues[$type]['sef_immediate'] = floatval($data[20]);

@@ -2,8 +2,10 @@
 
 @section('css')
 <style>
-	.modal-content{
-		padding: 1%;
+	.modal {
+		overflow-y: hidden;
+	}
+	.modal-lg .modal-content{
 		overflow: scroll;
 	}
 
@@ -27,14 +29,14 @@
 	
 	
 	@media (min-width: 1200px) {
-		.modal-xlg {
+		.modal-lg {
 			width: 95%; 
 		}
 	}
 	
-	.modal-dialog,
-	.modal-content {
-		height: 98%;
+	.modal-lg,
+	.modal-lg .modal-content {
+		height: 93%;
 	}
 	
 	#imports{
@@ -138,13 +140,11 @@
 		</div>
 	</div> -->
 	<div class="modal fade bd-example-modal-lg excelModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-xlg">
+		<div class="modal-dialog modal-lg">
 		  <div class="modal-content">
-			<div class="modal-header" style="padding:0">
-				<h5 class="modal-title">Excel Import</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
+			<div class="modal-header" style="padding-top:10px; padding-left: 10px;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Excel Import</h4>
 			  </div>
 			<div class="modal-body">
 
@@ -210,9 +210,13 @@
             },
         }).done(function(data){
 			if (data.html) {
+				$('.excelModal').find('.modal-dialog').addClass('modal-lg');
 				$('.excelModal').find('.modal-body').html(data.html);
+				$('.excelModal').find('.btn-success').show();
 			}else{
+				$('.excelModal').find('.modal-dialog').removeClass('modal-lg');
 				$('.excelModal').find('.modal-body').html(data.message);
+				$('.excelModal').find('.btn-success').hide();
 			}
 			$('.excelModal').modal('show');
         }).fail(function(){
