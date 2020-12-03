@@ -133,29 +133,47 @@ Class convertx {
         return $number > 0 ? number_format($number, $length) : '-';
     }
 
-    function changeFontSizeByDigits($number)
+    function dynamicFontSize($string, $type = 0)
     {
-        $assess_length = strlen($number);
+        $string_length = strlen($string);
         $fontSize = "13px";
-        switch ($assess_length) {
-            // 10,000.00
-            case 9:
+        // if type is receipt number
+        if ($type == 0) {
+            switch ($string_length) {
+                // 10,000.00
+                case 9:
+                    $fontSize = "12px";
+                    break;
+                // 100,000.00
+                case 10:
+                    $fontSize = "11px";
+                    break;
+                // 1,000,000.00
+                case 12:
+                    $fontSize = "10px";
+                    break;
+                default:
+                    break;
+            }
+        }
+        // if type is receipt string
+        if ($type == 1) {
+            if ($string_length >= 40) {
                 $fontSize = "12px";
-                break;
-            // 100,000.00
-            case 10:
+            }
+            if($string_length >= 80){
                 $fontSize = "11px";
-                break;
-            // 1,000,000.00
-            case 12:
+            }
+            if($string_length >= 120){
                 $fontSize = "10px";
-                break;
-            default:
-                # code...
-                break;
+            }if ($string_length >= 160) {
+                $fontSize = "9px";
+            }
         }
 
-        return $fontSize;
+        return "<span style='font-size:".$fontSize."'>".$string."</span>";
     }
+
+    
 
  

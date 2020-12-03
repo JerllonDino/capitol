@@ -211,7 +211,7 @@
                             $first = reset($period_covered);
                             $last = end($period_covered);
 
-                            $p_calendar_year = $first.' -'.$last;
+                            $p_calendar_year = $first.'-'.$last;
                             if($first == $last){
                                 $p_calendar_year = $first;
                             }
@@ -286,10 +286,11 @@
                                         <!-- full<br>
                                         installment -->
                                     </td>
-                                    <td width="100%" style="padding-top: 10px; padding-left: 25px; background: ##80fc03; text-align: center; float: right;">
+                                    <td width="100%" style="padding-left: 25px; background: ##80fc03; text-align: center; float: right;font-size: 13px">
                                         <!-- <span class="text-hidden">payment of REAL PROPERTY TAX upon property(ies) described below for the Calendar Year ></span> -->
 
                                         @foreach($full_part_unq as $fp => $dates)
+                                        
                                             @if(isset($full_partial_type[$fp]))
                                                 <?php
                                                     $prep_yr_frm = '';
@@ -309,22 +310,25 @@
                                                     }
                                                 ?>
                                             <!-- float: right; text-align: center;" -->
-                                                @if($prep_yr_frm == $prep_yr_to)
+                                                {{-- @if($prep_yr_frm == $prep_yr_to)
                                                     <div style="word-wrap: break-word; background: ##e63e3e; padding-left: 75%;">
-                                                        {{ $prep_yr_frm }} {{ $full_partial_type[$fp] }}
+                                                        {{ $prep_yr_frm }}
                                                     </div>
                                                 @else
                                                     <div style="word-wrap: break-word; background: ##e63e3e; padding-left: 75%;">
-                                                        {{ $prep_yr_frm }}-{{ $prep_yr_to }} {{ $full_partial_type[$fp] }}
+                                                        {{ $prep_yr_frm }}-{{ $prep_yr_to }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             @else
-                                                <span style="word-wrap: break-word; width: 100px; background: ##70fc41; padding-left: 75%;">
-                                                    {{ $p_calendar_year }}
-                                                </span>
+                                                {{-- <span style="word-wrap: break-word; width: 100px; background: ##70fc41; padding-left: 75%;">
+                                                        {{ $p_calendar_year }}
+                                                </span> --}}
                                             @endif 
-                                            <br>
+                                            
                                         @endforeach
+                                        <div style="word-wrap: break-word; background: ##e63e3e; padding-left: 77%;">
+                                            {{ $p_calendar_year }}
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -350,8 +354,8 @@
                             <th class="border-hidden" style="width: 6.4%"><span class="text-hidden">Total</span></th>
                             <th class="border-hidden" style="width: 9.5%"><span class="text-hidden">TAX DUE</span></th>
                             <th class="border-hidden" style="width: 6%"><span class="text-hidden">NO.</span></th>
-                            <th class="border-hidden" style="width: 5.2%"><span class="text-hidden">Payment</span></th>
-                            <th class="border-hidden" style="width: 6.2%"><span class="text-hidden">Full Payment</span></th>
+                            <th class="border-hidden" style="width: 6.2%"><span class="text-hidden">Payment</span></th>
+                            <th class="border-hidden" style="width: 5.2%"><span class="text-hidden">Full Payment</span></th>
                             <th class="border-hidden" style="width: 9%"><span class="text-hidden">Penalty</span></th>
                             <th class="border-hidden" style="width: 6.7%"><span class="text-hidden">TOTAL</span></th>
                         </tr>
@@ -366,7 +370,7 @@
                     <tr style="background: ##ef7385;">
                         <td class="border-hidden text-left vertical-top">
                             @if(isset($annual_per_arp[$arp]['owner']))
-                            {{ $annual_per_arp[$arp]['owner'] }}
+                            {!! dynamicFontSize($annual_per_arp[$arp]['owner'], 1) !!}
                             @endif
                         </td>
 
@@ -506,13 +510,13 @@
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
                                         @if(preg_match('/building/i', $val['kind']) != 1)
-                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
+                                            {!! dynamicFontSize(number_format($val['assess_val'],2)) !!}<br><br>
                                         @else
                                             <br>
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) != 1)
-                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
+                                            {!! dynamicFontSize(number_format($val['assess_val'],2)) !!}<br><br>
                                         @else
                                             <br>
                                         @endif
@@ -528,13 +532,13 @@
                                 @foreach($annual_per_arp[$arp]['assess_val_class'] as $index => $val)
                                     @if(!is_null($val['kind']))
                                         @if(preg_match('/building/i', $val['kind']) == 1)
-                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
+                                            {!! dynamicFontSize(number_format($val['assess_val'],2)) !!}<br><br>
                                         @else
                                             <br>
                                         @endif
                                     @elseif(!is_null($val['actual_use']))
                                         @if(preg_match('/bldg/i', $val['actual_use']) == 1)
-                                            <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'],2)) }}">{{ number_format($val['assess_val'],2) }}<br><br></span>
+                                            {!! dynamicFontSize(number_format($val['assess_val'],2)) !!}<br><br>
                                         @else
                                             <br>
                                         @endif
@@ -578,24 +582,24 @@
                                             @if(isset($annual_per_arp[$this_arp_next]))
                                                 @if($annual_per_arp[$this_arp]['prev_tax_dec_no'] == $this_arp_next || $annual_per_arp[$this_arp_next]['prev_tax_dec_no'] == $this_arp)
 
-                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$this_arp]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br></span>
-                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$this_arp_next]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$this_arp_next]['assess_val'], 2) }}<br><br></span>
+                                                    {!! dynamicFontSize(number_format($annual_per_arp[$this_arp]['assess_val'], 2)) !!}<br><br>
+                                                    {!! dynamicFontSize(number_format($annual_per_arp[$this_arp_next]['assess_val'], 2)) !!}<br><br>
                                                 @elseif($annual_per_arp[$this_arp]['prev_tax_dec_no'] != $this_arp_next || $annual_per_arp[$this_arp_next]['prev_tax_dec_no'] != $this_arp)
-                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$arp]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br></span>
+                                                    {!! dynamicFontSize(number_format($annual_per_arp[$arp]['assess_val'], 2)) !!}<br><br>
                                                 @endif
                                             @else
-                                                {{ number_format($val['assess_val'], 2) }}
+                                                {!! dynamicFontSize(number_format($val['assess_val'], 2)) !!}
                                             @endif
                                         @elseif($this_arp_prev != false)
                                             @if(isset($annual_per_arp[$this_arp_prev]))
                                                 @if($annual_per_arp[$this_arp]['prev_tax_dec_no'] == $this_arp_prev || $annual_per_arp[$this_arp_prev]['prev_tax_dec_no'] == $this_arp)
-                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2) }}<br><br></span>
-                                                    {{ number_format($annual_per_arp[$this_arp]['assess_val'], 2) }}<br><br>
+                                                    {!! dynamicFontSize(number_format($annual_per_arp[$this_arp_prev]['assess_val'], 2)) !!}<br><br>
+                                                    {!! dynamicFontSize(number_format($annual_per_arp[$this_arp]['assess_val'], 2)) !!}<br><br>
                                                 @elseif($annual_per_arp[$this_arp]['prev_tax_dec_no'] != $this_arp_prev || $annual_per_arp[$this_arp_prev]['prev_tax_dec_no'] != $this_arp)
-                                                    <span style="font-size: {{ changeFontSizeByDigits(number_format($annual_per_arp[$arp]['assess_val'], 2)) }}">{{ number_format($annual_per_arp[$arp]['assess_val'], 2) }}<br><br></span>
+                                                    {!! dynamicFontSize(number_format($annual_per_arp[$arp]['assess_val'], 2)) !!}<br><br>
                                                 @endif
                                             @else
-                                                <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'], 2)) }}">{{ number_format($val['assess_val'], 2) }}</span>
+                                                {!! dynamicFontSize(number_format($val['assess_val'], 2)) !!}
                                             @endif
                                         @elseif($this_arp == $arp)
                                             {{-- @if($this_arp_next == null && $this_arp_prev == null && count(array_keys($annual_arp[$arp])) == 1)  --}}
@@ -603,7 +607,7 @@
                                             {{-- @else --}}
                                                 @if(isset($annual_per_arp[$this_arp]['assess_val_class']))
                                                     @foreach($annual_per_arp[$this_arp]['assess_val_class'] as $i => $val)
-                                                        <span style="font-size: {{ changeFontSizeByDigits(number_format($val['assess_val'], 2)) }}">{{ number_format($val['assess_val'], 2) }}<br><br></span>
+                                                        {!! dynamicFontSize(number_format($val['assess_val'], 2)) !!}<br><br>
                                                     @endforeach
                                                 @endif
                                             {{-- @endif --}}
@@ -992,8 +996,8 @@
                                     @foreach ($lumped as $key => $data)
                                         @php
                                             if(count($lumped) == 1){
-                                                echo(number_format($data['sef'],2)."<br>");
-                                                echo(number_format($data['sef'],2)."<br>");
+                                                echo(dynamicFontSize(number_format($data['sef'],2))."<br>");
+                                                echo(dynamicFontSize(number_format($data['sef'],2))."<br>");
                                             }else{
                                                 if(isset($lumped[$key-1])){
                                                     if ($data['discount'] == 0 and $data['penalty'] != 0 and $key < count($lumped)-1) {
@@ -1036,16 +1040,16 @@
                                                             continue;
                                                         }else{
                                                             
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                             
                                                         }
                                                     }if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key+1]['discount'] and $data['assess_val'] == $lumped[$key+1]['assess_val']) {
                                                             continue;
                                                         }else{
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                             
                                                         }
                                                     }
@@ -1053,8 +1057,8 @@
                                                         if ($lumped[$key+1]['penalty'] == 0 and $lumped[$key+1]['discount'] == 0 and $data['assess_val'] == $lumped[$key+1]['assess_val']) {
                                                             continue;
                                                         }else{
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }
                                                     }
                                                     
@@ -1063,23 +1067,23 @@
                                                     if ($data['discount'] == 0 and $data['penalty'] != 0) {
                                                         if ($data['penalty'] == $lumped[$key-1]['penalty'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['sef'];
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }else{
                                                             $computedValue = $data['sef'];
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }
                                                     }
                                                     if ($data['penalty'] == 0 and $data['discount'] != 0) {
                                                         if ($data['discount'] == $lumped[$key-1]['discount'] and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['sef'];
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }else{
                                                             $computedValue = $data['sef'];
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }
                                                         
                                                         
@@ -1088,12 +1092,12 @@
                                                         
                                                         if ($lumped[$key-1]['penalty'] == 0 and $lumped[$key-1]['discount'] == 0 and $data['assess_val'] == $lumped[$key-1]['assess_val']) {
                                                             $computedValue += $data['sef'];
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }else{
                                                             $computedValue = $data['sef'];
-                                                            echo(number_format($computedValue, 2)."<br>");
-                                                            echo(number_format($computedValue, 2)."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
+                                                            echo(dynamicFontSize(number_format($computedValue, 2))."<br>");
                                                         }
                                                         
                                                     }
@@ -1119,13 +1123,18 @@
                                     @foreach ($lumped as $key => $data)
                                         @php
                                             if(count($lumped) == 1){
-                                                if ($data['penalty'] and $data['discount'] == 0) {
+                                                if ($data['penalty'] != 0 and $data['discount'] == 0) {
                                                     echo(number_format($data['penalty'],2)."<br>");
                                                     echo(number_format($data['penalty'],2)."<br>");
                                                 }
-                                                if ($data['discount'] and $data['penalty'] == 0) {
-                                                    echo(number_format($data['discount'],2)."<br>");
-                                                    echo(number_format($data['discount'],2)."<br>");
+                                                if ($data['discount'] != 0 and $data['penalty'] == 0) {
+                                                    echo("(".number_format($data['discount'],2).")<br>");
+                                                    echo("(".number_format($data['discount'],2).")<br>");
+                                                }
+
+                                                if($data['discount'] == 0 and $data['penalty'] == 0){
+                                                    echo("0.00<br>");
+                                                    echo("0.00<br>");
                                                 }
                                                 
                                             }else{
@@ -1365,25 +1374,25 @@
 
                     <tr style="background: ##d68db8; transform: translate(0px, 5px)">
                         <td style="width: 2.5cm;">
-                            @if($receipt->bank_number != null || $receipt->bank_number != '')
+                            {{-- @if($receipt->bank_number != null || $receipt->bank_number != '')
                             {{ $receipt->bank_number }}
-                            @endif
+                            @endif --}}
                         </td>
                         <td style="width: 2.5cm;">
-                            @if($receipt->bank_name != null || $receipt->bank_name != '')
+                            {{-- @if($receipt->bank_name != null || $receipt->bank_name != '')
                             {{ $receipt->bank_name }}
-                            @endif
+                            @endif --}}
                         </td>
                         <td style="width: 2.5cm;">
-                            @if($receipt->bank_date != null || $receipt->bank_date != '')
+                            {{-- @if($receipt->bank_date != null || $receipt->bank_date != '')
                             {{ \Carbon\Carbon::parse($receipt->bank_date)->format('M d,Y') }}
-                            @endif
+                            @endif --}}
                         </td>
                     </tr> 
 
                     <tr>
                         <td colspan=5 rowspan="2"  style="border:0px ##ffffff00" >
-                            <table width="100%" style="position: absolute; top: 36px; left: -9px">
+                            <table width="100%" style="position: absolute; top: 40px; left: -20px">
                                 <tr>
                                     <td class="text-hidden">
                                         <div style="width:80%">
@@ -1408,25 +1417,31 @@
                                                 <td colspan="2" class="text-hidden" ><!-- MODE OF PAYMENT --></td>
                                             </tr>
                                             <tr>
-                                                <td width="70%" height="15px" class="text-hidden">CASH</td>
-                                                <td>{{ number_format($form56['total'], 2) }}</td>
+                                                <td width="70%" class="text-hidden">CASH</td>
+                                                <td width="30%">{{  $receipt->bank_number != null || $receipt->bank_name != null || $receipt->bank_date != null ? " " : number_format($form56['total'], 2) }}</td>
                                             </tr>
-                                            <tr>
-                                                <td height="15px" class="text-hidden">CHECK</td>
+                                            <tr style="transform: translate(0, 10px)">
+                                                <td style="word-break: break-all;vertical-align: text-top;">
+                                                    {{-- <span style="vertical-align: text-top;word-break: break-all; font-size: 7px; color:rgba(0, 0, 0, 1)">asdasdasdasdfdsfasdfasdfasdf</span> --}}
+                                                        <span style="word-break: break-all; font-size: 8px;">
+                                                        @if($receipt->bank_number != null || $receipt->bank_number != '')
+                                                            {{ $receipt->bank_number }}
+                                                        @endif
+                                                        @if($receipt->bank_name != null || $receipt->bank_name != '')
+                                                            {{ $receipt->bank_name }}<br>
+                                                        @endif
+                                                        @if($receipt->bank_date != null || $receipt->bank_date != '')
+                                                            {{ \Carbon\Carbon::parse($receipt->bank_date)->format('M d,Y') }}
+                                                        @endif
+                                                        
+                                                    </span>
+                                                </td>
                                                 <td>
-                                                    @if($receipt->bank_number != null || $receipt->bank_number != '')
-                                                        {{ $receipt->bank_number }}<br>
-                                                    @endif
-                                                    @if($receipt->bank_name != null || $receipt->bank_name != '')
-                                                        {{ $receipt->bank_name }}<br>
-                                                    @endif
-                                                    @if($receipt->bank_date != null || $receipt->bank_date != '')
-                                                        {{ \Carbon\Carbon::parse($receipt->bank_date)->format('M d,Y') }}<br>
-                                                    @endif
+                                                    {{  $receipt->bank_number != null || $receipt->bank_name != null || $receipt->bank_date != null ? number_format($form56['total'], 2) : "" }}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td height="15px" class="text-hidden">TW/PMO</td>
+                                                <td class="text-hidden">TW/PMO</td>
                                                 <td></td>
                                             </tr>
                                             <tr style="transform:translate(0px, 5px)">
