@@ -1,81 +1,6 @@
 @extends('nav')
 
-@section('css')
-<style>
-	.modal {
-		overflow-y: hidden;
-	}
-	.modal-lg .modal-content{
-		overflow: scroll;
-	}
-
-	.modal .table td{
-		padding:2px !important;
-		font-size: 10px;
-		margin:0;
-		width: 50px;
-	}
-	.modal .table thead tr th{
-		padding:2px !important;
-		font-size: 10px;
-		background: white;
-		position: sticky;
-		top:0;
-	}
-
-	.modal .table thead{
-		background-color: white;
-	}
-	
-	
-	@media (min-width: 1200px) {
-		.modal-lg {
-			width: 95%; 
-		}
-	}
-	
-	.modal-lg,
-	.modal-lg .modal-content {
-		height: 93%;
-	}
-	
-	#imports{
-		background-color: rgb(189, 182, 173);
-		padding:10px;
-		border-radius: 20px;
-	}
-
-	#imports{
-		cursor: pointer;
-		outline:none;
-	}
-
-	#importExcel {
-		display: flex;
-		flex-flow: row wrap;
-		align-items: center;
-	}
-</style>
-@endsection
-
 @section('content')
-<div class="popup" style="display:none"></div>
-<div class="panel panel-default">
-	<div class="panel-body">
-		<h4>Import Municipality RPT Report</h4>
-	{{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline"> --}}
-		<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
-			{{ csrf_field() }}
-			<input type="file" name="imports" id="imports">
-			<select name="excel_municipality" id="excel-municipality" class="form-control" style="margin-left: 3%; border-radius: 20px; outline: none;">
-				@foreach($base['municipality'] as $m)
-					<option value="{{ $m->id }}">{{ $m->name }}</option>
-				@endforeach
-			</select>
-			<button type="submit" class="btn btn-primary" style="margin-left: 3%; border-radius: 20px; outline: none; padding: 10px" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> &nbsp;<i class="fa fa-upload"></i> Import Excel</button>
-		</form>
-	</div>
-</div>
 	<div class="form-inline">
 		<label>MUNICIPALITY </label>
 		<select name="mun" id="mun" class="form-control">
@@ -139,22 +64,6 @@
 			</div>
 		</div>
 	</div> -->
-	<div class="modal fade bd-example-modal-lg excelModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-		  <div class="modal-content">
-			<div class="modal-header" style="padding-top:10px; padding-left: 10px;">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Excel Import</h4>
-			  </div>
-			<div class="modal-body">
-
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-success">Save Excel</button>
-			</div>
-		  </div>
-		</div>
-	  </div>
 @endsection
 
 @section('js')
@@ -192,39 +101,6 @@
 		});
 	}
 	$.fn.getRecords();
-	$excelImport = $('#importExcel');
-	$importButton = $('#submitExcel');
-	$excelImport.submit(function(e){
-        e.preventDefault();
-		data = new FormData(this);
-
-        $.ajax({
-            url: '{{ route("rpt.import_excel_report") }}',
-			method: 'POST',
-            data: data,
-			contentType: false,
-			cache: false,
-			processData:false,
-            beforeSend: function(){
-                $importButton.find('.fa-spinner').removeAttr('style');
-            },
-        }).done(function(data){
-			if (data.html) {
-				$('.excelModal').find('.modal-dialog').addClass('modal-lg');
-				$('.excelModal').find('.modal-body').html(data.html);
-				$('.excelModal').find('.btn-success').show();
-			}else{
-				$('.excelModal').find('.modal-dialog').removeClass('modal-lg');
-				$('.excelModal').find('.modal-body').html(data.message);
-				$('.excelModal').find('.btn-success').hide();
-			}
-			$('.excelModal').modal('show');
-        }).fail(function(){
-
-        }).always(function(){
-			$importButton.find('.fa-spinner').css('display', 'none');
-		});
-	});
 
 	// $(document).on('click', '#rpt_rec', function() {
 	// 	// $('#mnth_year').modal('toggle');

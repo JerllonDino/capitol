@@ -171,6 +171,7 @@ Class convertx {
             }
         }
 
+
         return "<span style='font-size:".$fontSize."'>".$string."</span>";
     }
 

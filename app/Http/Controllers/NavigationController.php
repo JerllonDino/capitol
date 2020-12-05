@@ -27,12 +27,12 @@ class NavigationController extends Controller
         $permission_ids = Permission::whereIn('name', $permission_names)
             ->get(['id'])
             ->toArray();
+            
         $root_links = Navigation::where('parent', null)
             ->whereIn('permission_id', $permission_ids)
             ->orderBy('order_value', 'ASC')
             ->orderBy('title', 'ASC')
             ->get();
-        
         $navigation = array();
         
         foreach ($root_links as $root_link) {
@@ -51,7 +51,7 @@ class NavigationController extends Controller
                 array_push($navigation, self::addlink($root_link));
             }
         }
-        // dd($root_links);
+        
         return $navigation;
     }
     

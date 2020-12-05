@@ -69,8 +69,16 @@ class CustomerController extends Controller
         return redirect()->route('customer.index');
     }
 
-    public function importEx(Request $request)
+    public function importIndex()
     {
+        $this->base['municipality'] = Municipality::all();
+        $this->base['page_title'] = 'Import Monthly Municipal RPT Report';
+        return view('collection::customer.rpt_import_excel')->with('base', $this->base);
+    }
+
+    public function viewExcel(Request $request)
+    {
+        
         $tableHeaders = '<thead>
         <tr>
             <th rowspan="4">Date</th>
@@ -91,56 +99,56 @@ class CustomerController extends Controller
         </tr>
         <tr>
             <!-- basic --> 
-            <th style="top: 20px" colspan="2" rowspan="2">Advance</th>
-            <th style="top: 20px" colspan="2" rowspan="2">Current Year</th>
-            <th style="top: 20px" rowspan="3">'.(date("Y")-1).'</th>
-            <th style="top: 20px" colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th style="top: 20px" colspan="4">PENALTIES</th>
+            <th style="top: 70px" colspan="2" rowspan="2">Advance</th>
+            <th style="top: 70px" colspan="2" rowspan="2">Current Year</th>
+            <th style="top: 70px" rowspan="3">'.(date("Y")-1).'</th>
+            <th style="top: 70px" colspan="2" rowspan="2">PRIOR YEARS</th>
+            <th style="top: 70px" colspan="4">PENALTIES</th>
             <!-- sef --> 
-            <th style="top: 20px" colspan="2" rowspan="2">Advance</th>
-            <th style="top: 20px" colspan="2" rowspan="2">Current Year</th>
-            <th style="top: 20px" rowspan="3">'.(date("Y")-1).'</th>
-            <th style="top: 20px" colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th style="top: 20px" colspan="4">PENALTIES</th>
+            <th style="top: 70px" colspan="2" rowspan="2">Advance</th>
+            <th style="top: 70px" colspan="2" rowspan="2">Current Year</th>
+            <th style="top: 70px" rowspan="3">'.(date("Y")-1).'</th>
+            <th style="top: 70px" colspan="2" rowspan="2">PRIOR YEARS</th>
+            <th style="top: 70px" colspan="4">PENALTIES</th>
         </tr> 
         <tr>
             <!-- basic -->
-            <th style="top: 40px" rowspan="2">'.date("Y").'</th>
-            <th style="top: 40px" rowspan="2">'.(date("Y")-1).'</th>
-            <th style="top: 40px" colspan="2">PRIOR YEARS</th>
+            <th style="top: 90px" rowspan="2">'.date("Y").'</th>
+            <th style="top: 90px" rowspan="2">'.(date("Y")-1).'</th>
+            <th style="top: 90px" colspan="2">PRIOR YEARS</th>
             <!-- sef -->
-            <th style="top: 40px" rowspan="2">'.date("Y").'</th>
-            <th style="top: 40px" rowspan="2">'.(date("Y")-1).'</th>
-            <th style="top: 40px" colspan="2">PRIOR YEARS</th>
+            <th style="top: 90px" rowspan="2">'.date("Y").'</th>
+            <th style="top: 90px" rowspan="2">'.(date("Y")-1).'</th>
+            <th style="top: 90px" colspan="2">PRIOR YEARS</th>
         </tr>
         <tr>
             <!-- basic -->
-            <th style="top: 60px">Gross Amount</th>
-            <th style="top: 60px">
+            <th style="top: 110px">Gross Amount</th>
+            <th style="top: 110px">
                Disc
             </th>
-            <th style="top: 60px">Gross Amount</th>
-            <th style="top: 60px">
+            <th style="top: 110px">Gross Amount</th>
+            <th style="top: 110px">
                Disc
             </th>
-            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 60px">1991 & Below</th>
-            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 60px">1991 & Below</th>
+            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 110px">1991 & Below</th>
+            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 110px">1991 & Below</th>
 
             <!-- sef -->
-            <th style="top: 60px">Gross Amount</th>
-            <th style="top: 60px">
+            <th style="top: 110px">Gross Amount</th>
+            <th style="top: 110px">
                 Disc
             </th>
-            <th style="top: 60px">Gross Amount</th>
-            <th style="top: 60px">
+            <th style="top: 110px">Gross Amount</th>
+            <th style="top: 110px">
                Disc
             </th>
-            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 60px">1991 & Below</th>
-            <th style="top: 60px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 60px">1991 & Below</th>
+            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 110px">1991 & Below</th>
+            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
+            <th style="top: 110px">1991 & Below</th>
         </tr>
     </thead>';
         $file = $request->file('imports');
@@ -194,7 +202,7 @@ class CustomerController extends Controller
                 $html = $html . '</tr>' . PHP_EOL;
             }
 
-            if(array_filter($arrayData)){
+            if(count(array_filter($arrayData)) > 0){
                 // $this->saveImportedExcel(array_filter($arrayData));
                 $html = $html . $this->excelSummary(array_filter($arrayData));
                 $html = $html . '</table>' . PHP_EOL;
@@ -203,12 +211,12 @@ class CustomerController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => '<div class="alert alert-danger">Hmmm. Seems like no data was recognized. Please check if columns in "A" of the excel file has dates.</div>'
+                    'message' => 'Hmmm. Seems like no data was recognized. Please check if columns in "A" of the excel file has dates.'
                 ]);
             }
         }else{
             return response()->json([
-                'message' => '<div class="alert alert-danger">Sorry. The file you uploaded is not an excel file. Please upload a valid excel file.</div>'
+                'message' => 'Sorry. The file you uploaded is not an excel file. Please upload a valid excel file.'
             ]);
         }
     }
