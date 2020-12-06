@@ -11,7 +11,7 @@
 	.table thead tr th{
 		padding:2px !important;
 		font-size: 10px;
-		background: white;
+		background: #d9fffe;
 		position: sticky;
 		top:50px;
 	}
@@ -70,7 +70,7 @@
 
 </div>
 
-<button class="btn btn-success" style="display:none; float:right; margin-top: 20px" id="save-import">Save Import</button>
+<button class="btn btn-success" style="display:none; float:right; margin-top: 20px" id="save-import"><i class="fa fa-save"></i> Save Import</button>
 @endsection
 
 @section('js')
@@ -101,7 +101,7 @@
                 }else{
                     showMessage(data.message, 1);
                 }
-                $excelContainer.css('overflow-x', 'scroll');
+                // $excelContainer.css('overflow-x', 'scroll');
                 $('#save-import').show();
             }).fail(function(){
                 showMessage('Sorry, something went wrong. Please refresh the page.', 1);

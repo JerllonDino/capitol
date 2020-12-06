@@ -157,6 +157,7 @@ class Form56Controller extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
         $serial = Serial::whereId($request['serial_id'])->first();
         $filter = [
             'user_id' => 'required|numeric',
@@ -214,7 +215,7 @@ class Form56Controller extends Controller
 
         $dt_3pm = new Carbon($report_datex->format('Y-m-d'));
 
-        if($report_datex->timestamp <= $dt_3pm->addHours(15)->timestamp   ){
+        if($report_datex->timestamp <= $dt_3pm->addHours(15)->timestamp){
             $report_date = $report_datex->format('Y-m-d');
         }else{
             $got_valid_date = false;
