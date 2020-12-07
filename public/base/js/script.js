@@ -17,3 +17,17 @@ function hide_messages() {
     $('#info-blk').closest('.row').addClass('row-hidden');
     $('#error-blk').closest('.row').addClass('row-hidden');
 }
+
+function showMessage(message, type = 0) {
+    $message = $('.popup');
+    if (type == 0) {
+        $message.css('background-color', '#38c172');
+    }else{
+        $message.css('background-color', '#C0392B');
+    }
+    // (type == 0 ?  : $message.css('background-color', '#C0392B'));
+    $message.html(message).slideDown();
+    setTimeout(function(){
+        $message.slideUp();
+    },7000);
+}

@@ -114,4 +114,5 @@
     </div>
 
 </div>
+<div class="popup" style="display:none;"></div>
 @endsection

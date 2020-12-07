@@ -32,17 +32,7 @@
 		flex-flow: row wrap;
 		align-items: center;
 	}
-    .popup {
-        background-color: #38c172;
-        color: #fff !important;
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        padding: 0.75rem 1.25rem;
-        border-radius: 0.25rem;
-        margin: 0.75rem;
-        z-index: 1030;
-    }
+    
     .btn{
         outline: none !important; 
         padding: 10px;
@@ -52,7 +42,7 @@
 @endsection
 
 @section('content')
-<div class="popup" style="display:none;"></div>
+
 {{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline"> --}}
 <form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
     {{ csrf_field() }}
@@ -64,13 +54,13 @@
     </select>
     <button type="submit" class="btn btn-primary" style="margin-left: 3%; " id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> &nbsp;<i class="fa fa-upload"></i> Upload Excel file</button>
 </form>
-
+<button class="btn btn-secondary" style="border-radius: 50%; float: right"><i class="fa fa-question-circle"></i></button>
 <div id="excel-container" style="padding-top: 30px; width: 100%; height: 70%">
 
 
 </div>
 
-<button class="btn btn-success" style="display:none; float:right; margin-top: 20px" id="save-import"><i class="fa fa-save"></i> Save Import</button>
+<button class="btn btn-success" style="display:none; margin-top: 20px; position: absolute; right: 0;" id="save-import"><i class="fa fa-save"></i> Save Import</button>
 @endsection
 
 @section('js')
@@ -80,9 +70,12 @@
 <script type="text/javascript">
     $excelImport = $('#importExcel');
 	$excelContainer = $('#excel-container');
-	$importButton = $('#submitExcel');
+    $importButton = $('#submitExcel');
+    
 	$excelImport.submit(function(e){
         e.preventDefault();
+        $excelContainer.html('');
+        $('#save-import').hide();
 		data = new FormData(this);
         if ($('#imports').val()) {
             $.ajax({
@@ -97,14 +90,15 @@
                 },
             }).done(function(data){
                 if (data.html) {
-                    $('#excel-container').html(data.html);
+                    $excelContainer.html(data.html);
+                    $('#save-import').show();
                 }else{
                     showMessage(data.message, 1);
                 }
                 // $excelContainer.css('overflow-x', 'scroll');
-                $('#save-import').show();
+                
             }).fail(function(){
-                showMessage('Sorry, something went wrong. Please refresh the page.', 1);
+                showMessage('Sorry, something went wrong. Please refresh the page and try again.', 1);
             }).always(function(){
                 $importButton.find('.fa-spinner').css('display', 'none');
             });
@@ -113,19 +107,7 @@
         }
     });
     
-    function showMessage(message, type = 0) {
-        $message = $('.popup');
-        if (type == 0) {
-            $message.css('background-color', '#38c172');
-        }else{
-            $message.css('background-color', '#C0392B');
-        }
-        // (type == 0 ?  : $message.css('background-color', '#C0392B'));
-        $message.html(message).slideDown();
-        setTimeout(function(){
-            $message.slideUp();
-        },7000);
-    }
+
 
 </script>
 @endsection

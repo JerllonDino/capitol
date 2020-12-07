@@ -289,14 +289,14 @@ class CustomerController extends Controller
             <td colspan=7 style="text-align: right"><b>Total:</b></td>
         ' . PHP_EOL;
         $provincialHtml = '';
-        $excemp = [18,19,31,32,33];
+        $excemp = [11,12,24,25,26];
         $provincialTotal = 0;
         $provincial = 0;
         foreach($sum as  $iterator => $value){
             $html = $html . '<td><b>'. (number_format(floatval($value), 2) === '0.00' ? '' : number_format(floatval($value), 2)) . '</b></td>' . PHP_EOL;
             $provincial = (array_search($iterator, $excemp) !== false || $iterator == '27' ? 0 : (floatval($value) * ($iterator > 10 ? .5 : .35 )));
             $provincialTotal = ($iterator == "1" || $iterator == "3" || $iterator == "14" || $iterator == "16" ? $provincialTotal - $provincial : $provincialTotal + $provincial);
-            $provincialHtml .= '<td>' . (number_format(floatval($value), 2) === '0.00' || array_search($iterator, $excemp) !== false ? '' : ($iterator == '23' ? number_format(floatval($provincialTotal), 2) : number_format((floatval($value) * ($iterator > 10 ? .5 : .35 )), 2))) . '</td>' . PHP_EOL;
+            $provincialHtml .= '<td>' . (number_format(floatval($value), 2) === '0.00' || array_search($iterator, $excemp) !== false ? '' : ($iterator == '27' ? number_format(floatval($provincialTotal), 2) : number_format($provincial, 2))) . '</td>' . PHP_EOL;
         }
         $html = $html . '</tr>' . PHP_EOL;
         $html = $html . '<tr>' . PHP_EOL . '<td colspan=7 style="text-align: right">Provincial Share</td>' . $provincialHtml . PHP_EOL . '</tr>'. PHP_EOL;
@@ -1562,12 +1562,12 @@ class CustomerController extends Controller
             }
             
         }
-
+        
         if(!($isPdf)) {
-            if(count($payment_record) == 0 && count($prev_tax_dec_paymnt) == 0) {
-                Session::flash('error', ['No payment records found for ARP No. '.$td]);
-                return redirect()->route('rpt.records_index');
-            }
+            // if(count($payment_record) == 0 && count($prev_tax_dec_paymnt) == 0) {
+            //     Session::flash('error', ['No payment records found for ARP No. '.$td]);
+            //     return redirect()->route('rpt.records_index');
+            // }
         } else {
             $this->base['msg_no_record'] = "NO RECORDS FOUND FOR TAX DECLARATION ".$td;
         }

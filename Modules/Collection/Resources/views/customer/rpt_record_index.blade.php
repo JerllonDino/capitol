@@ -75,9 +75,17 @@
 		if($.fn.DataTable.isDataTable('#records')) {
 			$('#records').DataTable().destroy();
 		}
-		$('#records').DataTable({
+		$('#records').on( 'processing.dt', function ( e, settings, processing ) {
+			if (processing) {
+				$('.dataTables_filter').find('input[type=search]').attr('disabled', 'disabled');
+			}else{
+				$('.dataTables_filter').find('input[type=search]').removeAttr('disabled', 'disabled');
+			}
+			// $('#processingIndicator').css( 'display', processing ? 'block' : 'none' );
+		} ).DataTable({
 			processing: true, 
 			serverSide: false,
+			deferRender: true,
 			ajax: {
 				url: "{{ route('rpt.records_dt') }}",
 				data: {
@@ -97,10 +105,15 @@
 					// 	<input type="hidden" value="'+data.arp_no+'" id="data_arp_no">';
 					return '<a class="btn btn-info" id="rpt_rec" href="'+data.view_link+'"><i class="fa fa-eye"></i> View</button>';
 				} }
-			]
+			],
 		});
 	}
 	$.fn.getRecords();
+	$(document).on('click', '.dataTables_filter', function(){
+		if ($(this).find('input[type=search]').prop('disabled')) {
+			showMessage('Please wait while we get the informations you need. Thank you.', 1);
+		}
+	});
 
 	// $(document).on('click', '#rpt_rec', function() {
 	// 	// $('#mnth_year').modal('toggle');
