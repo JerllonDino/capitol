@@ -1564,10 +1564,10 @@ class CustomerController extends Controller
         }
         
         if(!($isPdf)) {
-            // if(count($payment_record) == 0 && count($prev_tax_dec_paymnt) == 0) {
-            //     Session::flash('error', ['No payment records found for ARP No. '.$td]);
-            //     return redirect()->route('rpt.records_index');
-            // }
+            if(count($payment_record) == 0 && count($prev_tax_dec_paymnt) == 0) {
+                Session::flash('error', ['No payment records found for ARP No. '.$td]);
+                return redirect()->route('rpt.records_index');
+            }
         } else {
             $this->base['msg_no_record'] = "NO RECORDS FOUND FOR TAX DECLARATION ".$td;
         }

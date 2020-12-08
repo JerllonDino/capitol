@@ -18,7 +18,7 @@ function hide_messages() {
     $('#error-blk').closest('.row').addClass('row-hidden');
 }
 
-function showMessage(message, type = 0) {
+function showMessage(message, type = 0, duration = 7000) {
     $message = $('.popup');
     if (type == 0) {
         $message.css('background-color', '#38c172');
@@ -29,5 +29,5 @@ function showMessage(message, type = 0) {
     $message.html(message).slideDown();
     setTimeout(function(){
         $message.slideUp();
-    },7000);
+    },duration);
 }
