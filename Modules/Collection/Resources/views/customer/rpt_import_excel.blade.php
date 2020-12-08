@@ -115,12 +115,28 @@
             </div>
 
             <h3>Step 2: Uploading  the excel file</h3>
-            <h4>Click the choose file button. A new window will appear. In this window, you will now locate and open the excel file you will upload.</h4>
+            <div class="panel">
+                <img src="{{ asset('asset/images/import-guide/choose.png') }}" style="width: 100%" alt="">
+                <h4>Click the choose file button. A new window will appear. In this window, you will now locate and open the excel file you will upload.</h4>
+            </div>
+            <div class="panel">
+                <img src="{{ asset('asset/images/import-guide/muni.png') }}" style="width: 100%" alt="">
+                <h4>Once the file has been selected or if you can see the name of the file appeared in the choose file button, select what municipality the report belongs to.</h4>
+            </div>
+            <div class="panel">
+                <img src="{{ asset('asset/images/import-guide/upload.png') }}" style="width: 100%" alt="">
+                <h4>Once the proper municipality has been selected. Click the Excel File Button.</h4>
+            </div>
 
-            <h4>Once the file has been selected or if you can see the name of the file appeared in the choose file button, select what municipality the report belongs to then click upload.</h4>
+            <div class="panel">
+                <img src="{{ asset('asset/images/import-guide/success1.png') }}" style="width: 100%" alt="">
+                <h4>If there were no errors, a table should appear below the form inputs containing the data from the excel file.</h4>
+                <h4>Click Save Import if everything is correct.</h4>
+            </div>
+            
         </div>
         <div class="modal-footer">
-            <button class="btn btn-success">Ok, I understand</button>
+            <button class="btn btn-success" data-dismiss="modal">Ok, I understand</button>
         </div>
          
       </div>
