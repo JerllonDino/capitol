@@ -221,7 +221,7 @@ class CustomerController extends Controller
         }
     }
 
-    private function saveImportedExcel($datas)
+    public function saveImportedExcel($datas)
     {
         $newSortedData = [];
         $prevOr = 0;
@@ -231,10 +231,12 @@ class CustomerController extends Controller
                 $newSortedData[$prevOr][$data[4]] = $data;
             }else{
                 $prevOr = $data[3];
-                $newSortedData[$data[3]][$data[4]] = $data; 
+                $newSortedData[$data[3]][$data[4]] = $data;
             }
         }
+        
         dd($newSortedData);
+        
     }
 
     private function excelSummary($datas)

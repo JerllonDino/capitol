@@ -79,7 +79,7 @@ class ReportController extends Controller
                 break;
             case '2':
                 $reportIndex = '0'.$reportIndex;
-                break;                    
+                break;
             default:
                 # code...
                 break;

@@ -157,7 +157,7 @@ class Form56Controller extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         $serial = Serial::whereId($request['serial_id'])->first();
         $filter = [
             'user_id' => 'required|numeric',

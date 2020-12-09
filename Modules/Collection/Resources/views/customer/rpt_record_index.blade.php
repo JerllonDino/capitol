@@ -71,15 +71,44 @@
 {{ Html::script('/datatables-1.10.12/js/dataTables.bootstrap.min.js') }}
 
 <script type="text/javascript">
+var isTableProcessed = 0;
+var processingOnce = 0;
 	$.fn.getRecords = function() {
+		
 		if($.fn.DataTable.isDataTable('#records')) {
 			$('#records').DataTable().destroy();
 		}
 		$('#records').on( 'processing.dt', function ( e, settings, processing ) {
 			if (processing) {
+				isTableProcessed = 0;
+				processingOnce++;
+				console.log('processing');
+				seconds = 0;
+				if (processingOnce < 2) {
+					console.log(processingOnce);
+				var waitTimer = setInterval(function(){
+						seconds++;
+						if (isTableProcessed == 1) {
+							clearInterval(waitTimer);
+						}
+						if (seconds == 15) {
+								showMessage('Hello! This could really take some time. I hope you are doing good today!');
+						}
+						if (seconds >= 30) {
+							if ( seconds % 15 == 0 ) {
+								showMantra(Math.floor((Math.random() * 10) + 1));
+							}
+						}
+					},1000);
+					
+				}
 				$('.dataTables_filter').find('input[type=search]').attr('disabled', 'disabled');
 			}else{
-				$('.dataTables_filter').find('input[type=search]').removeAttr('disabled', 'disabled');
+				console.log('processed');
+				seconds = 0;
+				isTableProcessed = 1;
+				processingOnce = 0;
+				$('.dataTables_filter').find('input[type=search]').removeAttr('disabled');
 			}
 			// $('#processingIndicator').css( 'display', processing ? 'block' : 'none' );
 		} ).DataTable({
@@ -108,12 +137,66 @@
 			],
 		});
 	}
-	$.fn.getRecords();
+	// $.fn.getRecords();
+	showMessage('Please select the municipality you want to filter and press SHOW to display the table.');
 	$(document).on('click', '.dataTables_filter', function(){
 		if ($(this).find('input[type=search]').prop('disabled')) {
 			showMessage('Please wait while we get the informations you need. Thank you.', 1);
 		}
 	});
+	var idleTimer = setInterval(function(){
+		if (! $.fn.DataTable.isDataTable( '#records' )) {
+			showMessage('Hello! Seems like you haven\'t selected a filter yet. Please select a municipality and click SHOW to get started.');
+		}
+	},30*1000);
+
+function showMantra(number){
+	switch (number) {
+		case 1:
+			showMessage('"Be a magnet for joy, love and abundance."')
+			break;
+
+		case 2:
+			showMessage('"Let faith lead the way."');
+			break;
+	
+		case 3:
+			showMessage('How\'s you\'re day going?');
+		break;
+
+		case 4:
+			showMessage('That haircut looks good on you!');
+		break;
+
+		case 5:
+			showMessage('"Patience is bitter, but its fruit is sweet. - Aristotle"');
+		break;
+
+		case 6:
+			showMessage('"A man who masters patience masters everything else."');
+		break;
+
+		case 7:
+			showMessage('"Our patience will achieve more than our force." - Edmund Burke');
+		break;
+
+		case 8:
+			showMessage('"Patience is when you\'re supposed to get mad, but you choose to understand" - Anonymous');
+		break;
+
+		case 9:
+			showMessage('"Patience attracts happiness; it brings near that which is far" - Swahili Proverb');
+		break;
+
+		case 10:
+			showMessage('"With love and patience, nothing is impossible." - Daisaku Ikeda');
+		break;
+
+		default:
+			break;
+	}
+}
+
 
 	// $(document).on('click', '#rpt_rec', function() {
 	// 	// $('#mnth_year').modal('toggle');
