@@ -240,9 +240,9 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/customer/rpt_record_get/{id}/{td}/{isPdf?}', 'CustomerController@rpt_record_get')->name('rpt_record_get');
     Route::get('/real_property_tax/payment_records/index', 'CustomerController@rpt_record_index')->name('rpt.records_index');
     Route::get('/real_property_tax/payment_records/dt', 'CustomerController@rpt_record_dt')->name('rpt.records_dt');
-    Route::get('/real_property_tax/payment_records/import','CustomerController@importIndex')->name('rpt.import_excel_report');
-    Route::post('/real_property_tax/payment_records/import/view','CustomerController@viewExcel')->name('rpt.view_excel_report');
-    Route::post('/real_property_tax/payment_records/import/save','CustomerController@saveImportedExcel')->name('rpt.save_excel_report');
+    Route::get('/real_property_tax/importExcel','MunicipalExcelImportController@index')->name('rpt.import_excel_report');
+    Route::post('/real_property_tax/importExcel/view','MunicipalExcelImportController@viewExcel')->name('rpt.view_excel_report');
+    Route::post('/real_property_tax/importExcel/save','MunicipalExcelImportController@saveUploadedExcel')->name('rpt.save_excel_report');
 
     /*RPT delinquents*/
     Route::get('/form56/delinquent_payors', 'Form56Controller@rpt_delinquent')->name('rpt.delinquent');

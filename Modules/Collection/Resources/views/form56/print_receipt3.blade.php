@@ -1411,19 +1411,19 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td width="100%" class="" style="background: ##52aac7; padding-top: -23px;">
+                                    <td width="100%" class="" style="background: ##52aac7; padding-top: -15px;">
                                         <table width="100%" id="payment_dets" style="table-layout: fixed;">
                                             <tr>
                                                 <td colspan="2" class="text-hidden" ><!-- MODE OF PAYMENT --></td>
                                             </tr>
                                             <tr>
                                                 <td style="width:80%" class="text-hidden">CASH</td>
-                                                <td style="width:20%"><span style="position:absolute">{{  $receipt->bank_number != null || $receipt->bank_name != null || $receipt->bank_date != null ? " " : number_format($form56['total'], 2) }}</span></td>
+                                                <td style="width:20%"><span style="position:absolute; top: -5px">{{  $receipt->bank_number != null || $receipt->bank_name != null || $receipt->bank_date != null ? " " : number_format($form56['total'], 2) }}</span></td>
                                             </tr>
                                             <tr>
                                                 <td style="word-break: break-all;vertical-align: text-top;">
                                                     {{-- <span style="vertical-align: text-top;word-break: break-all; font-size: 7px; color:rgba(0, 0, 0, 1)"></span> --}}
-                                                        <span style="word-break: break-all; font-size: 8px;position: absolute;">
+                                                        <span style="word-break: break-all; font-size: 8px;position: absolute; top: -5px">
                                                         @if($receipt->bank_number != null || $receipt->bank_number != '')
                                                             {{ $receipt->bank_number }}
                                                         @endif
@@ -1437,7 +1437,7 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span style="position:absolute">{{  $receipt->bank_number != null || $receipt->bank_name != null || $receipt->bank_date != null ? number_format($form56['total'], 2) : "" }}</span>
+                                                    <span style="position:absolute; top: -5px">{{  $receipt->bank_number != null || $receipt->bank_name != null || $receipt->bank_date != null ? number_format($form56['total'], 2) : "" }}</span>
                                                 </td>
                                             </tr>
                                             <tr>

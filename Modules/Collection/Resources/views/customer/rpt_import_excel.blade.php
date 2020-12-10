@@ -76,9 +76,12 @@
 
 
 </div>
-
-<button class="btn btn-success" style="display:none; margin-top: 20px; position: absolute; right: 0;" id="save-import"><i class="fa fa-save"></i> Save Import</button>
-
+<form action="{{ route('rpt.save_excel_report') }}" id="excel-form" method="POST">
+    {{ csrf_field() }}
+    <input type="hidden" name="excel-data">
+    <input type="hidden" name="excel-municipality">
+    <button type="submit" class="btn btn-success" style="display:none; margin-top: 20px; position: absolute; right: 0;" id="save-import"><i class="fa fa-save"></i> Save Import</button>
+</form>
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalHelp">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -136,7 +139,10 @@
             
         </div>
         <div class="modal-footer">
-            <button class="btn btn-success" data-dismiss="modal">Ok, I understand</button>
+            
+                
+                <button type="submit" class="btn btn-success" data-dismiss="modal">Ok, I understand</button>
+            
         </div>
          
       </div>
@@ -173,11 +179,13 @@
             }).done(function(data){
                 if (data.html) {
                     $excelContainer.html(data.html);
+                    $('#excel-form').find('input[name="excel-data"]').val(JSON.stringify(data.data));
+                    $('#excel-form').find('input[name="excel-data"]').val(JSON.stringify(data.municipality));
                     $('#save-import').show();
                 }else{
                     showMessage(data.message, 1);
                 }
-            }).fail(function(){
+            }).fail(function(error){
                 showMessage('Sorry, something went wrong. Please refresh the page and try again.', 1);
             }).always(function(){
                 $importButton.find('.fa-spinner').css('display', 'none');
@@ -186,6 +194,21 @@
             showMessage('Sorry, you haven\'t chosen a file yet. Please choose a file first before pressing the button.', 1);
         }
     });
+
+    // $('#excel-form').submit(function(){
+    //     $.ajax({
+    //         url: '{{ route("rpt.view_excel_report") }}',
+    //         method: 'POST',
+    //         data: $(this).serialize(),
+    //         beforeSend: function(){
+
+    //         }
+    //     }).fail(function(){
+
+    //     }).done(function(data){
+            
+    //     });
+    // });
 
 
 </script>
