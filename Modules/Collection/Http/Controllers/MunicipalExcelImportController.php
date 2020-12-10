@@ -6,6 +6,7 @@ use App\Http\Controllers\{Controller};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Modules\Collection\Entities\CollectionRate;
 use Modules\Collection\Entities\Customer;
 use Modules\Collection\Entities\F56Detail;
@@ -332,7 +333,6 @@ class MunicipalExcelImportController extends Controller
     {
         $data = json_decode($request['excel-data']);
 
-
         foreach ($data as $or_number => $values) {
             # code...
         }
@@ -351,7 +351,6 @@ class MunicipalExcelImportController extends Controller
             $payor_id = $payor_id->id;
         }
         
-
         $is_printed = 0;
         $report_datex = new Carbon($request['date']);
 
@@ -402,7 +401,6 @@ class MunicipalExcelImportController extends Controller
             case 'S':
                 $aftype = F56Type::where('id', 6)->first();
             break;
-
         }
 
         $municipality = Municipality::where('name', $request['municipality'])->first();
@@ -420,12 +418,11 @@ class MunicipalExcelImportController extends Controller
             'cancelled_remark' => '',
             'transaction_source' => $values['field_land_tax'],
             'transaction_type' => 1,
-
             'client_type' => 0,
             ]);
 
 
-            $share_provincial = 0;
+            $share_provincial = $values["grandtotal_net"];
             $share_municipal = 0;
             $share_barangay = 0;
 
@@ -439,26 +436,31 @@ class MunicipalExcelImportController extends Controller
                 'share_municipal' => $share_municipal,
                 'share_barangay' => $share_barangay,
                 ]);
+
+            $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
+                from tax_dec_archive_info 
+                join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
+                left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
+                join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
+                where tax_dec_no = "'.$values['tdarp'].'"'));
         
             $detail = F56Detail::create([
                 'col_receipt_id' => $receipt->id,
                 'col_f56_type_id' => $aftype,
                 'owner_name' => $values['name'],
-                'tdrp_assedvalue' => $request['tdrp_assedvalue'],
-                'period_covered' => $request['period_covered'],
-                'full_partial' => $request['full_partial'],
-                'basic_current' => $request['basic_current'],
-                'basic_discount' => $request['basic_discount'],
-                'basic_previous' => $request['basic_previous'],
+                'tdrp_assedvalue' => $prev_tax_dec,
+                'period_covered' => $values["period_covered"],
+                'basic_current' => $values['basic_current_gross'],
+                'basic_discount' => $values['basic_current_discount'],
+                'basic_previous' => $values['basic_immediate'],
                 'basic_penalty_current' => $request['basic_penalty_current'],
                 'basic_penalty_previous' => $request['basic_penalty_previous'],
-                // 'manual_tax_due' => $request['tdrp_taxdue'],
                 'manual_tax_due' => $request['tdrp_assedvalue']*.01,
                 'ref_num' => isset($request['ref_num']) ? $request['ref_num'] : null,
             ]);
 
             $row['col_f56_detail_id'] = $detail->id;
-            $row['tdarpno'] = $tan;
+            $row['tdarpno'] = $prev_tax_dec;
             $row['municipality'] =  $request['municipality'];
             $row['barangay'] =  $request['tdrp_barangay'][$i];
             $row['f56_type'] = $request['f56_type'][$i];
