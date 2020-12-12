@@ -453,7 +453,7 @@ class MunicipalExcelImportController extends Controller
                 'basic_current' => $values['basic_current_gross'],
                 'basic_discount' => $values['basic_current_discount'],
                 'basic_previous' => $values['basic_immediate'],
-                'basic_penalty_current' => $request['basic_penalty_current'],
+                'basic_penalty_current' => $values[''],
                 'basic_penalty_previous' => $request['basic_penalty_previous'],
                 'manual_tax_due' => $request['tdrp_assedvalue']*.01,
                 'ref_num' => isset($request['ref_num']) ? $request['ref_num'] : null,
@@ -462,8 +462,8 @@ class MunicipalExcelImportController extends Controller
             $row['col_f56_detail_id'] = $detail->id;
             $row['tdarpno'] = $prev_tax_dec;
             $row['municipality'] =  $request['municipality'];
-            $row['barangay'] =  $request['tdrp_barangay'][$i];
-            $row['f56_type'] = $request['f56_type'][$i];
+            $row['barangay'] =  $request['tdrp_barangay'];
+            $row['f56_type'] = $request['f56_type'];
             $row['previous_tax_type_id'] = $request['previous_tax_type']; // vague insertion
             array_push($data, $row);
             
