@@ -3,10 +3,24 @@ textarea {
     resize: vertical;
 }
 
-/* @font-face {
+@font-face {
+    font-family: OpenSansBold;
+    src: url('fonts/OpenSans-Bold.ttf');
+  }
+
+  @font-face {
+    font-family: OpenSansRegular;
+    src: url('fonts/OpenSans-Semibold.ttf');
+  }
+
+  @font-face {
     font-family: Roboto;
-    src: url('../fonts/Roboto-Regular.ttf');
-  } */
+    src: url('fonts/Roboto-Regular.ttf');
+  }
+
+  body{
+      font-family: Roboto;
+  }
 
 .dtable {
     table-layout: fixed;
@@ -112,14 +126,20 @@ input[type=number]::-webkit-outer-spin-button {
     z-index: 1030;
 }
 
-/* .btn-primary{
-    background-color: #1a334b !important;
+.btn-primary{
+    background-color: #1d3750; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
     background-image: none !important;
-    border-radius: 0px !important;
+    font-family: OpenSansBold;
 }
 
 .btn-primary:hover{
     background-color: #2e5981 !important;
     background-image: none !important;
 }
-     */

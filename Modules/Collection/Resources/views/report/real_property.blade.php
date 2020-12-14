@@ -77,10 +77,10 @@
 @if (session('isSaved'))
         <div class="alert alert-success">{{ session('isSaved') }}</div>
 @endif
-<h3>View/Edit Report</h3>
+<h3>View Collections</h3>
 <div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="form-group col-sm-6">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="form-group col-sm-4">
             <label for="municipality">Municipality</label>
             <select class="form-control" name="search_municipality" id="search_municipality" required>
                 @foreach ($base['municipalities'] as $mun)
@@ -88,7 +88,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group col-sm-6">
+        {{-- <div class="form-group col-sm-6">
             <label for="report_type">Report Type</label>
             <select name="report_type" id="report_type" class="form-control">
                 <option value="button">Municipal Report</option>
@@ -98,9 +98,18 @@
                 <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
                 <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
             </select>
+        </div> --}}
+        <div class="form-group col-sm-4">
+            <label for="start_date">Start Date</label>
+            <input type="text" class="form-control date" name="start_date" value="{{ date('m/d/Y') }}" required>
+        </div>
+        <div class="form-group col-sm-4">
+            <label for="end_date">End Date</label>
+            <input type="text" class="form-control date" name="end_date" value="{{ date('m/d/Y') }}" required>
+        </div>
     </div>
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-12">
+    <center><button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm"> <i class="fa fa-eye"></i> View</button></center>
+    {{-- <div class="col-lg-6 col-md-6 col-sm-12">
         <label for="report_number">Report Number</label>
         <div class="input-group">
             <span class="input-group-addon">RPT-</span>
@@ -111,7 +120,7 @@
             <i class="fa fa-spinner fa-spin"></i>
             <span>Searching...</span>
         </div>
-    </div>
+    </div> --}}
 </div>
 <hr>
 <h3>Generate New Report</h3>
@@ -154,8 +163,8 @@
         <input type="hidden" name="isEdit" class="isEdit" value="0">
 
         <div class="form-group col-sm-12">
-          <button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm">Municipal Report</button>
-          <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_collections" id="confirm">Municipal Report (Collections)</button>
+          {{-- <button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm">Municipal Report</button> --}}
+          <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_collections" id="confirm">Municipal Report</button>
           <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_summary_disposition" id="confirm">Municipal Report (Summary and Disposition)</button>
         </div>
 
@@ -179,7 +188,45 @@
     {{ Form::close() }}
 </div>
 <br>
+
+<hr>
+<h3>View Report:</h3>
 <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="form-group col-sm-6">
+            <label for="municipality">Municipality</label>
+            <select class="form-control" name="search_municipality" id="search_municipality" required>
+                @foreach ($base['municipalities'] as $mun)
+                <option value="{{ $mun->id }}">{{ $mun->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="report_type">Report Type</label>
+            <select name="report_type" id="report_type" class="form-control">
+                <option value="button">Municipal Report</option>
+                <option value="rpt_mun_report_collections">Municipal Report (Collection)</option>
+                <option value="rpt_mun_report_summary_disposition">Municipal Report (Summary and Disposition)</option>
+                <option value="rpt_mun_report_protest">Municipal Report (Paid under protest/Held in Trust)</option>
+                <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
+                <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
+            </select>
+    </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <label for="report_number">Report Number</label>
+        <div class="input-group">
+            <span class="input-group-addon">RPT-</span>
+            <input type="text" class="form-control" id="report_number" placeholder="Please Input Report Number">
+            <span class="input-group-addon btn btn-warning" style="width:5%" id="search-report"><i class="fa fa-search" aria-hidden="true"></i></span>
+        </div>
+        <div class="loading hidden">
+            <i class="fa fa-spinner fa-spin"></i>
+            <span>Searching...</span>
+        </div>
+    </div>
+</div>
+{{-- <div class="row">
     {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property_consolidated']]) }}
          <div class="form-group col-sm-4 ">
                 <label for="end_date">Report Date</label>
@@ -203,7 +250,8 @@
         </div>
     {{ Form::close() }}
 </div>
-<br>
+<br> --}}
+<hr>
 <div class="row">
     {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property_p2']]) }}
      <div class="form-group col-sm-6 ">
