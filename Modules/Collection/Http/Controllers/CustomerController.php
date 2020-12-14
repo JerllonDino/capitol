@@ -200,35 +200,35 @@ class CustomerController extends Controller
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$det->owner_id));
                 $get_owner_info = collect($get_owner_info);
                 foreach($get_owner_info as $info) {
-                    $owner_name .= nl2br($info->spouse . ' & ' . $info->married_to . '
+                    $owner_name = nl2br($info->spouse . ' & ' . $info->married_to . '
                         ');
                 }
             } elseif($det->type_o == 'Person') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$det->owner_id));
                 $get_owner_info = collect($get_owner_info);
                 foreach($get_owner_info as $info) {
-                    $owner_name .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
+                    $owner_name = nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
                         ');
                 }
             } elseif($det->type_o == 'Company') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$det->owner_id));
                 $get_owner_info = collect($get_owner_info);
                 foreach($get_owner_info as $info) {
-                    $owner_name .= nl2br($info->company_name . '
+                    $owner_name = nl2br($info->company_name . '
                         ');
                 }
             } elseif($det->type_o == 'MarriedTo') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$det->owner_id));
                 $get_owner_info = collect($get_owner_info);
                 foreach($get_owner_info as $info) {
-                    $owner_name .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
+                    $owner_name = nl2br($info->owner_name . ' married to ' . $info->married_to .'
                         ');
                 }
             } elseif($det->type_o == 'Special') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$det->owner_id));
                 $get_owner_info = collect($get_owner_info);
                 foreach($get_owner_info as $info) {
-                    $owner_name .= nl2br($info->special_name.'
+                    $owner_name = nl2br($info->special_name.'
                         ');
                 }
             }
@@ -488,35 +488,35 @@ class CustomerController extends Controller
                                     $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$getNewOwner[0]->owner_id));
                                     $get_owner_info_new = collect($get_owner_info_new);
                                     foreach($get_owner_info_new as $info) {
-                                        $owner_new .= nl2br($info->spouse . ' & ' . $info->married_to . '
+                                        $owner_new = nl2br($info->spouse . ' & ' . $info->married_to . '
                                             ');
                                     }
                                 } elseif($getNewOwner[0]->type_o == 'Person') {
                                     $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$getNewOwner[0]->owner_id));
                                     $get_owner_info_new = collect($get_owner_info_new);
                                     foreach($get_owner_info_new as $info) {
-                                        $owner_new .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
+                                        $owner_new = nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
                                             ');
                                     }
                                 } elseif($getNewOwner[0]->type_o == 'Company') {
                                     $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$getNewOwner[0]->owner_id));
                                     $get_owner_info_new = collect($get_owner_info_new);
                                     foreach($get_owner_info_new as $info) {
-                                        $owner_new .= nl2br($info->company_name . '
+                                        $owner_new = nl2br($info->company_name . '
                                             ');
                                     }
                                 } elseif($getNewOwner[0]->type_o == 'MarriedTo') {
                                     $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$getNewOwner[0]->owner_id));
                                     $get_owner_info_new = collect($get_owner_info_new);
                                     foreach($get_owner_info_new as $info) {
-                                        $owner_new .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
+                                        $owner_new = nl2br($info->owner_name . ' married to ' . $info->married_to .'
                                             ');
                                     }
                                 } elseif($getNewOwner[0]->type_o == 'Special') {
                                     $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$getNewOwner[0]->owner_id));
                                     $get_owner_info_new = collect($get_owner_info_new);
                                     foreach($get_owner_info_new as $info) {
-                                        $owner_new .= nl2br($info->special_name.'
+                                        $owner_new = nl2br($info->special_name.'
                                             ');
                                     }
                                 }
@@ -616,35 +616,35 @@ class CustomerController extends Controller
                                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$det->owner_id));
                                 $get_owner_info = collect($get_owner_info);
                                 foreach($get_owner_info as $info) {
-                                    $owner_name .= nl2br($info->spouse . ' & ' . $info->married_to . '
+                                    $owner_name = nl2br($info->spouse . ' & ' . $info->married_to . '
                                         ');
                                 }
                             } elseif($det->type_o == 'Person') {
                                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$det->owner_id));
                                 $get_owner_info = collect($get_owner_info);
                                 foreach($get_owner_info as $info) {
-                                    $owner_name .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
+                                    $owner_name = nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
                                         ');
                                 }
                             } elseif($det->type_o == 'Company') {
                                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$det->owner_id));
                                 $get_owner_info = collect($get_owner_info);
                                 foreach($get_owner_info as $info) {
-                                    $owner_name .= nl2br($info->company_name . '
+                                    $owner_name = nl2br($info->company_name . '
                                         ');
                                 }
                             } elseif($det->type_o == 'MarriedTo') {
                                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$det->owner_id));
                                 $get_owner_info = collect($get_owner_info);
                                 foreach($get_owner_info as $info) {
-                                    $owner_name .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
+                                    $owner_name = nl2br($info->owner_name . ' married to ' . $info->married_to .'
                                         ');
                                 }
                             } elseif($det->type_o == 'Special') {
                                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$det->owner_id));
                                 $get_owner_info = collect($get_owner_info);
                                 foreach($get_owner_info as $info) {
-                                    $owner_name .= nl2br($info->special_name.'
+                                    $owner_name = nl2br($info->special_name.'
                                         ');
                                 }
                             }
@@ -704,7 +704,7 @@ class CustomerController extends Controller
         } else {
             // search from old archive
             $get_tax_dec = DB::connection('mysql2')->select(DB::raw('select prevs_tax_dec_no from tax_dec_old_archive_info where tax_dec_no = "'.$td.'"')); 
-            if(!empty($get_tax_dec) && !is_nul($get_tax_dec)) {
+            if(!empty($get_tax_dec) && !is_null($get_tax_dec)) {
                 $clean = preg_replace("/[^0-9-\s]+/", " ", $get_tax_dec[0]->prevs_tax_dec_no);
                 $split = explode(" ", $clean);
                 for($i = 0; $i < count($split); $i++) {

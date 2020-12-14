@@ -239,6 +239,7 @@
                 <form method="POST" action="{{ route('rpt.submit') }}" id="form">
                     {{ csrf_field() }}
                     <div id="addl_inputs">
+                        <div id="addl_entries"></div>
                         {{-- <input type="hidden" name="municipality" id="munic">
                         <input type="hidden" name="start_date" id="start_date">
                         <input type="hidden" name="end_date" id="end_date">
@@ -316,7 +317,8 @@
             'end_date' : $('#pdf_rpt').find('input[name="end_date"]').val(),
         }
 
-        reportType = $(this).attr('name');
+        var reportType = $(this).attr('name');
+        console.log(reportType);
 
         preparePDF(arrayData, reportType, arrayData.municipality);
         
@@ -331,17 +333,15 @@
         console.log(isEdit);
 
         if(isEdit == 0){
-            $('#addl_inputs').append(`
-                    <div id="addl_entries">
+            $('#addl_entries').html(`
                         <input type="hidden" name="municipality" id="munic">
                         <input type="hidden" name="start_date" id="start_date">
                         <input type="hidden" name="end_date" id="end_date">
                         <input type="hidden" name="report_no" id="report_num">
                         <input type="hidden" name="report_date" id="report_date">
-                    </div>
             `);
         }else{
-            $('#addl_entries').remove();
+            $('#addl_entries').html('');
         }
 
         $.ajax({

@@ -3714,7 +3714,6 @@ class PdfController extends Controller
                         ->setPaper("legal", 'portrait');
                     }else{
                         if($typex === 'type_A'){
-                            // dd($this->base);
                             $pdf = PDF::loadView('collection::pdf.collections_deposits_per_A', $this->base)
                         // ->setPaper("legal", 'Landscape');
                             ->setPaper("legal", 'Landscape');
@@ -4403,8 +4402,7 @@ class PdfController extends Controller
             ->get();
             
         if($request['isEdit'] == 0 and count($report_exist) > 0){
-            return 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!';
-            // return redirect()->route('report.real_property')->with('isExist', 'Report '.$request['report_no'].' in '.$this->base['municipality']->name.' already exist!');
+            return 'Report '.(isset($request['report_no']) ? $request['report_no'] : "").' of '.( isset($this->base['municipality']->name) ? $this->base['municipality']->name : '').' already exist!';
         }
 
         $this->base['sef_exist'] = $report_exist;
@@ -4497,7 +4495,6 @@ class PdfController extends Controller
         $request = new Request($req->all()); 
         $data = $this->rpr_report_edit($request);
         $this->base['mun'] = Municipality::find($req->municipality);
-
         if(isset($req['save_report'])){
           
         $insert = RptSefAdjustments::updateOrCreate(
@@ -4582,9 +4579,10 @@ class PdfController extends Controller
                 'brgy_penalty_1991' => $req->brgy_prior_1991_penalties,
             ]
         );
-        return redirect()->route('report.real_property')->with('isSaved', 'Report '.$req->report_no.' in '.$this->base['mun']->name.' succesfully saved!');
+        
+        return redirect()->route('report.real_property')->with('isSaved', 'Report '.$req->report_no.' of '.$this->base['mun']->name.' succesfully saved!');
         }
-        $merged = $data ? array_merge($data, $req->all()) : $req->all();
+        $merged = is_array($data) ? array_merge($data, $req->all()) : $req->all();
 
         $this->base['merged'] = $merged;
 
@@ -4610,6 +4608,7 @@ class PdfController extends Controller
             // $objWriter->save(storage_path($req->report_no.'.docx'));
             // return response()->download(storage_path($req->report_no.'.docx'));
         } else if($req['btn_pdf'] == 'rpt_mun_report_collections' || $req['btn'] == 'rpt_mun_report_protest_col') {
+            
             $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property_collections', $this->base)->setPaper(array(0,0,612,936), 'landscape');
             return $pdf->stream();
         } else if($req['btn_pdf'] == 'rpt_mun_report_summary_disposition' || $req['btn'] == 'rpt_mun_report_protest_sd') {

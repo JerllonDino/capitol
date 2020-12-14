@@ -297,10 +297,10 @@ class MunicipalExcelImportController extends Controller
                 "basic_immediate" => $data[11],
                 "basic_prior_1992" => $data[12],
                 "basic_prior_1991" => $data[13],
-                "sef_penalty_current" => $data[14],
-                "sef_penalty_immediate" => $data[15],
-                "sef_penalty_prior_1992" => $data[16],
-                "sef_penalty_prior_1991" => $data[17],
+                "basic_penalty_current" => $data[14],
+                "basic_penalty_immediate" => $data[15],
+                "basic_penalty_prior_1992" => $data[16],
+                "basic_penalty_prior_1991" => $data[17],
                 "basic_subtotal_gross" => $data[18],
                 "basic_subtotal_net" => $data[19],
                 "sef_advance_gross" => $data[20],
@@ -338,6 +338,14 @@ class MunicipalExcelImportController extends Controller
         }
         # Add payor if not existing
         $payor_id = 0;
+
+        $period_covered = explode("-", $values['period_covered']);
+        if (count($period_covered) > 0) {
+            for ($i=$period_covered[0]; $i < $period_covered[3]; $i++) {
+                # code...
+            }
+        }
+        
         
         $payor = Customer::withTrashed()->where('name',$values['name'])->first();
         if (!empty($payor)) {
@@ -444,17 +452,20 @@ class MunicipalExcelImportController extends Controller
                 join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
                 where tax_dec_no = "'.$values['tdarp'].'"'));
         
+            if ($period_covered < date("Y")) {
+                
+            }
             $detail = F56Detail::create([
                 'col_receipt_id' => $receipt->id,
                 'col_f56_type_id' => $aftype,
                 'owner_name' => $values['name'],
                 'tdrp_assedvalue' => $prev_tax_dec,
                 'period_covered' => $values["period_covered"],
-                'basic_current' => $values['basic_current_gross'],
-                'basic_discount' => $values['basic_current_discount'],
-                'basic_previous' => $values['basic_immediate'],
-                'basic_penalty_current' => $values[''],
-                'basic_penalty_previous' => $request['basic_penalty_previous'],
+                'basic_current' => ($period_covered >= date("Y") ? $values['basic_current_gross'] : 0),
+                'basic_discount' => ($period_covered >= date("Y") ? $values['basic_current_discount'] : 0),
+                'basic_previous' => ($period_covered < date("Y") ? ($values['basic_immediate']) : 0),
+                'basic_penalty_current' => ($period_covered >= date("Y") ? $values['basic_penalty_current'] : 0),
+                'basic_penalty_previous' => ($period_covered < date("Y") ? $values['basic_penalty_previous'] : 0),
                 'manual_tax_due' => $request['tdrp_assedvalue']*.01,
                 'ref_num' => isset($request['ref_num']) ? $request['ref_num'] : null,
             ]);
