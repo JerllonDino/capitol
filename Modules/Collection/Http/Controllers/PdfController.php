@@ -741,6 +741,7 @@ class PdfController extends Controller
 
     public function real_property_p2(Request $request)
     {
+
         $form_56 = 2;
         $date_start = date('Y-m-d', strtotime($request['start_date']));
         $date_end = date('Y-m-d', strtotime($request['end_date']));
@@ -864,6 +865,7 @@ class PdfController extends Controller
         // $this->base['total_in_words'] = $this->convert_number_to_words($total_paymt);
         $this->base['total_in_words'] = $this->convert_number_to_words(number_format($total_paymt, 2, '.', ''));
         $pdf = new PDF;
+        // dd($this->base);
         $pdf = PDF::loadView('collection::pdf/real_property_p2', $this->base)->setPaper('legal', 'landscape');
         return @$pdf->stream();
     }
@@ -3193,6 +3195,7 @@ class PdfController extends Controller
 
     public function collections_deposits(Request $request)
     {
+        
         $form_51 = 1;
         $insurance_premium = 42;
         $amusement = 6;
@@ -3245,7 +3248,7 @@ class PdfController extends Controller
                 }
             }
         }
-
+        
         $receipts = collect($unique);
 
         foreach ($receipts as $i => $r) {
@@ -3336,6 +3339,7 @@ class PdfController extends Controller
         $amusement_shares = [];
         $shares = [];
         $municipalities = Municipality::get();
+        
         foreach ($municipalities as $mun) {
             $shares[$mun->id] = array(
                 'name' => $mun->name,
@@ -3361,7 +3365,7 @@ class PdfController extends Controller
         # variables for receipt accountability
         $rcpt_acct_af = array();
         $bank = array();
-
+        
         foreach ($receipts as $rcpt_index => $receipt) {
             if ($receipt->serial->acct_cat_id != $_GET['type']) {
                 if($_GET['type'] == 1) {
@@ -3501,7 +3505,7 @@ class PdfController extends Controller
                 $receipts_total[$receipt->serial_no] = $total;
             }
         }
-
+        dd($receipts);
         $rcpt_acct = $this->format_sort_af($form_51, $rcpt_acct_af, $date_start, $date_end, $_GET['type']);
 
         // $rcpt_acct = $this->format_sort_af($form_56, $rcpt_acct_af, $date_start, $date_end);
@@ -3575,6 +3579,7 @@ class PdfController extends Controller
             $date_end = new Carbon($date_end);
             $this->base['date_range'] = date('F d', strtotime($date_start)) .' - '. $date_end->format('F d, Y') ;
         }
+        
         $this->base['report_start'] = date('F d, Y', strtotime($date_start));
         $this->base['report_date'] = date('F d, Y', strtotime($report_date));
 
@@ -3644,7 +3649,7 @@ class PdfController extends Controller
         $convert_width = round(floatval($request['custom_width']) * 72, 2);
         $this->base['papr_size_custom_h'] = $convert_height;
         $this->base['papr_size_custom_w'] = $convert_width;
-
+        
         if(isset($request['button_pdf'])){
             $paper_size = $this->set_paper_size($total_columns);
                 // dd($total_columns);
@@ -4492,7 +4497,7 @@ class PdfController extends Controller
     }
 
     public function rpt_report_submit(Request $req) {
-        $request = new Request($req->all()); 
+        $request = new Request($req->all());
         $data = $this->rpr_report_edit($request);
         $this->base['mun'] = Municipality::find($req->municipality);
         if(isset($req['save_report'])){

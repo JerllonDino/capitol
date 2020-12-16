@@ -82,7 +82,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="form-group col-sm-4">
             <label for="municipality">Municipality</label>
-            <select class="form-control" name="search_municipality" id="search_municipality" required>
+            <select class="form-control" name="municipality" id="municipality" required>
                 @foreach ($base['municipalities'] as $mun)
                 <option value="{{ $mun->id }}">{{ $mun->name }}</option>
                 @endforeach
@@ -99,6 +99,7 @@
                 <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
             </select>
         </div> --}}
+        
         <div class="form-group col-sm-4">
             <label for="start_date">Start Date</label>
             <input type="text" class="form-control date" name="start_date" value="{{ date('m/d/Y') }}" required>
@@ -107,8 +108,12 @@
             <label for="end_date">End Date</label>
             <input type="text" class="form-control date" name="end_date" value="{{ date('m/d/Y') }}" required>
         </div>
+        <div class="form-group col-sm-6 col-sm-offset-3">
+            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%" data-view="1" name="rpt_mun_report_collections" id="confirm"><i class="fa fa-spinner fa-spin" style="display:none"> </i> <i class="fa fa-eye"></i> View</button>
+        </div>
     </div>
-    <center><button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm"> <i class="fa fa-eye"></i> View</button></center>
+    
+    
     {{-- <div class="col-lg-6 col-md-6 col-sm-12">
         <label for="report_number">Report Number</label>
         <div class="input-group">
@@ -123,7 +128,7 @@
     </div> --}}
 </div>
 <hr>
-<h3>Generate New Report</h3>
+<h3>Generate Report</h3>
 @if (session('isExist'))
     <div class="alert alert-danger">{{ session('isExist') }}</div>
 @endif
@@ -162,12 +167,18 @@
 
         <input type="hidden" name="isEdit" class="isEdit" value="0">
 
-        <div class="form-group col-sm-12">
+        
           {{-- <button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm">Municipal Report</button> --}}
-          <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_collections" id="confirm">Municipal Report</button>
-          <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_summary_disposition" id="confirm">Municipal Report (Summary and Disposition)</button>
-        </div>
-
+          <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_collections" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report</button>
+          </div>
+          <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_summary_disposition" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report (Summary and Disposition)</button>
+          </div>
+          <div class="col-sm-6 col-sm-offset-3">
+            <button type="submit" class="btn btn-primary" name="button" style="width: 100%; margin: 5px 0" id="consolidated-report"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Consolidated Report</button>
+          </div>
+      
         <!-- <div class="form-group col-sm-12">
           <button type="submit" class="btn btn-primary" name="rpt_excel" id="confirm">Municipal Report (Excel)</button>
           <button type="submit" class="btn btn-primary" name="rpt_collections_excel" id="confirm">Municipal Report (Collections) (Excel)</button>
@@ -179,12 +190,15 @@
             <button type="submit" class="btn btn-primary" name="rpt_mun_report_advanced_col" id="confirm">Municipal Report Collections (w/ Advanced Payment)</button>
             <button type="submit" class="btn btn-primary" name="rpt_mun_report_advanced_sd" id="confirm">Municipal Report Summary and Disposition (w/ Advanced Payment)</button>
         </div> -->
-
-        <div class="form-group col-sm-12">
-            <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_protest" id="confirm">Municipal Report (Paid under protest/Held in Trust)</button>
-            <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_protest_col" id="confirm">Municipal Report Collections (Paid under protest/Held in Trust)</button>
-            <button type="submit" class="btn btn-primary rpt_report" name="rpt_mun_report_protest_sd" id="confirm">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</button>
-        </div>
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_protest" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report (Paid under protest/Held in Trust)</button>
+            </div>
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_protest_col" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report Collections (Paid under protest/Held in Trust)</button>
+            </div>
+            <div class="col-sm-8 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_protest_sd" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</button>
+            </div>
     {{ Form::close() }}
 </div>
 <br>
@@ -193,15 +207,13 @@
 <h3>View Report:</h3>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="form-group col-sm-6">
             <label for="municipality">Municipality</label>
             <select class="form-control" name="search_municipality" id="search_municipality" required>
                 @foreach ($base['municipalities'] as $mun)
                 <option value="{{ $mun->id }}">{{ $mun->name }}</option>
                 @endforeach
             </select>
-        </div>
-        <div class="form-group col-sm-6">
+        {{-- <div class="form-group col-sm-6">
             <label for="report_type">Report Type</label>
             <select name="report_type" id="report_type" class="form-control">
                 <option value="button">Municipal Report</option>
@@ -211,19 +223,23 @@
                 <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
                 <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
             </select>
-    </div>
+    </div> --}}
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12">
         <label for="report_number">Report Number</label>
         <div class="input-group">
             <span class="input-group-addon">RPT-</span>
             <input type="text" class="form-control" id="report_number" placeholder="Please Input Report Number">
-            <span class="input-group-addon btn btn-warning" style="width:5%" id="search-report"><i class="fa fa-search" aria-hidden="true"></i></span>
+            
         </div>
         <div class="loading hidden">
             <i class="fa fa-spinner fa-spin"></i>
             <span>Searching...</span>
         </div>
+    </div>
+
+    <div class="col-sm-8 col-sm-offset-2">
+        <button class="btn btn-primary consolidated-report" style="width: 100%; margin: 10px 0"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Collections, Summary & Disposition, & Consolidated Report</button>
     </div>
 </div>
 {{-- <div class="row">
@@ -252,16 +268,16 @@
 </div>
 <br> --}}
 <hr>
-<div class="row">
-    {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property_p2']]) }}
-     <div class="form-group col-sm-6 ">
-                <label for="end_date">Report Date</label>
-                <input type="text" class="form-control date" name="report_date" value="{{ date('m/d/Y') }}" required>
-            </div>
-            <div class="form-group col-sm-6 ">
-                <label for="end_date">Report No.</label>
-                <input type="text" class="form-control" name="report_no" required>
-            </div>
+<div style="display:none">
+    {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property_p2'], 'id' => 'consolidated-form']) }}
+        <div class="form-group col-sm-6 ">
+            <label for="end_date">Report Date</label>
+            <input type="text" class="form-control date" name="report_date" value="{{ date('m/d/Y') }}" required>
+        </div>
+        <div class="form-group col-sm-6 ">
+            <label for="end_date">Report No.</label>
+            <input type="text" class="form-control" name="report_no" required>
+        </div>
         <div class="form-group col-sm-6">
             <label for="start_date">Start Date</label>
             <input type="text" class="form-control date" name="start_date" value="{{ date('m/d/Y') }}" required>
@@ -269,10 +285,6 @@
         <div class="form-group col-sm-6">
             <label for="end_date">End Date</label>
             <input type="text" class="form-control date" name="end_date" value="{{ date('m/d/Y') }}" required>
-        </div>
-
-        <div class="form-group col-sm-12">
-          <button type="submit" class="btn btn-primary" name="button" id="confirm">Consolidated Report</button>
         </div>
     {{ Form::close() }}
 </div>
@@ -314,7 +326,6 @@
 
 @section('js')
 <script>
-    
 
     $('button[name="view_report"]').click(function(){
         $('#form').attr('target', '_blank');
@@ -354,31 +365,49 @@
         });
     });
 
+    $('#consolidated-report').click(function(e){
+        e.preventDefault();
+        $(this).find('.fa-spinner').show();
+        $consolidatedForm = $('#consolidated-form');
+        $pdfRpt = $('#pdf_rpt');
+        $consolidatedForm.find('input[name="report_date"]').val($pdfRpt.find('input[name="report_date"]').val());
+        $consolidatedForm.find('input[name="report_no"]').val($pdfRpt.find('input[name="report_no"]').val());
+        $consolidatedForm.find('input[name="start_date"]').val($pdfRpt.find('input[name="start_date"]').val());
+        $consolidatedForm.find('input[name="end_date"]').val($pdfRpt.find('input[name="end_date"]').val());
+        $consolidatedForm.submit();
+    })
+
     $(document).on('click', '.rpt_report', function(e) {
         e.preventDefault();
+        $parentReport = $(this).parent().parent();
         $('.isEdit').val(0);
         arrayData = {
-            'municipality' : $('#pdf_rpt').find('[name="municipality"]').val(),
-            'report_no' : 'RPT-'+$('#pdf_rpt').find('input[name="report_no"]').val(),
-            'report_date' : $('#pdf_rpt').find('input[name="report_date"]').val(),
-            'start_date' : $('#pdf_rpt').find('input[name="start_date"]').val(),
-            'end_date' : $('#pdf_rpt').find('input[name="end_date"]').val(),
-        }
+            'municipality' : $parentReport.find('[name="municipality"]').val(),
+            'report_no' : 'RPT-'+$parentReport.find('input[name="report_no"]').val(),
+            'report_date' : $parentReport.find('input[name="report_date"]').val(),
+            'start_date' : $parentReport.find('input[name="start_date"]').val(),
+            'end_date' : $parentReport.find('input[name="end_date"]').val(),
+        }   
+        console.log(arrayData);
+
+        $(this).find('.fa-spinner').show();
 
         var reportType = $(this).attr('name');
-        console.log(reportType);
 
-        preparePDF(arrayData, reportType, arrayData.municipality);
-        
+        if ($(this).data('view')) {
+            preparePDF(arrayData, reportType, arrayData.municipality, 1);
+        }else{
+            preparePDF(arrayData, reportType, arrayData.municipality);
+        }
     });
-    function preparePDF(arrayData, button_pdf, municipality){
+
+    function preparePDF(arrayData, button_pdf, municipality, isDirect = 0){
         
         var isEdit = $('.isEdit').val();
         var report_no = arrayData.report_no;
         var report_date = arrayData.report_date;
         var start_date = arrayData.start_date;
         var end_date = arrayData.end_date;
-        console.log(isEdit);
 
         if(isEdit == 0){
             $('#addl_entries').html(`
@@ -406,14 +435,17 @@
                 alert(error.responseJSON);
             },
             success : function(data) {
-                console.log(data);
+                $('.rpt_report').find('.fa-spinner').hide();
                 $('#report_content').removeClass('alert alert-danger');
                 $('#report_content').empty();
                 if(typeof(data) == 'object') {
                     $('#submit').css('display', 'block');
                     
                     $('#btn_pdf').val(button_pdf);
-                    $('#report_content_modal').modal('show');
+                    if (isDirect == 0) {
+                        $('#report_content_modal').modal('show');
+                    }
+                    
                     var content = '';
 
                     content += '<table class="center">\
@@ -1031,7 +1063,7 @@
                             <th colspan="2" class="border_all ctr">1991 & below</th>\
                         </tr>';
                     if(data.sef_exist != null && data.sef_exist != undefined && data.sef_exist.length > 0) {
-                        console.log('exist');
+                        console.log(data.sef_exist);
                         // compute totals here
                         if(data.sef_exist[0].report_basic_items[0] != null && data.sef_exist[0].report_basic_items[0] != undefined) {
                             var provincial_total = parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_adv_amt).toFixed(2)) - parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_adv_discount).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_curr_amt).toFixed(2)) - parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_curr_discount).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_prev_amt).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_1992_amt).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_1991_amt).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_curr).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_prev).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_1992).toFixed(2)) + parseFloat(parseFloat(data.sef_exist[0].report_basic_items[0].prv_penalty_1991).toFixed(2));
@@ -1874,12 +1906,16 @@
                     $('#end_date').val(moment(new Date(end_date)).format('MM/DD/YYYY'));
                     $('#report_num').val(report_no);
                     $('#report_date').val(moment(new Date(report_date)).format('MM/DD/YYYY'));
+                    if (isDirect == 1) {
+                        $('#report_content_modal').find('button[name="view_report"]').trigger('click');
+                    }
                 } else {
                     $('#submit').css('display', 'none');
                     $('#report_content_modal').modal('show');
-                    $('#report_content').addClass('alert alert-danger')
-                    $('#report_content').append('<p>'+data+'</p>')
+                    $('#report_content').addClass('alert alert-danger');
+                    $('#report_content').append('<p>'+data+'</p>');
                 }
+                
             }
         });
 

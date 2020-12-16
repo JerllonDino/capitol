@@ -171,6 +171,14 @@
         </tr>
         </thead>
         @foreach ($rcpt_acct as $rcpt)
+            @if ($rcpt['src'] == "Other Cities/Prov." || $rcpt['src'] == 'La Trinidad')
+                @if (date('m/d/Y', strtotime('12/1/2020')) <= date('m/d/Y', strtotime($report_date)));
+                    @php
+                        continue;
+                    @endphp
+                @endif
+                
+            @endif
         <tr>
             <td >
                 <span class="hidden">
