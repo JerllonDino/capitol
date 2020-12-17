@@ -240,6 +240,7 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/customer/rpt_record_get/{id}/{td}/{isPdf?}', 'CustomerController@rpt_record_get')->name('rpt_record_get');
     Route::get('/real_property_tax/payment_records/index', 'CustomerController@rpt_record_index')->name('rpt.records_index');
     Route::get('/real_property_tax/payment_records/dt', 'CustomerController@rpt_record_dt')->name('rpt.records_dt');
+    
     Route::get('/real_property_tax/importExcel','MunicipalExcelImportController@index')->name('rpt.import_excel_report');
     Route::post('/real_property_tax/importExcel/view','MunicipalExcelImportController@viewExcel')->name('rpt.view_excel_report');
     Route::post('/real_property_tax/importExcel/save','MunicipalExcelImportController@saveUploadedExcel')->name('rpt.save_excel_report');
@@ -267,6 +268,8 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     // real property display and edit SEF
     Route::get('/report/real_property/prepare', 'PdfController@rpr_report_edit')->name('rpt.prepare');
     Route::post('/report/real_property/submit', 'PdfController@rpt_report_submit')->name('rpt.submit');
+    Route::get('/report/real_property/get_reports', 'PdfController@getReportsByReportNumber')->name('rpt.get_reports');
+    Route::get('/report/real_property/view_generated_report', 'PdfController@viewGeneratedReport')->name('rpt.view_generated_report');
 
     // munisipyo receipts
     Route::get('/municipal_receipts', 'MunicipalReceiptsController@index')->name('mncpal.index');

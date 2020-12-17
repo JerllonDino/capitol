@@ -252,6 +252,8 @@
         </div>
     </div>    
 </div>
+
+
 @endsection
 
 @section('js')
@@ -300,7 +302,6 @@
             'start_date' : $('#pdf_rpt').find('input[name="start_date"]').val(),
             'end_date' : $('#pdf_rpt').find('input[name="end_date"]').val(),
         }
-        console.log(arrayData);
         reportType = $(this).attr('name');
 
         preparePDF(arrayData, reportType, arrayData.municipality);

@@ -24,4 +24,9 @@ class RptSefAdjustments extends Model
     public function report_basic_items() {
         return $this->hasMany('Modules\Collection\Entities\RptBasicAdjustmentsItems', 'col_rpt_sef_adjustments_id');
     }
+
+    public function municipality()
+    {
+        return $this->belongsTo('Modules\Collection\Entities\Municipality', 'municipality');
+    }
 }

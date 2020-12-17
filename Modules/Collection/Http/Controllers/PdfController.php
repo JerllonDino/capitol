@@ -7,7 +7,7 @@ use DOMDocument;
 use Illuminate\Http\{Request,Response};
 use Illuminate\Support\Facades\{Session,Validator};
 use Illuminate\Support\Arr;
-use PDF,Excel,Carbon\Carbon,DB;
+use PDF,Excel,Carbon\Carbon,DB,Datatables;
 use Modules\Collection\Entities\{
                                 AccountTitle,AccountCategory,AccountSubtitle,CashDivision,CashDivisionItems,Barangay,BudgetEstimate,F56Type,
                                 F56Detail,F56TDARP,Municipality,Receipt,ReceiptItems,Serial,TransactionType,RcptCertificate,RcptCertificateType,
@@ -3505,7 +3505,6 @@ class PdfController extends Controller
                 $receipts_total[$receipt->serial_no] = $total;
             }
         }
-        dd($receipts);
         $rcpt_acct = $this->format_sort_af($form_51, $rcpt_acct_af, $date_start, $date_end, $_GET['type']);
 
         // $rcpt_acct = $this->format_sort_af($form_56, $rcpt_acct_af, $date_start, $date_end);
@@ -4458,6 +4457,7 @@ class PdfController extends Controller
         $this->base['receipts'] = $receipts;
         $this->base['class_amt'] = $class_amt;
         $this->base['report_date'] = $report_date;
+        $this->base['report_no'] = $request['report_no'];
 
         // empty receipts
         if(count($receipts) == 0)
@@ -4632,6 +4632,18 @@ class PdfController extends Controller
             return response()->json('Report Not Found', 500);
         }
         return $report;
-        
+
     }
+
+    public function getReportsByReportNumber(Request $request)
+    {
+        $year = isset($request['year']) ? $request['year'] : date('Y');
+        $reports = RptSefAdjustments::whereYear('report_date', '=', $year)
+                                        ->join('col_municipality', 'col_rpt_sef_adjustments.municipality',  '=', 'col_municipality.id')
+                                        ->select('col_rpt_sef_adjustments.*', 'col_municipality.name as municipality_name')
+                                        ->get();
+        // dd($reports);
+        return Datatables::of(collect($reports))->make(true);
+    }
+
 }

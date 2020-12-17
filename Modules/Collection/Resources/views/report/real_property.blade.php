@@ -77,7 +77,7 @@
 @if (session('isSaved'))
         <div class="alert alert-success">{{ session('isSaved') }}</div>
 @endif
-<h3>View Collections</h3>
+<h3>View Report (Collections Only)</h3>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="form-group col-sm-4">
@@ -88,17 +88,6 @@
                 @endforeach
             </select>
         </div>
-        {{-- <div class="form-group col-sm-6">
-            <label for="report_type">Report Type</label>
-            <select name="report_type" id="report_type" class="form-control">
-                <option value="button">Municipal Report</option>
-                <option value="rpt_mun_report_collections">Municipal Report (Collection)</option>
-                <option value="rpt_mun_report_summary_disposition">Municipal Report (Summary and Disposition)</option>
-                <option value="rpt_mun_report_protest">Municipal Report (Paid under protest/Held in Trust)</option>
-                <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
-                <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
-            </select>
-        </div> --}}
         
         <div class="form-group col-sm-4">
             <label for="start_date">Start Date</label>
@@ -113,22 +102,9 @@
         </div>
     </div>
     
-    
-    {{-- <div class="col-lg-6 col-md-6 col-sm-12">
-        <label for="report_number">Report Number</label>
-        <div class="input-group">
-            <span class="input-group-addon">RPT-</span>
-            <input type="text" class="form-control" id="report_number" placeholder="Please Input Report Number">
-            <span class="input-group-addon btn btn-warning" style="width:5%" id="search-report"><i class="fa fa-search" aria-hidden="true"></i></span>
-        </div>
-        <div class="loading hidden">
-            <i class="fa fa-spinner fa-spin"></i>
-            <span>Searching...</span>
-        </div>
-    </div> --}}
 </div>
 <hr>
-<h3>Generate Report</h3>
+<h3>Generate New Report</h3>
 @if (session('isExist'))
     <div class="alert alert-danger">{{ session('isExist') }}</div>
 @endif
@@ -166,9 +142,6 @@
         </div>
 
         <input type="hidden" name="isEdit" class="isEdit" value="0">
-
-        
-          {{-- <button type="submit" class="btn btn-primary rpt_report" name="button" id="confirm">Municipal Report</button> --}}
           <div class="col-sm-6">
             <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_collections" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report</button>
           </div>
@@ -178,18 +151,6 @@
           <div class="col-sm-6 col-sm-offset-3">
             <button type="submit" class="btn btn-primary" name="button" style="width: 100%; margin: 5px 0" id="consolidated-report"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Consolidated Report</button>
           </div>
-      
-        <!-- <div class="form-group col-sm-12">
-          <button type="submit" class="btn btn-primary" name="rpt_excel" id="confirm">Municipal Report (Excel)</button>
-          <button type="submit" class="btn btn-primary" name="rpt_collections_excel" id="confirm">Municipal Report (Collections) (Excel)</button>
-          <button type="submit" class="btn btn-primary" name="rpt_summ_dispo_excel" id="confirm">Municipal Report (Summary and Disposition) (Excel)</button>
-        </div> -->
-
-        <!-- <div class="form-group col-sm-12">
-            <button type="submit" class="btn btn-primary" name="rpt_mun_report_advanced" id="confirm">Municipal Report (w/ Advanced Payment)</button>
-            <button type="submit" class="btn btn-primary" name="rpt_mun_report_advanced_col" id="confirm">Municipal Report Collections (w/ Advanced Payment)</button>
-            <button type="submit" class="btn btn-primary" name="rpt_mun_report_advanced_sd" id="confirm">Municipal Report Summary and Disposition (w/ Advanced Payment)</button>
-        </div> -->
             <div class="col-sm-6">
                 <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_protest" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report (Paid under protest/Held in Trust)</button>
             </div>
@@ -204,69 +165,27 @@
 <br>
 
 <hr>
-<h3>View Report:</h3>
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12">
-            <label for="municipality">Municipality</label>
-            <select class="form-control" name="search_municipality" id="search_municipality" required>
-                @foreach ($base['municipalities'] as $mun)
-                <option value="{{ $mun->id }}">{{ $mun->name }}</option>
-                @endforeach
-            </select>
-        {{-- <div class="form-group col-sm-6">
-            <label for="report_type">Report Type</label>
-            <select name="report_type" id="report_type" class="form-control">
-                <option value="button">Municipal Report</option>
-                <option value="rpt_mun_report_collections">Municipal Report (Collection)</option>
-                <option value="rpt_mun_report_summary_disposition">Municipal Report (Summary and Disposition)</option>
-                <option value="rpt_mun_report_protest">Municipal Report (Paid under protest/Held in Trust)</option>
-                <option value="rpt_mun_report_protest_col">Municipal Report Collections (Paid under protest/Held in Trust)</option>
-                <option value="rpt_mun_report_protest_sd">Municipal Report Summary and Disposition (Paid under protest/Held in Trust)</option>
-            </select>
-    </div> --}}
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <label for="report_number">Report Number</label>
-        <div class="input-group">
-            <span class="input-group-addon">RPT-</span>
-            <input type="text" class="form-control" id="report_number" placeholder="Please Input Report Number">
-            
-        </div>
-        <div class="loading hidden">
-            <i class="fa fa-spinner fa-spin"></i>
-            <span>Searching...</span>
-        </div>
-    </div>
-
-    <div class="col-sm-8 col-sm-offset-2">
-        <button class="btn btn-primary consolidated-report" style="width: 100%; margin: 10px 0"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Collections, Summary & Disposition, & Consolidated Report</button>
-    </div>
+<h3>View Generated Reports</h3>
+<div class="form-inline">
+    <label for="rpt_year">Year:</label>
+    <input type="number" class="form-control" value="{{ date('Y') }}" id="rpt_year" name="rpt_year" style="font-size: inherit; text-align: left;">
+    <input type="submit" value="SHOW" class="btn btn-secondary" onclick="getReports()">
 </div>
-{{-- <div class="row">
-    {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property_consolidated']]) }}
-         <div class="form-group col-sm-4 ">
-                <label for="end_date">Report Date</label>
-                <input type="text" class="form-control date" name="report_date" value="{{ date('m/d/Y') }}" required>
-            </div>
-           
+<br>
+<table id="reports" class="table table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Report Date</th>
+            <th>Municipality</th>
+            <th>Report Number</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-        <div class="form-group col-sm-4">
-            <label for="start_date">Start Date</label>
-            <input type="text" class="form-control date" name="start_date" value="{{ date('m/d/Y') }}" required>
-        </div>
-        <div class="form-group col-sm-4">
-            <label for="end_date">End Date</label>
-            <input type="text" class="form-control date" name="end_date" value="{{ date('m/d/Y') }}" required>
-        </div>
-
-        <div class="form-group col-sm-12">
-          <button type="submit" class="btn btn-primary" name="button" id="confirm">Consolidated Municipal Report</button>
-          <button type="submit" class="btn btn-primary" name="rpt_mun_report_collections" id="confirm">Consolidated Municipal Report (Collections)</button>
-          <button type="submit" class="btn btn-primary" name="rpt_mun_report_summary_disposition" id="confirm">Consolidated Municipal Report (Summary and Disposition)</button>
-        </div>
-    {{ Form::close() }}
-</div>
-<br> --}}
 <hr>
 <div style="display:none">
     {{ Form::open(['method' => 'GET', 'route' => ['pdf.real_property_p2'], 'id' => 'consolidated-form']) }}
@@ -300,11 +219,6 @@
                     {{ csrf_field() }}
                     <div id="addl_inputs">
                         <div id="addl_entries"></div>
-                        {{-- <input type="hidden" name="municipality" id="munic">
-                        <input type="hidden" name="start_date" id="start_date">
-                        <input type="hidden" name="end_date" id="end_date">
-                        <input type="hidden" name="report_no" id="report_num">
-                        <input type="hidden" name="report_date" id="report_date"> --}}
                         <input type="hidden" name="btn_pdf" id="btn_pdf">
                         <input type="hidden" name="isEdit" class="isEdit" value="0">
                     </div>
@@ -325,7 +239,66 @@
 @endsection
 
 @section('js')
+{{ Html::script('/datatables-1.10.12/js/jquery.dataTables.min.js') }}
+{{ Html::script('/datatables-1.10.12/js/dataTables.bootstrap.min.js') }}
 <script>
+    function getReports(){
+        if($.fn.DataTable.isDataTable('#reports')) {
+			$('#reports').DataTable().destroy();
+		}
+        $('#reports').DataTable({
+            processing: true, 
+            serverSide: false,
+            deferRender: true,
+            order: [[ 0, 'desc' ]],
+            ajax: {
+                url: "{{ route('rpt.get_reports') }}",
+                data: {
+                    'year' : $('#rpt_year').val(),
+                }
+            },
+            columns: [
+                { data: 'report_date', name: 'report_date' },
+                { data: 'municipality_name', name: 'municipality_name' },
+                { data: 'report_no', name: 'report_no' },
+                { data: 'start_date', name: 'start_date' },
+                { data: 'end_date', name: 'end_date' },
+                { data: null, render: function(data) {
+                    return `<button class="btn btn-info view-generated-report" data-values='`+JSON.stringify(data)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-eye"></i></button>
+                            <button class="btn btn-info edit-generated-report" data-values='`+JSON.stringify(data)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-edit"></i></button>`;
+                } }
+            ],
+        });
+    }
+
+    $('#reports').on('click', '.view-generated-report', function(){
+        var values = $(this).data('values');
+        $('.isEdit').val(1);
+        var arrayData = {
+            'municipality' : values.municipality,
+            'report_no' : values.report_no,
+            'report_date' : values.report_date,
+            'start_date' : values.start_date,
+            'end_date' : values.end_date,
+        }
+        $(this).find('.fa-spinner').show();
+        preparePDF(arrayData, 'button', arrayData.municipality, 1);
+    });
+    $('#reports').on('click', '.edit-generated-report', function(){
+        var values = $(this).data('values');
+        $('.isEdit').val(1);
+        var arrayData = {
+            'municipality' : values.municipality,
+            'report_no' : values.report_no,
+            'report_date' : values.report_date,
+            'start_date' : values.start_date,
+            'end_date' : values.end_date,
+        }
+        $(this).find('.fa-spinner').show();
+        preparePDF(arrayData, 'button', arrayData.municipality);
+    });
+
+    getReports();
 
     $('button[name="view_report"]').click(function(){
         $('#form').attr('target', '_blank');
@@ -387,8 +360,7 @@
             'report_date' : $parentReport.find('input[name="report_date"]').val(),
             'start_date' : $parentReport.find('input[name="start_date"]').val(),
             'end_date' : $parentReport.find('input[name="end_date"]').val(),
-        }   
-        console.log(arrayData);
+        }
 
         $(this).find('.fa-spinner').show();
 
@@ -435,7 +407,7 @@
                 alert(error.responseJSON);
             },
             success : function(data) {
-                $('.rpt_report').find('.fa-spinner').hide();
+                $('.btn').find('.fa-spinner').hide();
                 $('#report_content').removeClass('alert alert-danger');
                 $('#report_content').empty();
                 if(typeof(data) == 'object') {
