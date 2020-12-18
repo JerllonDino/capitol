@@ -6,7 +6,7 @@
         @page { margin: 0px; }
         body {
             margin-bottom: 8px;
-            margin-top: 2cm;
+            margin-top: 150px;
             margin-left: 18px;
             margin-right: 18px;
 
@@ -70,42 +70,51 @@
             width: 37.15px;
             /* white-space: nowrap; */
         }
+
+        header{
+            position: fixed;
+            top: 60px;
+            left: 20px;
+            height: 50px;
+        }
     </style>
 </head>
 <body>
-    <table class="center">
-        <tr>
-            <td>RECORD OF REAL PROPERTY TAX COLLECTIONS</td>
-        </tr>
-        <tr>
-            <td>BASIC & SEF</td>
-        </tr>
-        @if(isset($mun->name))
-        <tr>
-            <td>MUNICIPALITY OF {{ strtoupper($mun->name) }}</td>
-        </tr>
-        @endif
-        <tr>
-            <td>{{ $date_range }}</td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <td width="50%">Name of Accountable Officer: ISABEL D. KIW-AN - Local Recenue Collection Officer IV</td>
-            <td width="35%"></td>
-            @if(isset($report_no))
-            <td>Report No.</td>
-            <td>{{ $report_no }}</td>
+    <header>
+        <table class="center">
+            <tr>
+                <td>RECORD OF REAL PROPERTY TAX COLLECTIONS</td>
+            </tr>
+            <tr>
+                <td>BASIC & SEF</td>
+            </tr>
+            @if(isset($mun->name))
+            <tr>
+                <td>MUNICIPALITY OF {{ strtoupper($mun->name) }}</td>
+            </tr>
             @endif
-        </tr>
-        <tr>
-            <td>A. COLLECTIONS</td>
-            <td></td>
-            <td>Date</td>
-            <td>{{ $report_date }}</td>
-        </tr>
-    </table>
+            <tr>
+                <td>{{ $date_range }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td width="50%">Name of Accountable Officer: ISABEL D. KIW-AN - Local Recenue Collection Officer IV</td>
+                <td width="35%"></td>
+                @if(isset($report_no))
+                <td>Report No.</td>
+                <td>{{ $report_no }}</td>
+                @endif
+            </tr>
+            <tr>
+                <td>A. COLLECTIONS</td>
+                <td></td>
+                <td>Date</td>
+                <td>{{ $report_date }}</td>
+            </tr>
+        </table>
+    </header>
     <?php
         // $prior_start = \Carbon\Carbon::now()->subYears(2)->format('Y');
         // $preceeding = \Carbon\Carbon::now()->subYear()->format('Y');
@@ -555,7 +564,7 @@
             </tr>
         </tbody>
     </table>
-
+<div class="newpage"></div>
     <table class="table summary-table">
         <tr>
             <th colspan="4"></th>
