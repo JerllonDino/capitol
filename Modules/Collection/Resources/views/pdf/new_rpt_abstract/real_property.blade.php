@@ -87,6 +87,11 @@
             
         }
 
+        .table-break{
+            page-break-before: always;
+            /* display: none; */
+        }
+
         header table tr td{
             font-size: 10px;
         }
@@ -278,12 +283,14 @@
                 @elseif($receipt->F56Detailmny()->count() > 0)
                     @foreach ($receipt->F56Detailmny as $f56_detail)
                     <?php
-                        if ($rowCounter == 19 || $rowCounter == 38) {
-                            echo('<tr><td><div class="page-break"></div></td></tr>');
+                        if ($rowCounter == 19) {
+                            echo('<tr style="border:none"><td colspan=35 style="border:none"><div class="table-break"></div></td></tr>');
                             $rowCounter = 0;
+                        }else{
+                            $rowCounter++;
                         }
                     
-                        $rowCounter++; 
+                        
                         // current
                         if($f56_detail->period_covered == $current) {
                             $total_basic_current += $f56_detail->basic_current;
@@ -331,7 +338,7 @@
                         }
                     ?>
 
-                    <tr>
+                    <tr {{ $rowCounter ? "style='border:none'" : '' }}>
                         @if($rcpt_done == 0)
                             <?php 
                                 $rcpt_done = 1; 
