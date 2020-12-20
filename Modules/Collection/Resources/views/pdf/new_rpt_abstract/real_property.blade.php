@@ -9,14 +9,14 @@
             margin-top: 150px;
             margin-left: 18px;
             margin-right: 18px;
-
             font-family: arial, "sans-serif";
-            font-size: 8;
+            /* font-size: 8px; */
         }
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 8px;
+            page-break-inside: auto;
         }
         table, td {
             padding: 1px;
@@ -35,7 +35,7 @@
         }
         .border_all_table tr th, .border_all_table tr td  {
             border: 1px solid #000000;
-            /*font-size: 8px;*/ /* 10px */
+            font-size: 8px;
             text-align: center;
         }
         .val {
@@ -66,16 +66,29 @@
             padding: 0;
             margin: 0;
         }
-        .summary-table td{
-            width: 37.15px;
-            /* white-space: nowrap; */
-        }
 
         header{
             position: fixed;
-            top: 60px;
+            top: 50px;
             left: 20px;
             height: 50px;
+        }
+
+        .summary th{
+            border:none !important;
+        }
+        .summary-table tr th, .summary-table tr td  {
+            text-align: center;
+            font-size: 8px;
+        }
+
+        .disposition-table tr th, .disposition-table tr td  {
+            text-align: center;
+            
+        }
+
+        header table tr td{
+            font-size: 10px;
         }
     </style>
 </head>
@@ -98,20 +111,20 @@
             </tr>
         </table>
 
-        <table>
+        <table style="width: 100%; margin-right: 20px;">
             <tr>
-                <td width="50%">Name of Accountable Officer: ISABEL D. KIW-AN - Local Recenue Collection Officer IV</td>
-                <td width="35%"></td>
+                <td width="48%"><b>Name of Accountable Officer:</b> <u>ISABEL D. KIW-AN - Local Recenue Collection Officer IV</u></td>
+                <td width="33%"></td>
                 @if(isset($report_no))
-                <td>Report No.</td>
-                <td>{{ $report_no }}</td>
+                <td style="font-weight: bold;" width="5%">Report No.</td>
+                <td style="border-bottom: 1px solid black !important; text-align:center">{{ $report_no }}</td>
                 @endif
             </tr>
             <tr>
-                <td>A. COLLECTIONS</td>
+                <td style="font-weight: bold">A. COLLECTIONS</td>
                 <td></td>
-                <td>Date</td>
-                <td>{{ $report_date }}</td>
+                <td style="font-weight: bold">Date</td>
+                <td style="border-bottom: 1px solid black !important; text-align:center">{{ $report_date }}</td>
             </tr>
         </table>
     </header>
@@ -234,7 +247,7 @@
                 $total_basic_net = 0;
                 $gt_gross = 0;
                 $gt_net = 0;
-                $counter = 0;
+                $rowCounter = 0;
 
                 // immediate preceeding year
                 $total_preceed = 0;
@@ -248,6 +261,7 @@
                 // advance
                 $total_adv = 0;
                 $total_adv_discount = 0;
+
             ?>
             @foreach($receipts as $receipt)
                 @php
@@ -264,7 +278,12 @@
                 @elseif($receipt->F56Detailmny()->count() > 0)
                     @foreach ($receipt->F56Detailmny as $f56_detail)
                     <?php
-                        $counter++; 
+                        if ($rowCounter == 19 || $rowCounter == 38) {
+                            echo('<tr><td><div class="page-break"></div></td></tr>');
+                            $rowCounter = 0;
+                        }
+                    
+                        $rowCounter++; 
                         // current
                         if($f56_detail->period_covered == $current) {
                             $total_basic_current += $f56_detail->basic_current;
@@ -280,10 +299,6 @@
                         }
 
                         if($f56_detail->period_covered >= $advance_yr) {
-                            // $basic_gross = $f56_detail->basic_penalty_previous + $f56_detail->basic_previous + ($f56_detail->tdrp_assedvalue * .01);
-                            // $total_adv += $f56_detail->tdrp_assedvalue * .01;
-                            // $total_adv_discount += ($f56_detail->tdrp_assedvalue * .01) * .10;
-
                             $basic_gross = $f56_detail->basic_penalty_previous + $f56_detail->basic_previous + $f56_detail->basic_current;
                             $total_adv += $f56_detail->basic_current;
                             $total_adv_discount += $f56_detail->basic_discount;
@@ -318,7 +333,10 @@
 
                     <tr>
                         @if($rcpt_done == 0)
-                            <?php $rcpt_done = 1; ?>
+                            <?php 
+                                $rcpt_done = 1; 
+                                
+                            ?>
                             <td>
                                 @if($entry_date->format('M') == 'Sep')
                                     Sept {{ date('d', strtotime($receipt->date_of_entry)) }}
@@ -563,12 +581,116 @@
                 <td colspan="35"></td>
             </tr>
         </tbody>
-    </table>
-<div class="newpage"></div>
-    <table class="table summary-table">
-        <tr>
-            <th colspan="4"></th>
-            <td><b>Summary</b></td>
+    
+    @if ($rowCounter >= 3)
+        </table>
+        <div class="newpage"></div>
+        <table class="table summary-table">
+            <thead class="border_all_table">
+                <tr>
+                    <th rowspan="4">Date</th>
+                    <th rowspan="4">Name of Tax Payor</th>
+                    <th rowspan="4">Period Covered</th>
+                    <th rowspan="4">Official Receipt Number</th>
+                    <th rowspan="4">TD/ARP No.</th>
+                    <th rowspan="4">Name of Brgy.</th>
+                    <th rowspan="4">Classifi <br> cation</th>
+                    <th colspan="11">BASIC TAX</th>
+                    <th rowspan="4">Sub-total Gross Collection</th>
+                    <th rowspan="4">Sub-total Net Collection</th>
+                    <th colspan="11">SPECIAL EDUCATION FUND</th>
+                    <th rowspan="4">Sub-total Gross Collection</th>
+                    <th rowspan="4">Sub-total Net Collection</th>
+                    <th rowspan="4">Grand Total Gross Collection</th>
+                    <th rowspan="4">Grand Total Net Collection</th>
+                </tr>
+                <tr>
+                    <!-- basic --> 
+                    <th colspan="2" rowspan="2">Advance</th>
+                    <th colspan="2" rowspan="2">Current Year</th>
+                    <th rowspan="3">{{ $preceeding }}</th>
+                    <th colspan="2" rowspan="2">PRIOR YEARS</th>
+                    <th colspan="4">PENALTIES</th>
+                    <!-- sef --> 
+                    <th colspan="2" rowspan="2">Advance</th>
+                    <th colspan="2" rowspan="2">Current Year</th>
+                    <th rowspan="3">{{ $preceeding }}</th>
+                    <th colspan="2" rowspan="2">PRIOR YEARS</th>
+                    <th colspan="4">PENALTIES</th>
+                </tr> 
+                <tr>
+                    <!-- basic -->
+                    <th rowspan="2">Current Year</th>
+                    <th rowspan="2">{{ $preceeding }}</th>
+                    <th colspan="2">PRIOR YEARS</th>
+                    <!-- sef -->
+                    <th rowspan="2">Current Year</th>
+                    <th rowspan="2">{{ $preceeding }}</th>
+                    <th colspan="2">PRIOR YEARS</th>
+                </tr>
+                <tr>
+                    <!-- basic -->
+                    <th>Gross Amount</th>
+                    <th>
+                        D<br>
+                        I<br>
+                        S<br>
+                        C<br>
+                        O<br>
+                        U<br>
+                        N<br>
+                        T<br>
+                    </th>
+                    <th>Gross Amount</th>
+                    <th>
+                        D<br>
+                        I<br>
+                        S<br>
+                        C<br>
+                        O<br>
+                        U<br>
+                        N<br>
+                        T<br>
+                    </th>
+                    <th>{{ $prior_start }}-1992</th>
+                    <th>1991 & Below</th>
+                    <th>{{ $prior_start }}-1992</th>
+                    <th>1991 & Below</th>
+
+                    <!-- sef -->
+                    <th>Gross Amount</th>
+                    <th>
+                        D<br>
+                        I<br>
+                        S<br>
+                        C<br>
+                        O<br>
+                        U<br>
+                        N<br>
+                        T<br>
+                    </th>
+                    <th>Gross Amount</th>
+                    <th>
+                        D<br>
+                        I<br>
+                        S<br>
+                        C<br>
+                        O<br>
+                        U<br>
+                        N<br>
+                        T<br>
+                    </th>
+                    <th>{{ $prior_start }}-1992</th>
+                    <th>1991 & Below</th>
+                    <th>{{ $prior_start }}-1992</th>
+                    <th>1991 & Below</th>
+                </tr>
+            </thead>
+
+        @endif
+        <tr class="summary">
+            <th colspan="3"></th>
+            <th colspan="4"><b>Summary</b></th>
             <!-- advance -->
             <th></th>
             <th></th>
@@ -618,7 +740,7 @@
 
         @foreach($f56_type as $type)
         <tr>
-            <td colspan="5">
+            <td colspan="5" style="border:none">
                 <!-- <span class="hidden"> -->
                     <?php
                         $class_basic_gross = ($class_amt[$type->id]['basic_current'] 
@@ -637,7 +759,7 @@
                     ?>
                 <!-- </span> -->
             </td>
-            <td colspan="2">{{ $type->name }}</td>
+            <td colspan="2" style="border:none; text-align: left">{{ $type->name }}</td>
             <!-- BASIC -->
             <!-- advance -->
             <td class="border_all val">{{ zeroToDash($class_amt[$type->id]['basic_adv'], 2) }}</td>
@@ -687,7 +809,7 @@
         </tr>
         @endforeach
         <tr>
-            <td colspan="5"></td>
+            <td colspan="5" style="border:none"></td>
             <th class="border_all" colspan="2">TOTAL</th>
             <th class="border_all val">{{ zeroToDash($total_adv, 2) }}</th>
             <th class="border_all val">{{ zeroToDash($total_adv_discount, 2) }}</th>
@@ -719,22 +841,22 @@
             <th class="border_all val">{{ zeroToDash($gt_net, 2) }}</th>
         </tr>
         <tr>
-            <td colspan="5"></td>
+            <td colspan="5" style="border:none"></td>
             <td colspan="30" class="border_all"></td>
         </tr>
 
         <tr>
-            <th colspan="35">&nbsp;</th>
+            <th colspan="35" style="border:none">&nbsp;</th>
         </tr>
 
     </table>
 
     <div>
-        <table class="table dis-pgbreak">
+        <table class="table dis-pgbreak disposition-table">
             <!-- DISPOSITION SECTION -->
             <tr>
                 <th colspan="4"></th>
-                <td><b>Disposition </b></td>
+                <td style="text-align:left"><b>Disposition </b></td>
                 <th colspan="2"></th>
                 <th colspan="5" class="border_all ctr">ADVANCE</th>
                 <th colspan="5" class="border_all ctr">CURRENT</th>
@@ -746,7 +868,7 @@
             </tr>           
             <tr>
                 <th colspan="4"></th>
-                <td colspan="3">BASIC TAX 1%</td>
+                <td colspan="3" style="text-align:left">BASIC TAX 1%</td>
                 <!-- ADVANCE -->
                 <th class="border_all">%</th>
                 <th colspan="2" class="border_all ctr">AMOUNT</th>
@@ -831,7 +953,7 @@
                 ?>
 
                 <th colspan="4"></th>
-                <td colspan="3">Provincial Share</td>
+                <td colspan="3" style="text-align:left">Provincial Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">35%</td>
                 <td colspan="2" class="border_all val">{{ zeroToDash($merged['prv_adv_ammount'], 2) }}</td>
@@ -860,7 +982,7 @@
             </tr>
             <tr>
                 <th colspan="4"></th>
-                <td colspan="3">Municipal Share</td>
+                <td colspan="3" style="text-align:left">Municipal Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">40%</td>
                 <td colspan="2" class="border_all val">{{ zeroToDash($merged['mnc_adv_ammount'], 2) }}</td>
@@ -889,7 +1011,7 @@
             </tr>      
             <tr>
                 <th colspan="4"></th>
-                <td colspan="3">Barangay Share</td>
+                <td colspan="3" style="text-align:left">Barangay Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">25%</td>
                 <td colspan="2" class="border_all val">{{ zeroToDash($merged['brgy_adv_ammount'], 2) }}</td>
@@ -918,7 +1040,7 @@
             </tr>     
             <tr>
                 <th colspan="4"></th>
-                <th colspan="3">TOTAL(S)</th>
+                <th colspan="3" style="text-align:left">TOTAL(S)</th>
                 <!-- advance -->
                 <td class="border_all"></td>
                 <td class="border_all val" colspan="2">{{ zeroToDash($merged['total_adv_amt'], 2) }}</td>
@@ -961,7 +1083,7 @@
             ?>
             <tr>
                 <th colspan="4"></th>
-                <td colspan="3"><b>SEF TAX 1%</b></td>
+                <td colspan="3" style="text-align:left"><b>SEF TAX 1%</b></td>
                 <!-- advance -->
                 <td class="border_all"></td>
                 <td colspan="2" class="border_all"></td>
@@ -1083,7 +1205,7 @@
             ?>
             <tr>
                 <th colspan="4"></th>
-                <td colspan="3">Provincial Share</td>
+                <td colspan="3" style="text-align:left">Provincial Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">50%</td>
                 <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_prv_adv_amt'], 2) }}</td>
@@ -1112,7 +1234,7 @@
             </tr>
             <tr>
                 <th colspan="4"></th>
-                <td colspan="3">Municipal Share</td>
+                <td colspan="3" style="text-align:left">Municipal Share</td>
                 <!-- advance -->
                 <td class="border_all ctr">50%</td>
                 <td class="border_all val" colspan="2">{{ zeroToDash($merged['sef_mnc_adv_amt'], 2) }}</td>
@@ -1141,7 +1263,7 @@
             </tr>
             <tr>
                 <th colspan="4"></th>
-                <th colspan="3">TOTAL(S)</th>
+                <th colspan="3" style="text-align:left">TOTAL(S)</th>
                 <!-- advance --> 
                 <td class="border_all"></td>
                 <td colspan="2" class="border_all val">{{ zeroToDash($merged['sef_total_adv_amt'], 2) }}</td>
@@ -1174,7 +1296,7 @@
             </tr>
         </table>
     </div>
-    <div style="width: 200px;font-weight:bold;float:right;margin-top:20px">
+    <div style="width: 200px;font-weight:bold;float:right;margin-top:20px; font-size: 10px;">
           Certified Correct By:  <br><br>
           <center>
           ISABEL KIW-AN<br>

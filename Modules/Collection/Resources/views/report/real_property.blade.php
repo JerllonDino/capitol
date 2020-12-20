@@ -143,12 +143,12 @@
 
         <input type="hidden" name="isEdit" class="isEdit" value="0">
           <div class="col-sm-6">
-            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_collections" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report</button>
+            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="button" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report</button>
           </div>
-          <div class="col-sm-6">
+          {{-- <div class="col-sm-6">
             <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_summary_disposition" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report (Summary and Disposition)</button>
-          </div>
-          <div class="col-sm-6 col-sm-offset-3">
+          </div> --}}
+          <div class="col-sm-6">
             <button type="submit" class="btn btn-primary" name="button" style="width: 100%; margin: 5px 0" id="consolidated-report"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Consolidated Report</button>
           </div>
             <div class="col-sm-6">

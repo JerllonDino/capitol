@@ -741,7 +741,6 @@ class PdfController extends Controller
 
     public function real_property_p2(Request $request)
     {
-
         $form_56 = 2;
         $date_start = date('Y-m-d', strtotime($request['start_date']));
         $date_end = date('Y-m-d', strtotime($request['end_date']));
@@ -4593,6 +4592,7 @@ class PdfController extends Controller
 
         if($req['btn_pdf'] == 'button' || $req['btn'] == 'rpt_mun_report_protest') {
             $pdf = PDF::loadView('collection::pdf.new_rpt_abstract.real_property', $this->base)->setPaper(array(0,0,612,936), 'landscape');
+            
             return $pdf->stream();
             // $html = view('collection::docx.rpt_test', $this->base)->render();
             // $phpWord = new \PhpOffice\PhpWord\PhpWord();
@@ -4642,7 +4642,6 @@ class PdfController extends Controller
                                         ->join('col_municipality', 'col_rpt_sef_adjustments.municipality',  '=', 'col_municipality.id')
                                         ->select('col_rpt_sef_adjustments.*', 'col_municipality.name as municipality_name')
                                         ->get();
-        // dd($reports);
         return Datatables::of(collect($reports))->make(true);
     }
 
