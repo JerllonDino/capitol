@@ -20,6 +20,11 @@ protected $table = 'col_f56_tdarp';
         return $this->belongsTo('Modules\Collection\Entities\Barangay', 'barangay');
     }
 
+    public function municipality_name()
+    {
+        return $this->belongsTo('Modules\Collection\Entities\Municipality', 'municipality');
+    }
+
     public function previousTaxType()
     {
         return $this->hasOne('Modules\Collection\Entities\PreviousTaxType', 'id','previous_tax_type_id');

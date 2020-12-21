@@ -4500,18 +4500,22 @@ class PdfController extends Controller
         $data = $this->rpr_report_edit($request);
         $this->base['mun'] = Municipality::find($req->municipality);
         if(isset($req['save_report'])){
+          $equivalents = [
+            'report_no' => $req->report_no,
+            'municipality' => $req->municipality
+          ];
+          $values = [
+            'start_date' => Carbon::parse($req->start_date)->format('Y-m-d'),
+            'end_date' => Carbon::parse($req->end_date)->format('Y-m-d'),
+            'report_date' => Carbon::parse($req->report_date)->format('Y-m-d')
+          ];
+          if(isset($req->report_id) || $req->report_id != ""){
+              $equivalents = [ 'id' => $req->report_id ];
+              $values['report_no'] = $req->report_no;
+              $values['municipality'] = $req->municipality;
+          }
           
-        $insert = RptSefAdjustments::updateOrCreate(
-            [
-                'report_no' => $req->report_no,
-                'municipality' => $req->municipality
-            ],
-            [
-                'start_date' => Carbon::parse($req->start_date)->format('Y-m-d'),
-                'end_date' => Carbon::parse($req->end_date)->format('Y-m-d'),
-                'report_date' => Carbon::parse($req->report_date)->format('Y-m-d')
-            ]
-        );
+        $insert = RptSefAdjustments::updateOrCreate($equivalents, $values);
 
         RptSefAdjustmentsItems::updateOrCreate(
             [

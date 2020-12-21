@@ -66,7 +66,6 @@ class Form56Controller extends Controller
 
     public function view($id)
     {
-
         $this->base['receipt'] = Receipt::find($id);
         $this->base['f56_types'] = F56Type::get();
         $this->base['sub_header'] = 'FORM56 Land Tax';
@@ -157,7 +156,6 @@ class Form56Controller extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         $serial = Serial::whereId($request['serial_id'])->first();
         $filter = [
             'user_id' => 'required|numeric',

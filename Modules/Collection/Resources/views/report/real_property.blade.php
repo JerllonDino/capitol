@@ -219,6 +219,7 @@
                     {{ csrf_field() }}
                     <div id="addl_inputs">
                         <div id="addl_entries"></div>
+                        <input type="hidden" name="report_id" id="report-id">
                         <input type="hidden" name="btn_pdf" id="btn_pdf">
                         <input type="hidden" name="isEdit" class="isEdit" value="0">
                     </div>
@@ -275,6 +276,7 @@
         var values = $(this).data('values');
         $('.isEdit').val(1);
         var arrayData = {
+            
             'municipality' : values.municipality,
             'report_no' : values.report_no,
             'report_date' : values.report_date,
@@ -284,10 +286,12 @@
         $(this).find('.fa-spinner').show();
         preparePDF(arrayData, 'button', arrayData.municipality, 1);
     });
+
     $('#reports').on('click', '.edit-generated-report', function(){
         var values = $(this).data('values');
         $('.isEdit').val(1);
         var arrayData = {
+            'id' : values.id,
             'municipality' : values.municipality,
             'report_no' : values.report_no,
             'report_date' : values.report_date,
@@ -380,8 +384,10 @@
         var report_date = arrayData.report_date;
         var start_date = arrayData.start_date;
         var end_date = arrayData.end_date;
+        var id = (typeof arrayData.id !== 'undefined' ? arrayData.id : null);
 
         if(isEdit == 0){
+            $('#report-id').val(null);
             $('#addl_entries').html(`
                         <input type="hidden" name="municipality" id="munic">
                         <input type="hidden" name="start_date" id="start_date">
@@ -390,6 +396,7 @@
                         <input type="hidden" name="report_date" id="report_date">
             `);
         }else{
+            $('#report-id').val(id);
             $('#addl_entries').html('');
         }
 

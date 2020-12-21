@@ -133,12 +133,6 @@
             </tr>
         </table>
     </header>
-    <?php
-        // $prior_start = \Carbon\Carbon::now()->subYears(2)->format('Y');
-        // $preceeding = \Carbon\Carbon::now()->subYear()->format('Y');
-        // $advance_yr = \Carbon\Carbon::now()->addYear()->format('Y');
-        // $current = \Carbon\Carbon::now()->format('Y');
-    ?>
 
     <table class="border_all_table">
         <thead>
@@ -283,7 +277,7 @@
                 @elseif($receipt->F56Detailmny()->count() > 0)
                     @foreach ($receipt->F56Detailmny as $f56_detail)
                     <?php
-                        if ($rowCounter == 19) {
+                        if ($rowCounter == 18) {
                             echo('<tr style="border:none"><td colspan=35 style="border:none"><div class="table-break"></div></td></tr>');
                             $rowCounter = 0;
                         }else{
@@ -903,53 +897,12 @@
 
             <tr>
                 <?php
-                    // $munshare_basic_current             = $total_basic_current * .4;
-                    // $munshare_basic_discount            = $total_basic_discount * .4;
-                    // $munshare_basic_previous            = $total_basic_previous * .4;
-                    // $munshare_basic_penalty_current     = $total_basic_penalty_current * .4;
-                    // $munshare_basic_penalty_previous    = $total_basic_penalty_previous * .4;
-                    // $munshare_basic_net                 = $total_basic_net * .4;
-
-                    // $prv_crnt_ammount = $total_basic_current * .35;
-                    // $prv_crnt_discount = $total_basic_discount * .35;
-                    // $prv_prvious_ammount = $total_basic_previous * .35;
-                    // $prv_pnalties_crnt = $total_basic_penalty_current * .35;
-                    // $prv_pnalties_prvious = $total_basic_penalty_previous * .35;
-
-                    // // advance
-                    // $prv_adv_ammount = $total_adv * .35;
-                    // $prv_adv_discount = $total_adv_discount * .35;
-                    // $mnc_adv_ammount = $total_adv * .40;
-                    // $mnc_adv_discount = $total_adv_discount * .40;
-                    // $brgy_adv_ammount = round(floatval($total_adv), 2) - round(floatval($prv_adv_ammount), 2) - round(floatval($mnc_adv_ammount), 2);
-                    // $brgy_adv_discount = round(floatval($total_adv_discount), 2) - round(floatval($prv_adv_discount), 2) - round(floatval($mnc_adv_discount), 2);
                     $total_adv_amt = round(floatval($merged['prv_adv_ammount']), 2) + round(floatval($merged['mnc_adv_ammount']), 2) + round(floatval($merged['brgy_adv_ammount']), 2);
                     $total_adv_discount = round(floatval($merged['prv_adv_discount']), 2) + round(floatval($merged['mnc_adv_discount']), 2) + round(floatval($merged['brgy_adv_discount']), 2);
-                    // // 1992-above
-                    // $prv_prior_1992_amt = $total_prior_1992 * .35;
-                    // $prv_prior_1992_penalties = $total_penalty_prior_1992 * .35;
-                    // $mnc_prior_1992_amt = $total_prior_1992 * .40;
-                    // $mnc_prior_1992_penalties = $total_penalty_prior_1992 * .40;
-                    // $brgy_prior_1992_amt = round(floatval($total_prior_1992), 2) - round(floatval($prv_prior_1992_amt), 2) - round(floatval($mnc_prior_1992_amt), 2);
-                    // $brgy_prior_1992_penalties = round(floatval($total_penalty_prior_1992), 2) - round(floatval($prv_prior_1992_penalties), 2) - round(floatval($mnc_prior_1992_penalties), 2);
                     $total_prior_1992_amt = round(floatval($merged['prv_prior_1992_amt']), 2) + round(floatval($merged['mnc_prior_1992_amt']), 2) + round(floatval($merged['brgy_prior_1992_amt']), 2);
                     $total_prior_1992_penalties = round(floatval($merged['prv_prior_1992_penalties']), 2) + round(floatval($merged['mnc_prior_1992_penalties']), 2) + round(floatval($merged['brgy_prior_1992_penalties']), 2);
-
-                    // // 1991-below
-                    // $prv_prior_1991_amt = $total_prior_1991 * .35;
-                    // $prv_prior_1991_penalties = $total_penalty_prior_1991 * .35;
-                    // $mnc_prior_1991_amt = $total_prior_1991 * .40;
-                    // $mnc_prior_1991_penalties = $total_penalty_prior_1991 * .40;
-                    // $brgy_prior_1991_amt = round(floatval($total_prior_1991), 2) - round(floatval($prv_prior_1991_amt), 2) - round(floatval($mnc_prior_1991_amt), 2);
-                    // $brgy_prior_1991_penalties = round(floatval($total_penalty_prior_1991), 2) - round(floatval($prv_prior_1991_penalties), 2) - round(floatval($mnc_prior_1991_penalties), 2);
                     $total_prior_1991_amt = round(floatval($merged['prv_prior_1991_amt']), 2) + round(floatval($merged['mnc_prior_1991_amt']), 2) + round(floatval($merged['brgy_prior_1991_amt']), 2);
                     $total_prior_1991_penalties = round(floatval($merged['prv_prior_1991_penalties']), 2) + round(floatval($merged['mnc_prior_1991_penalties']), 2) + round(floatval($merged['brgy_prior_1991_penalties']), 2);         
-
-                    // $brgyshare_basic_current            = round(floatval($total_basic_current), 2) - round(floatval($prv_crnt_ammount), 2) - round(floatval($munshare_basic_current), 2);
-                    // $brgyshare_basic_discount           = round(floatval($total_basic_discount), 2) - round(floatval($prv_crnt_discount), 2) - round(floatval($munshare_basic_discount), 2);
-                    // $brgyshare_basic_previous           = round(floatval($total_basic_previous), 2) - round(floatval($prv_prvious_ammount), 2) - round(floatval($munshare_basic_previous), 2);
-                    // $brgyshare_basic_penalty_current    = round(floatval($total_basic_penalty_current), 2) - round(floatval($prv_pnalties_crnt), 2) - round(floatval($munshare_basic_penalty_current), 2);
-                    // $brgyshare_basic_penalty_previous   = round(floatval($total_basic_penalty_previous), 2) - round(floatval($prv_pnalties_prvious), 2) - round(floatval($munshare_basic_penalty_previous), 2);
 
                     $prv_total_basic = round(floatval($merged['prv_crnt_ammount']), 2) - round(floatval($merged['prv_crnt_discount']), 2)  + round(floatval($merged['prv_prvious_ammount']), 2) + round(floatval($merged['prv_pnalties_crnt']), 2) + round(floatval($merged['prv_pnalties_prvious']), 2) + round(floatval($merged['prv_adv_ammount']), 2) + round(floatval($merged['prv_prior_1992_amt']), 2) + round(floatval($merged['prv_prior_1991_amt']), 2) - round(floatval($merged['prv_adv_discount']), 2) + round(floatval($merged['prv_prior_1992_penalties']), 2) + round(floatval($merged['prv_prior_1991_penalties']), 2);
                     $mncpal_total_basic = (round(floatval($merged['munshare_basic_current']), 2) - round(floatval($merged['munshare_basic_discount']), 2)  + round(floatval($merged['munshare_basic_previous']), 2) + round(floatval($merged['munshare_basic_penalty_current']), 2) + round(floatval($merged['munshare_basic_penalty_previous']), 2)) + round(floatval($merged['mnc_adv_ammount']) ,2) - round(floatval($merged['mnc_adv_discount']), 2) + round(floatval($merged['mnc_prior_1992_amt']), 2) + round(floatval($merged['mnc_prior_1992_penalties']), 2) + round(floatval($merged['mnc_prior_1991_amt']), 2) + round(floatval($merged['mnc_prior_1991_penalties'])); 
@@ -1117,99 +1070,6 @@
                 <!-- total -->
                 <td colspan="2" class="border_all"></td>
             </tr>
-            <?php
-                // // PROVINCIAL SHARE LARGER SHARE (* 50%)
-                // // discount lower for prov'l share
-                // $sef_prv_amt = $total_basic_current * .5;
-                // $sef_prev_prv_amt = $total_basic_previous * .5;
-                // // $sef_prv_penalty = $total_basic_penalty_current * .5;
-                // // $sef_prev_prv_penalty = $total_basic_penalty_previous * .5;          
-
-                // if($total_basic_discount > 0 && $total_adv_discount > 0) {
-                //     $sef_prv_discount = $total_basic_discount * .5; 
-                //     $sef_mncpl_dscnt = round(floatval($total_basic_discount), 2) - round(floatval($sef_prv_discount), 2);
-                // } else {
-                //     $sef_mncpl_dscnt = $total_basic_discount * .5; 
-                //     $sef_prv_discount = round(floatval($total_basic_discount), 2) - round(floatval($sef_mncpl_dscnt), 2);
-                // }
-
-                // $sef_mncpl_crnt = round(floatval($total_basic_current), 2) - round(floatval($sef_prv_amt), 2); 
-                // $sef_mncpl_prev = round(floatval($total_basic_previous), 2) - round(floatval($sef_prev_prv_amt), 2); 
-                // // $sef_mncpl_pen_crnt = round(floatval($total_basic_penalty_current), 2) - round(floatval($sef_prv_penalty), 2); // less
-                // // $sef_mncpl_pen_crnt_prev = round(floatval($total_basic_penalty_previous), 2) - round(floatval($sef_prev_prv_penalty), 2); // less  
-
-                // if($total_basic_penalty_current > 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 <= 0 && $total_penalty_prior_1991 <= 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
-                //     $sef_mncpl_pen_crnt = $total_basic_penalty_current * .5;
-                //     $sef_prv_penalty = round(floatval($total_basic_penalty_current), 2) - round(floatval($sef_mncpl_pen_crnt), 2); // less
-                // } else {
-                //     $sef_prv_penalty = $total_basic_penalty_current * .5;
-                //     $sef_mncpl_pen_crnt = round(floatval($total_basic_penalty_current), 2) - round(floatval($sef_prv_penalty), 2); // less
-                // }
-
-                // if($total_basic_penalty_current > 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 <= 0 && $total_penalty_prior_1991 <= 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
-                //     $sef_mncpl_pen_crnt_prev = $total_basic_penalty_previous * .5; 
-                //     $sef_prev_prv_penalty = round(floatval($total_basic_penalty_previous), 2) - round(floatval($sef_mncpl_pen_crnt_prev), 2); // less 
-                // } else {
-                //     $sef_prev_prv_penalty = $total_basic_penalty_previous * .5; 
-                //     $sef_mncpl_pen_crnt_prev = round(floatval($total_basic_penalty_previous), 2) - round(floatval($sef_prev_prv_penalty), 2); // less 
-                // }
-
-                // $sef_curr_total = round(floatval($sef_prv_amt), 2) + round(floatval($sef_mncpl_crnt), 2); 
-                // $sef_curr_discount_total = round(floatval($sef_prv_discount), 2) + round(floatval($sef_mncpl_dscnt), 2);
-                // $sef_curr_pen_total = round(floatval($sef_prv_penalty), 2) + round(floatval($sef_mncpl_pen_crnt), 2);
-
-
-                // $sef_prev_total = round(floatval($sef_prev_prv_amt), 2) + round(floatval($sef_mncpl_prev), 2);
-                // $sef_prev_penalty_total = round(floatval($sef_prev_prv_penalty), 2) + round(floatval($sef_mncpl_pen_crnt_prev), 2);
-
-                // // advance
-                // $sef_prv_adv_amt = $total_adv * .50;
-                // $sef_mnc_adv_amt = round(floatval($total_adv), 2) - round(floatval($sef_prv_adv_amt), 2);
-                // $sef_total_adv_amt = round(floatval($sef_prv_adv_amt), 2) + round(floatval($sef_mnc_adv_amt), 2);
-                // if($total_basic_discount > 0 && $total_adv_discount > 0) {
-                //     $sef_prv_adv_discount = $total_adv_discount * .50;
-                //     $sef_mnc_adv_discount = round(floatval($total_adv_discount), 2) - round(floatval($sef_prv_adv_discount), 2); // lesser
-                // } else {
-                //     $sef_mnc_adv_discount = $total_adv_discount * .50;
-                //     $sef_prv_adv_discount = round(floatval($total_adv_discount), 2) - round(floatval($sef_mnc_adv_discount), 2); // lesser
-                // }
-                
-                // $sef_total_adv_discount = round(floatval($sef_prv_adv_discount), 2) + round(floatval($sef_mnc_adv_discount), 2);
-
-                // // 1992-above
-                // $sef_prv_prior_1992_amt = $total_prior_1992 * .50;
-                // $sef_mnc_prior_1992_amt = round(floatval($total_prior_1992), 2) - round(floatval($sef_prv_prior_1992_amt), 2);
-                // // $sef_prv_prior_1992_penalties = $total_penalty_prior_1992 * .50;
-                // // $sef_mnc_prior_1992_penalties = round(floatval($total_penalty_prior_1992), 2) - round(floatval($sef_prv_prior_1992_penalties), 2);
-                // if($total_basic_penalty_current <= 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 > 0 && $total_penalty_prior_1991 <= 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
-                //     $sef_mnc_prior_1992_penalties = $total_penalty_prior_1992 * .50;
-                //     $sef_prv_prior_1992_penalties = round(floatval($total_penalty_prior_1992), 2) - round(floatval($sef_mnc_prior_1992_penalties), 2);
-                // } else {
-                //     $sef_prv_prior_1992_penalties = $total_penalty_prior_1992 * .50;
-                //     $sef_mnc_prior_1992_penalties = round(floatval($total_penalty_prior_1992), 2) - round(floatval($sef_prv_prior_1992_penalties), 2);
-                // }
-                // $sef_total_prior_1992_amt = round(floatval($sef_prv_prior_1992_amt), 2) + round(floatval($sef_mnc_prior_1992_amt), 2);
-                // $sef_total_prior_1992_penalties = round(floatval($sef_prv_prior_1992_penalties), 2) + round(floatval($sef_mnc_prior_1992_penalties), 2);
-
-                // // 1991-below
-                // $sef_prv_prior_1991_amt = $total_prior_1991 * .50;
-                // $sef_mnc_prior_1991_amt = round(floatval($total_prior_1991), 2) - round(floatval($sef_prv_prior_1991_amt), 2);
-                // // $sef_prv_prior_1991_penalties = $total_penalty_prior_1991 * .50;
-                // // $sef_mnc_prior_1991_penalties = round(floatval($total_penalty_prior_1991), 2) - round(floatval($sef_prv_prior_1991_penalties), 2);
-                // if($total_basic_penalty_current <= 0 && $total_basic_penalty_previous <= 0 && $total_penalty_prior_1992 <= 0 && $total_penalty_prior_1991 > 0 && ($total_basic_discount > 0 || $total_adv_discount > 0)) {
-                //     $sef_mnc_prior_1991_penalties = $total_penalty_prior_1991 * .50;
-                //     $sef_prv_prior_1991_penalties = round(floatval($total_penalty_prior_1991), 2) - round(floatval($sef_mnc_prior_1991_penalties), 2);
-                // } else {
-                //     $sef_prv_prior_1991_penalties = $total_penalty_prior_1991 * .50;
-                //     $sef_mnc_prior_1991_penalties = round(floatval($total_penalty_prior_1991), 2) - round(floatval($sef_prv_prior_1991_penalties), 2);
-                // }
-                // $sef_total_prior_1991_amt = round(floatval($sef_prv_prior_1991_amt), 2) + round(floatval($sef_mnc_prior_1991_amt), 2);
-                // $sef_total_prior_1991_penalties = round(floatval($sef_prv_prior_1991_penalties), 2) + round(floatval($sef_mnc_prior_1991_penalties), 2);
-
-                // $sef_prv_net = round(floatval($sef_prv_amt), 2) - round(floatval($sef_prv_discount), 2) + round(floatval($sef_prv_penalty), 2) + round(floatval($sef_prev_prv_amt), 2) + round(floatval($sef_prev_prv_penalty), 2) + round(floatval($sef_prv_adv_amt), 2) - round(floatval($sef_prv_adv_discount), 2) + round(floatval($sef_prv_prior_1992_amt), 2) + round(floatval($sef_prv_prior_1992_penalties), 2) + round(floatval($sef_prv_prior_1991_amt), 2) + round(floatval($sef_prv_prior_1991_penalties), 2);
-                // $sef_total_basic_net = round(floatval($sef_mncpl_crnt), 2) - round(floatval($sef_mncpl_dscnt), 2) + round(floatval($sef_mncpl_prev), 2) + round(floatval($sef_mncpl_pen_crnt), 2) + round(floatval($sef_mncpl_pen_crnt_prev), 2) + round(floatval($sef_mnc_adv_amt), 2) - round(floatval($sef_mnc_adv_discount), 2) + round(floatval($sef_mnc_prior_1992_amt), 2) + round(floatval($sef_mnc_prior_1992_penalties), 2) + round(floatval($sef_mnc_prior_1991_amt), 2) + round(floatval($sef_mnc_prior_1991_penalties), 2);
-                // $gtotal_sef = round(floatval($sef_prv_net), 2) + round(floatval($sef_total_basic_net), 2);
-            ?>
             <tr>
                 <th colspan="4"></th>
                 <td colspan="3" style="text-align:left">Provincial Share</td>
