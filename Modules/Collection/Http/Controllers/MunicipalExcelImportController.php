@@ -7,10 +7,12 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Modules\Collection\Entities\Barangay;
 use Modules\Collection\Entities\CollectionRate;
 use Modules\Collection\Entities\Customer;
 use Modules\Collection\Entities\F56Detail;
 use Modules\Collection\Entities\F56PreviousReceipt;
+use Modules\Collection\Entities\F56TDARP;
 use Modules\Collection\Entities\F56Type;
 use Modules\Collection\Entities\Municipality;
 use Modules\Collection\Entities\Receipt;
@@ -332,155 +334,142 @@ class MunicipalExcelImportController extends Controller
     public function saveUploadedExcel(Request $request)
     {
         $data = json_decode($request['excel-data']);
-
+        $tdarps = [];
+        $municipality = $request['excel_municipality'];
+        $counter = 0;
         foreach ($data as $or_number => $values) {
-            # code...
-        }
+            foreach($values as $tdarp => $value) {
+        
         # Add payor if not existing
         $payor_id = 0;
+        
 
-        $period_covered = explode("-", $values['period_covered']);
-        if (count($period_covered) > 0) {
-            for ($i=$period_covered[0]; $i < $period_covered[3]; $i++) {
-                # code...
-            }
-        }
-        
-        
-        $payor = Customer::withTrashed()->where('name',$values['name'])->first();
+        $payor = Customer::withTrashed()->where('name', $value->name)->first();
         if (!empty($payor)) {
             $payor_id = $payor->id;
             $payor->restore();
         } else {
             $payor_id = Customer::create([
-                'name' => $request['customer'],
+                'name' => $value->name,
                 'address' => '',
                 ]);
             $payor_id = $payor_id->id;
         }
         
-        $is_printed = 0;
-        $report_datex = new Carbon($request['date']);
+        // $is_printed = 0;
+        // $report_datex = new Carbon($request['date']);
 
-        $dt_3pm = new Carbon($report_datex->format('Y-m-d'));
-
-        if($report_datex->timestamp <= $dt_3pm->addHours(15)->timestamp){
-            $report_date = $report_datex->format('Y-m-d');
-        }else{
-            $got_valid_date = false;
-            $wh = WeekdayHoliday::where('date', $report_datex->format('Y-m-d'))->first();
-            $rday = $report_datex->format('Y-m-d');
-                while (!$got_valid_date) {
-                    $rday =  $report_datex->addDay();
-                    if ( $rday->format('D') == 'Sun' ||  $rday->format('D') == 'Sat' ) {
-                        continue;
-                    }
-
-                    $wh = WeekdayHoliday::where('date', $rday->format('Y-m-d'))->first();
-                    if ($wh != null) {
-                        continue;
-                    }
-                    $got_valid_date = true;
-                }
-                $report_date = $rday;
-        }
-        $aftype = 0;
-        switch ($values['classification']) {
+        $f56_type = 0;
+        switch ($value->classification) {
             case 'R':
-                $aftype = F56Type::where('id', 1)->first();
+                $f56_type = 1;
             break;
             
             case 'A':
-                $aftype = F56Type::where('id', 2)->first();
+                $f56_type = 2;
             break;
 
             case 'C':
-                $aftype = F56Type::where('id', 3)->first();
+                $f56_type = 3;
             break;
 
             case 'I':
-                $aftype = F56Type::where('id', 4)->first();
+                $f56_type = 4;
             break;
 
             case 'M':
-                $aftype = F56Type::where('id', 5)->first();
+                $f56_type = 5;
             break;
 
             case 'S':
-                $aftype = F56Type::where('id', 6)->first();
+                $f56_type = 6;
             break;
         }
+        $barangay = Barangay::where([
+            ['name', '=', 'Kayapa'],
+            ['municipality_id', '=', $municipality]
+            ])->first();
+        if ($barangay == null) {
+            return redirect()->route('rpt.import_excel_report');
+        }
+        
 
-        $municipality = Municipality::where('name', $request['municipality'])->first();
-        $dtx = new Carbon;
         # Success
         $receipt = Receipt::create([
-            'serial_no' => $values['serial_number'],
-            'af_type' => $aftype->id,
-            'col_municipality_id' => $municipality->id,
+            'serial_no' => $value->serial_number,
+            'af_type' => 2,
+            'col_municipality_id' => $municipality,
+            'col_barangay' => $barangay,
             'col_customer_id' => $payor_id,
             'report_date' => date('Y-m-d H:i:s'),
             'date_of_entry' => date('Y-m-d H:i:s'),
-            'is_printed' => $is_printed,
+            'is_printed' => 1,
             'is_cancelled' => 0,
             'cancelled_remark' => '',
-            'transaction_source' => $values['field_land_tax'],
+            'transaction_source' => 'field_land_tax',
             'transaction_type' => 1,
             'client_type' => 0,
-            ]);
+        ]);
 
 
-            $share_provincial = $values["grandtotal_net"];
-            $share_municipal = 0;
-            $share_barangay = 0;
+        $share_provincial = $value->grandtotal_net;
+        $share_municipal = 0;
+        $share_barangay = 0;
 
-            $receipt_item = ReceiptItems::create([
-                'col_receipt_id' => $receipt->id,
-                'nature' => "Real Property Tax-Basic (Net of Discount)",
-                'col_acct_title_id' => 2,
-                'col_acct_subtitle_id' => 0,
-                'value' => $values["grandtotal_net"],
-                'share_provincial' => $values["grandtotal_net"],
-                'share_municipal' => $share_municipal,
-                'share_barangay' => $share_barangay,
-                ]);
+        $receipt_item = ReceiptItems::create([
+            'col_receipt_id' => $receipt->id,
+            'nature' => "Real Property Tax-Basic (Net of Discount)",
+            'col_acct_title_id' => 2,
+            'col_acct_subtitle_id' => 0,
+            'value' => $value->grandtotal_net,
+            'share_provincial' => $share_provincial,
+            'share_municipal' => $share_municipal,
+            'share_barangay' => $share_barangay,
+        ]);
 
-            $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
-                from tax_dec_archive_info 
-                join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
-                left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
-                join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
-                where tax_dec_no = "'.$values['tdarp'].'"'));
+        $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
+            from tax_dec_archive_info 
+            join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
+            left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
+            join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
+            where tax_dec_no = "'.$value->tdarp.'"'));
+            // dd($prev_tax_dec);
+        $detail = [];
+        $period_covered = $value->period_covered;
+                        
+        $detail = F56Detail::create([ 
+            'col_receipt_id' => $receipt->id,
+            'col_f56_type_id' => $f56_type,
+            'owner_name' => $value->name,
+            'tdrp_assedvalue' => $prev_tax_dec[0]->assessed_value,
+            'period_covered' => $value->period_covered,
+            'basic_current' => $value->basic_current_gross,
+            'basic_discount' => $value->basic_current_discount,
+            'basic_previous' => $value->basic_immediate + $value->basic_prior_1992 + $value->basic_prior_1991,
+            'basic_penalty_current' => $value->basic_penalty_current,
+            'basic_penalty_previous' => $value->basic_penalty_immediate + $value->basic_penalty_prior_1992 + $value->basic_penalty_prior_1991,
+            'manual_tax_due' => $prev_tax_dec[0]->assessed_value * .01,
+        ]);
         
-            if ($period_covered < date("Y")) {
-                
-            }
-            $detail = F56Detail::create([
-                'col_receipt_id' => $receipt->id,
-                'col_f56_type_id' => $aftype,
-                'owner_name' => $values['name'],
-                'tdrp_assedvalue' => $prev_tax_dec,
-                'period_covered' => $values["period_covered"],
-                'basic_current' => ($period_covered >= date("Y") ? $values['basic_current_gross'] : 0),
-                'basic_discount' => ($period_covered >= date("Y") ? $values['basic_current_discount'] : 0),
-                'basic_previous' => ($period_covered < date("Y") ? ($values['basic_immediate']) : 0),
-                'basic_penalty_current' => ($period_covered >= date("Y") ? $values['basic_penalty_current'] : 0),
-                'basic_penalty_previous' => ($period_covered < date("Y") ? $values['basic_penalty_previous'] : 0),
-                'manual_tax_due' => $request['tdrp_assedvalue']*.01,
-                'ref_num' => isset($request['ref_num']) ? $request['ref_num'] : null,
-            ]);
+        
+        $row['col_f56_detail_id'] = $detail->id;
+        $row['tdarpno'] = $prev_tax_dec[0]->assessed_value;
+        $row['municipality'] =  $municipality;
+        $row['barangay'] =  $barangay->id;
+        $row['f56_type'] = $f56_type;
+        $row['previous_tax_type_id'] = 5; // vague insertion
+        array_push($tdarps, $row);
+        F56TDARP::insert($tdarps);
 
-            $row['col_f56_detail_id'] = $detail->id;
-            $row['tdarpno'] = $prev_tax_dec;
-            $row['municipality'] =  $request['municipality'];
-            $row['barangay'] =  $request['tdrp_barangay'];
-            $row['f56_type'] = $request['f56_type'];
-            $row['previous_tax_type_id'] = $request['previous_tax_type']; // vague insertion
-            array_push($data, $row);
+        $counter++;
+    }
+}
+dd($receipt);
             
-            F56TDARP::insert($data);
+            
+        //     F56TDARP::insert($data);
 
-            Session::flash('info', ['Successfully created Form 56 transaction for serial: '.$receipt->serial_no]);
-        return redirect()->route('form56.index');
+        //     Session::flash('info', ['Successfully created Form 56 transaction for serial: '.$receipt->serial_no]);
+        // return redirect()->route('form56.index');
     }
 }

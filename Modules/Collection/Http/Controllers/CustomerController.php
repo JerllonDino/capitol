@@ -557,10 +557,6 @@ class CustomerController extends Controller
     }
 
     public function rpt_record_get($id = null, $td, $isPdf = null) {
-        $tax_decs = F56TDARP::with('F56Detail')
-                                ->get()
-                                ->toArray();
-        dd($tax_decs[1000]['f56_detail']);
         $id = Crypt::decrypt($id);
         $td = Crypt::decrypt($td);
         $receipts = Receipt::with('F56Detailmny.TDARPX')

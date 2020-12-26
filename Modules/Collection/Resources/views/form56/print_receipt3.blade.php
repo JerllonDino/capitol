@@ -218,7 +218,7 @@
                          @endphp
                         <td class="border-hidden text-right" style="background: ##eda6eb;">
                             <!-- DATE -->
-                            <div style="margin-bottom:13px; padding-right: 25px;">
+                            <div style="margin-bottom:13px; padding-right: 35px;">
                                 {{ $date_entry->format('F d, Y') }}
                             </div>
                         </td>
@@ -231,7 +231,7 @@
                             </div>
                         </td>
                         <td class="border-hidden" style="padding-left: -30px;">{{ $total_words }} only</td>
-                        <td class="border-hidden text-right" style="text-indent: 13px; padding-right: 25px; background: ##a7e57b;transform:translate(0, -7px)"><br />{{ number_format($form56['total'], 2) }}</td>
+                        <td class="border-hidden text-right" style="text-indent: 13px; padding-right: 35px; background: ##a7e57b;transform:translate(0, -7px)"><br />{{ number_format($form56['total'], 2) }}</td>
                     </tr>
                     <tr>
                         <td colspan=2 class="border-hidden" height="28">

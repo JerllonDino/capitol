@@ -402,6 +402,7 @@ $.fn.tdarpno();
 
 
 $.fn.changeAmountTotal = function(){
+  
     $(document).ready(function(){
         $.fn.computeAmountTotal();
     });
@@ -411,12 +412,15 @@ $.fn.changeAmountTotal = function(){
 };
 
 $('.basic_penalty_current').change(function(){
+  
     $.fn.computeAmountTotal();
 });
 $('.basic_penalty_previous').change(function(){
+  
     $.fn.computeAmountTotal();
 });
 $('.basic_discount').change(function(){
+  
     $.fn.computeAmountTotal();
 });
 
@@ -616,7 +620,7 @@ $('#tablex').on('change','.basic_current', function(){
 
 $.fn.computePayment = function(){
     // $('.tdrp_assedvalue, .period_covered, .full_partial').change(function(){
-    $('.tdrp_assedvalue, .period_covered, .full_partial, #date_timex').on('change keyup focusout', function(){
+    $('.tdrp_assedvalue, .period_covered, .full_partial, #date_timex').on('change', function(){
         var el_index_x = $('.tdrp_assedvalue').index(this);
         var el_index_y = $('.period_covered').index(this);
         var el_index_z = $('.full_partial').index(this);
@@ -673,7 +677,7 @@ $.fn.computePayment = function(){
                             $('.basicxx').eq(el_index).text(sef_basic.toFixed(2));
                             $('.grand_total_net').eq(el_index).text(grand_total_net.toFixed(2));
                             // $('.tdrp_taxdue').eq(el_index).val(tax_due.toFixed(2));
-
+                            
                             $.fn.computeAmountTotal();
                         }
                     });
@@ -749,9 +753,9 @@ $('.basic_current, .basic_discount, .basic_previous, .basic_penalty_current, .ba
   $('.grand_total_net').eq(el_index).text(parseFloat(sef_basic*2).toFixed(2));
 });
 
-$.fn.computePayment();
+// $.fn.computePayment();
 
-$(document).on('focusout', '#date_timex', function() {
+$(document).on('change', '#date_timex', function() {
     $.fn.computePayment();
 });
 

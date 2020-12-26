@@ -79,7 +79,7 @@
 <form action="{{ route('rpt.save_excel_report') }}" id="excel-form" method="POST">
     {{ csrf_field() }}
     <input type="hidden" name="excel-data">
-    <input type="hidden" name="excel-municipality">
+    <input type="hidden" name="excel_municipality">
     <button type="submit" class="btn btn-success" style="display:none; margin-top: 20px; position: absolute; right: 0;" id="save-import"><i class="fa fa-save"></i> Save Import</button>
 </form>
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalHelp">
@@ -139,10 +139,7 @@
             
         </div>
         <div class="modal-footer">
-            
-                
-                <button type="submit" class="btn btn-success" data-dismiss="modal">Ok, I understand</button>
-            
+            <button type="submit" class="btn btn-success" data-dismiss="modal">Ok, I understand</button>
         </div>
          
       </div>
@@ -179,8 +176,9 @@
             }).done(function(data){
                 if (data.html) {
                     $excelContainer.html(data.html);
+                    console.log(data.municipality)
                     $('#excel-form').find('input[name="excel-data"]').val(JSON.stringify(data.data));
-                    $('#excel-form').find('input[name="excel-data"]').val(JSON.stringify(data.municipality));
+                    $('#excel-form').find('input[name="excel_municipality"]').val(data.municipality);
                     $('#save-import').show();
                 }else{
                     showMessage(data.message, 1);
