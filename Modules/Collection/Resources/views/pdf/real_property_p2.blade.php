@@ -103,6 +103,13 @@
         </tr>
 
         @foreach ($remdep as $rd)
+        @if ($rd['name'] == "Other Cities/Prov." || $rd['name'] == 'La Trinidad')
+                @if (date('m/d/Y', strtotime('12/1/2020')) <= date('m/d/Y', strtotime($report_date)));
+                    @php
+                        continue;
+                    @endphp
+                @endif
+            @endif
             <tr>
                 <td style="font-size:12px">{{ $officer_name->value }} - {{ $officer_position->value }}</td>
                 <td >{{ $rd['name'] }}</td>
@@ -177,7 +184,6 @@
                         continue;
                     @endphp
                 @endif
-                
             @endif
         <tr>
             <td >

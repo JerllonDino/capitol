@@ -118,7 +118,7 @@
 
         <table style="width: 100%; margin-right: 20px;">
             <tr>
-                <td width="48%"><b>Name of Accountable Officer:</b> <u>ISABEL D. KIW-AN - Local Recenue Collection Officer IV</u></td>
+                <td width="48%"><b>Name of Accountable Officer:</b> <u>ISABEL D. KIW-AN - Local Revenue Collection Officer IV</u></td>
                 <td width="33%"></td>
                 @if(isset($report_no))
                 <td style="font-weight: bold;" width="5%">Report No.</td>
@@ -277,7 +277,7 @@
                 @elseif($receipt->F56Detailmny()->count() > 0)
                     @foreach ($receipt->F56Detailmny as $f56_detail)
                     <?php
-                        if ($rowCounter == 18) {
+                        if ($rowCounter == 20) {
                             echo('<tr style="border:none"><td colspan=35 style="border:none"><div class="table-break"></div></td></tr>');
                             $rowCounter = 0;
                         }else{

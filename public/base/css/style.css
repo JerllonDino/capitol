@@ -145,24 +145,7 @@ input[type=number]::-webkit-outer-spin-button {
     background-image: none !important;
 } */
 
-.btn-primary{
-    background-color: #1d3750;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    background-image: none !important;
-    font-family: OpenSansBold;
-    
-}
 
-.btn-primary:hover{
-    background-color: #2e5981 !important;
-    background-image: none !important;
-}
 
 /* .btn-primary .fa:before{
     background: rgba(0,0,0,0.2);

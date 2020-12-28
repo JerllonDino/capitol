@@ -21,7 +21,7 @@
 	}
 	
 	#imports{
-		padding:10px;
+		/* padding:10px; */
 		border-radius: 20px;
 		cursor: pointer;
 		outline:none;
@@ -35,7 +35,7 @@
     
     .btn{
         outline: none !important; 
-        padding: 10px;
+        /* padding: 10px; */
         border-radius: 20px;
     }
 
@@ -61,15 +61,43 @@
 
 {{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline"> --}}
 <h1 id="import-excel" data-toggle="modal" data-target="#modalHelp"><i class="fa fa-question-circle"></i></h1>
-<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="form-inline">
+<div class="row" style="height: 40px">
+    <div class="col col-sm-2"><h4>Municipality:</h4></div>
+    <div class="col col-sm-2"><h4>Month:</h4></div>
+    <div class="col col-sm-2"><h4>Year:</h4></div>
+    <div class="col col-sm-3"></div>
+    <div class="col col-sm-2"></div>
+</div>
+<form enctype="multipart/form-data" id="importExcel" method="post" action="" class="row">
     {{ csrf_field() }}
-    <input type="file" name="imports" id="imports" class="btn btn-warning">
-    <select name="excel_municipality" id="excel-municipality" class="form-control" style="margin-left: 3%; border-radius: 20px; outline: none;">
-        @foreach($base['municipality'] as $m)
-            <option value="{{ $m->id }}">{{ $m->name }}</option>
-        @endforeach
-    </select>
-    <button type="submit" class="btn btn-primary" style="margin-left: 3%; " id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> &nbsp;<i class="fa fa-upload"></i> Upload Excel file</button>
+        <div class="col col-sm-2">
+            <select name="excel_municipality" id="excel-municipality" class="form-control" style="margin-left: 3%; border-radius: 20px; outline: none;">
+                @foreach($base['municipality'] as $m)
+                    <option value="{{ $m->id }}">{{ $m->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    <div class="col col-sm-2">
+        <select name="excel_month" id="excel-month" class="form-control" style="margin-left: 3%; margin-right: 3%; border-radius: 20px; outline: none;">
+            @foreach($base['months'] as $i => $month)
+                @if ($i+1 == date('n'))
+                <option value="{{ $i+1 }}" selected>{{ $month }}</option>
+                @else
+                <option value="{{ $i+1 }}">{{ $month }}</option>
+                @endif
+            @endforeach
+        </select>
+    </div>
+    <div class="col col-sm-2">
+        <input type="int" value="{{ date('Y') }}" name="excel_year" class="form-control" style="margin-left: 3%; margin-right: 3%; border-radius: 20px; outline: none;">
+    </div>
+    <div class="col col-sm-3">
+        <input type="file" name="imports" id="imports" class="btn btn-warning form-control">
+    </div>
+    <div class="col col-sm-2">
+        <button type="submit" class="btn btn-primary form-control" style="margin-left: 3%;" id="submitExcel"> <i class="fa fa-spinner fa-spin" style="display: none"></i> &nbsp;<i class="fa fa-upload"></i> Upload Excel file</button>
+    </div>
+    
 </form>
 
 <div id="excel-container" style="padding-top: 30px; width: 100%; height: 70%">

@@ -70,6 +70,25 @@
         .ui-datepicker{
              z-index: 9999 !important;
              }
+             
+         .btn-primary{
+            background-color: #1d3750;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            background-image: none !important;
+            font-family: OpenSansBold;
+            
+        }
+
+        .btn-primary:hover{
+            background-color: #2e5981 !important;
+            background-image: none !important;
+        }
     </style>
 @endsection
 
@@ -143,13 +162,13 @@
 
         <input type="hidden" name="isEdit" class="isEdit" value="0">
           <div class="col-sm-6">
-            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="button" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report</button>
+            <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="button" id="confirm" data-toggle="tooltip" title="Clicking this button will generate the municipal report A (Collections w/ Summary and Disposition) and will require all input fields to be filled."> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report A (Collections w/ Summary and Disposition)</button>
           </div>
           {{-- <div class="col-sm-6">
             <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_summary_disposition" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report (Summary and Disposition)</button>
           </div> --}}
           <div class="col-sm-6">
-            <button type="submit" class="btn btn-primary" name="button" style="width: 100%; margin: 5px 0" id="consolidated-report"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Consolidated Report</button>
+            <button type="submit" class="btn btn-primary" name="button" style="width: 100%; margin: 5px 0" id="consolidated-report" data-toggle="tooltip" title="Clicking this button will generate the municipality report b,c,d and will not require you to choose a specific municipality."> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report B, C, D</button>
           </div>
             <div class="col-sm-6">
                 <button type="submit" class="btn btn-primary rpt_report" style="width: 100%; margin: 5px 0" name="rpt_mun_report_protest" id="confirm"> <i class="fa fa-spinner fa-spin" style="display:none"></i> Municipal Report (Paid under protest/Held in Trust)</button>
@@ -243,10 +262,13 @@
 {{ Html::script('/datatables-1.10.12/js/jquery.dataTables.min.js') }}
 {{ Html::script('/datatables-1.10.12/js/dataTables.bootstrap.min.js') }}
 <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
     function getReports(){
         if($.fn.DataTable.isDataTable('#reports')) {
-			$('#reports').DataTable().destroy();
-		}
+            $('#reports').DataTable().destroy();
+        }
         $('#reports').DataTable({
             processing: true, 
             serverSide: false,

@@ -18,6 +18,7 @@ use Modules\Collection\Entities\Municipality;
 use Modules\Collection\Entities\Receipt;
 use Modules\Collection\Entities\ReceiptItemDetail;
 use Modules\Collection\Entities\ReceiptItems;
+use Modules\Collection\Entities\RptMunicipalExcel;
 use Modules\Collection\Entities\WeekdayHoliday;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -28,6 +29,11 @@ class MunicipalExcelImportController extends Controller
     {
         $this->base['municipality'] = Municipality::all();
         $this->base['page_title'] = 'Import Monthly Municipal RPT Report';
+        $this->base['months'] = array();
+        for ($m=1; $m<=12; $m++) {
+            $month = date('F', mktime(0,0,0,$m, 1, date('Y')));
+            array_push($this->base['months'], $month);
+        }
         return view('collection::customer.rpt_import_excel')->with('base', $this->base);
     }
 
@@ -285,12 +291,12 @@ class MunicipalExcelImportController extends Controller
         foreach($datas as $i => $data)
         {
             $values = [
-                "date" => $data[0],
-                "name" => $data[1],
+                "collection_date" => $data[0],
+                "tax_payor_name" => $data[1],
                 "period_covered" => $data[2],
-                "serial_number" => $data[3],
-                "tdarp" => $data[4],
-                "barangay" => $data[5],
+                "or_number" => $data[3],
+                "tdarp_number" => $data[4],
+                "barangay_id" => $data[5],
                 "classification" => $data[6],
                 "basic_advance_gross" => $data[7],
                 "basic_advance_discount" => $data[8],
@@ -337,139 +343,17 @@ class MunicipalExcelImportController extends Controller
         $tdarps = [];
         $municipality = $request['excel_municipality'];
         $counter = 0;
+        $excel = RptMunicipalExcel::create([
+            'municipal' => $request['excel_municipality'],
+            'report_month' => $request['excel_month'],
+            'report_year' => $request['excel_year']
+        ]);
+        dd($detail);
+        
         foreach ($data as $or_number => $values) {
-            foreach($values as $tdarp => $value) {
-        
-        # Add payor if not existing
-        $payor_id = 0;
-        
-
-        $payor = Customer::withTrashed()->where('name', $value->name)->first();
-        if (!empty($payor)) {
-            $payor_id = $payor->id;
-            $payor->restore();
-        } else {
-            $payor_id = Customer::create([
-                'name' => $value->name,
-                'address' => '',
-                ]);
-            $payor_id = $payor_id->id;
+                $values['col_rpt_municipal_excel_id'] = $excel->id;
+                $detail = $values;
+                
         }
-        
-        // $is_printed = 0;
-        // $report_datex = new Carbon($request['date']);
-
-        $f56_type = 0;
-        switch ($value->classification) {
-            case 'R':
-                $f56_type = 1;
-            break;
-            
-            case 'A':
-                $f56_type = 2;
-            break;
-
-            case 'C':
-                $f56_type = 3;
-            break;
-
-            case 'I':
-                $f56_type = 4;
-            break;
-
-            case 'M':
-                $f56_type = 5;
-            break;
-
-            case 'S':
-                $f56_type = 6;
-            break;
-        }
-        $barangay = Barangay::where([
-            ['name', '=', 'Kayapa'],
-            ['municipality_id', '=', $municipality]
-            ])->first();
-        if ($barangay == null) {
-            return redirect()->route('rpt.import_excel_report');
-        }
-        
-
-        # Success
-        $receipt = Receipt::create([
-            'serial_no' => $value->serial_number,
-            'af_type' => 2,
-            'col_municipality_id' => $municipality,
-            'col_barangay' => $barangay,
-            'col_customer_id' => $payor_id,
-            'report_date' => date('Y-m-d H:i:s'),
-            'date_of_entry' => date('Y-m-d H:i:s'),
-            'is_printed' => 1,
-            'is_cancelled' => 0,
-            'cancelled_remark' => '',
-            'transaction_source' => 'field_land_tax',
-            'transaction_type' => 1,
-            'client_type' => 0,
-        ]);
-
-
-        $share_provincial = $value->grandtotal_net;
-        $share_municipal = 0;
-        $share_barangay = 0;
-
-        $receipt_item = ReceiptItems::create([
-            'col_receipt_id' => $receipt->id,
-            'nature' => "Real Property Tax-Basic (Net of Discount)",
-            'col_acct_title_id' => 2,
-            'col_acct_subtitle_id' => 0,
-            'value' => $value->grandtotal_net,
-            'share_provincial' => $share_provincial,
-            'share_municipal' => $share_municipal,
-            'share_barangay' => $share_barangay,
-        ]);
-
-        $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
-            from tax_dec_archive_info 
-            join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
-            left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
-            join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
-            where tax_dec_no = "'.$value->tdarp.'"'));
-            // dd($prev_tax_dec);
-        $detail = [];
-        $period_covered = $value->period_covered;
-                        
-        $detail = F56Detail::create([ 
-            'col_receipt_id' => $receipt->id,
-            'col_f56_type_id' => $f56_type,
-            'owner_name' => $value->name,
-            'tdrp_assedvalue' => $prev_tax_dec[0]->assessed_value,
-            'period_covered' => $value->period_covered,
-            'basic_current' => $value->basic_current_gross,
-            'basic_discount' => $value->basic_current_discount,
-            'basic_previous' => $value->basic_immediate + $value->basic_prior_1992 + $value->basic_prior_1991,
-            'basic_penalty_current' => $value->basic_penalty_current,
-            'basic_penalty_previous' => $value->basic_penalty_immediate + $value->basic_penalty_prior_1992 + $value->basic_penalty_prior_1991,
-            'manual_tax_due' => $prev_tax_dec[0]->assessed_value * .01,
-        ]);
-        
-        
-        $row['col_f56_detail_id'] = $detail->id;
-        $row['tdarpno'] = $prev_tax_dec[0]->assessed_value;
-        $row['municipality'] =  $municipality;
-        $row['barangay'] =  $barangay->id;
-        $row['f56_type'] = $f56_type;
-        $row['previous_tax_type_id'] = 5; // vague insertion
-        array_push($tdarps, $row);
-        F56TDARP::insert($tdarps);
-
-        $counter++;
-    }
-}
-dd($receipt);
-            
-            
-        //     F56TDARP::insert($data);
-
-        //     Session::flash('info', ['Successfully created Form 56 transaction for serial: '.$receipt->serial_no]);
-        // return redirect()->route('form56.index');
     }
 }
