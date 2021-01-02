@@ -7,7 +7,7 @@ use App\Http\Controllers\{Controller,BreadcrumbsController};
 use Illuminate\Http\{Request,Response};
 use Illuminate\Support\Facades\{Session,Validator,URL,Crypt};
 
-use Modules\Collection\Entities\{Customer,Receipt,ReceiptItems,CashDivision,CashDivisionItems,Municipality,Barangay,PreviousTaxType,MunicipalReceipt,F56TDARP, RptSefAdjustments};
+use Modules\Collection\Entities\{Customer,Receipt,ReceiptItems,CashDivision,CashDivisionItems,Municipality,Barangay,PreviousTaxType,MunicipalReceipt,F56TDARP, RptMunicipalExcelItems, RptSefAdjustments};
 use Modules\Collection\Entities\SandGravelTypes as sg_types;
 use Carbon\Carbon,PDF,DB,Datatables;
 use Smalot\PdfParser\Parser;
@@ -559,6 +559,7 @@ class CustomerController extends Controller
     public function rpt_record_get($id = null, $td, $isPdf = null) {
         $id = Crypt::decrypt($id);
         $td = Crypt::decrypt($td);
+        
         $receipts = Receipt::with('F56Detailmny.TDARPX')
             ->with('F56Detailmny.F56Type')
             ->whereHas('F56Detailmny.TDARPX', function($q) use($td) {
@@ -1037,7 +1038,10 @@ class CustomerController extends Controller
             }
             
         }
-
+        // dd($payment_record);
+        $payment_record = $this->getAndMergeImportedExcelPayments($td, $payment_record);
+        // $payment_record = $excelPayments;
+        // dd($payment_record);
         if(!($isPdf)) {
             if(count($payment_record) == 0 && count($prev_tax_dec_paymnt) == 0) {
                 Session::flash('error', ['No payment records found for ARP No. '.$td]);
@@ -1056,6 +1060,30 @@ class CustomerController extends Controller
         $pdf = PDF::loadView('collection::customer.rpt_record', $this->base);
         $pdf->setPaper('letter', 'portrait');
         return $pdf->stream();
+    }
+
+    private function getAndMergeImportedExcelPayments($tdarp, $payment_record)
+    {
+        $excelPayments = RptMunicipalExcelItems::where([
+            ['tdarp_number', '=', $tdarp]
+        ])->get();
+
+        $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
+            from tax_dec_archive_info 
+            join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
+            left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
+            join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
+            where tax_dec_no = "'.$tdarp.'"'));
+            
+        foreach($excelPayments as $payment){
+           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax_type'] = [5];
+           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['discount'] = [$payment->basic_adv_discount + $payment->basic_current_discount];
+           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['penalty'] = [$payment->basic_penalty_current + $payment->basic_penalty_immediate + $payment->basic_penalty_1992 + $payment->basic_penalty_1991];
+           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax'] = [$payment->basic];
+           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['period_covered'] = [$payment->period_covered];
+           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['date'] = [$payment->collection_date];
+        }
+        return $payment_record;
     }
 
 }

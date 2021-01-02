@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Modules\Collection\Entities\Barangay;
 use Modules\Collection\Entities\CollectionRate;
 use Modules\Collection\Entities\Customer;
@@ -19,6 +20,7 @@ use Modules\Collection\Entities\Receipt;
 use Modules\Collection\Entities\ReceiptItemDetail;
 use Modules\Collection\Entities\ReceiptItems;
 use Modules\Collection\Entities\RptMunicipalExcel;
+use Modules\Collection\Entities\RptMunicipalExcelItems;
 use Modules\Collection\Entities\WeekdayHoliday;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -169,7 +171,7 @@ class MunicipalExcelImportController extends Controller
                 $html = $html . '</table>' . PHP_EOL;
                 return response()->json([
                     'html' => $html,
-                    'data' => $this->resortExcelData(array_filter($arrayData)),
+                    'data' => $this->resortExcelData(array_filter($arrayData), $request->excel_municipality),
                     'municipality' => $request->excel_municipality,
                 ]);
             }else{
@@ -288,6 +290,7 @@ class MunicipalExcelImportController extends Controller
     {
         $newSortedData = [];
         $prevOr = 0;
+        $prevName = '';
         foreach($datas as $i => $data)
         {
             $values = [
@@ -328,9 +331,12 @@ class MunicipalExcelImportController extends Controller
                 "grandtotal_net" => $data[34],
             ];
             if(empty($data[3])){
+                $values['or_number'] = $prevOr;
+                $values['tax_payor_name'] = $prevName;
                 $newSortedData[$prevOr][$data[4]] = $values;
             }else{
                 $prevOr = $data[3];
+                $prevName = $data[1];
                 $newSortedData[$data[3]][$data[4]] = $values;
             }
         }
@@ -339,21 +345,29 @@ class MunicipalExcelImportController extends Controller
 
     public function saveUploadedExcel(Request $request)
     {
-        $data = json_decode($request['excel-data']);
-        $tdarps = [];
-        $municipality = $request['excel_municipality'];
-        $counter = 0;
-        $excel = RptMunicipalExcel::create([
-            'municipal' => $request['excel_municipality'],
-            'report_month' => $request['excel_month'],
-            'report_year' => $request['excel_year']
+        $data = json_decode($request['excel_data']);
+        $excel = RptMunicipalExcel::create([    
+            'municipal' => $request['excel_final_municipality'],
+            'report_month' => $request['excel_final_month'],
+            'report_year' => $request['excel_final_year']
         ]);
-        dd($detail);
         
         foreach ($data as $or_number => $values) {
-                $values['col_rpt_municipal_excel_id'] = $excel->id;
-                $detail = $values;
-                
+            foreach($values as $tdarp => $value){
+                $arrayData = (array) $value;
+                $barangay = Barangay::where([
+                    ['name', '=', $arrayData['barangay_id']],
+                    ['municipality_id', '=', $request['excel_final_municipality']]
+                ])->first();
+                $arrayData['barangay_id'] = $barangay->id;
+                $arrayData['col_rpt_municipal_excel_id'] = $excel->id;
+                $excelItems = RptMunicipalExcelItems::create($arrayData);
+            }
         }
+        if ($excelItems) {
+            Session::flash('successMessage', 'Excel imported successfully!');
+            return redirect()->route('rpt.import_excel_report');
+        }
+        
     }
 }

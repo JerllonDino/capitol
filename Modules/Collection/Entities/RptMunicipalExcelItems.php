@@ -41,8 +41,11 @@ class RptMunicipalExcelItems extends Model
         'sef_subtotal_gross',
         'sef_subtotal_net',
         'grand_total_gross',
-        'grand_total_net'
+        'grand_total_net',
+        'col_rpt_municipal_excel_id'
     ];
+
+    public $timestamps = false;
 
     protected $table = 'col_rpt_municipal_excel_items';
 

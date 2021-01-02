@@ -58,7 +58,9 @@
 @endsection
 
 @section('content')
-
+@if(session('successMessage'))
+<div class="alert alert-success alert-dismissible">{{ session('successMessage') }}</div>
+@endif
 {{-- <form enctype="multipart/form-data" id="importExcel" method="post" action="{{ route('rpt.import_excel_report') }}" class="form-inline"> --}}
 <h1 id="import-excel" data-toggle="modal" data-target="#modalHelp"><i class="fa fa-question-circle"></i></h1>
 <div class="row" style="height: 40px">
@@ -106,8 +108,10 @@
 </div>
 <form action="{{ route('rpt.save_excel_report') }}" id="excel-form" method="POST">
     {{ csrf_field() }}
-    <input type="hidden" name="excel-data">
-    <input type="hidden" name="excel_municipality">
+    <input type="hidden" name="excel_data">
+    <input type="hidden" name="excel_final_municipality">
+    <input type="hidden" name="excel_final_month">
+    <input type="hidden" name="excel_final_year">
     <button type="submit" class="btn btn-success" style="display:none; margin-top: 20px; position: absolute; right: 0;" id="save-import"><i class="fa fa-save"></i> Save Import</button>
 </form>
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalHelp">
@@ -181,6 +185,7 @@
 {{ Html::script('/datatables-1.10.12/js/dataTables.bootstrap.min.js') }}
 
 <script type="text/javascript">
+
     $excelImport = $('#importExcel');
 	$excelContainer = $('#excel-container');
     $importButton = $('#submitExcel');
@@ -204,9 +209,8 @@
             }).done(function(data){
                 if (data.html) {
                     $excelContainer.html(data.html);
-                    console.log(data.municipality)
-                    $('#excel-form').find('input[name="excel-data"]').val(JSON.stringify(data.data));
-                    $('#excel-form').find('input[name="excel_municipality"]').val(data.municipality);
+                    console.log(data.municipality);
+                    $('#excel-form').find('input[name="excel_data"]').val(JSON.stringify(data.data));
                     $('#save-import').show();
                 }else{
                     showMessage(data.message, 1);
@@ -221,20 +225,13 @@
         }
     });
 
-    // $('#excel-form').submit(function(){
-    //     $.ajax({
-    //         url: '{{ route("rpt.view_excel_report") }}',
-    //         method: 'POST',
-    //         data: $(this).serialize(),
-    //         beforeSend: function(){
-
-    //         }
-    //     }).fail(function(){
-
-    //     }).done(function(data){
-            
-    //     });
-    // });
+    $('#save-import').click(function(e){
+        e.preventDefault();
+        $('#excel-form').find('input[name="excel_final_municipality"]').val($excelImport.find('[name="excel_municipality"]').val());
+        $('#excel-form').find('input[name="excel_final_month"]').val($excelImport.find('[name="excel_month"]').val());
+        $('#excel-form').find('input[name="excel_final_year"]').val($excelImport.find('input[name="excel_year"]').val());
+        $('#excel-form').submit();
+    });
 
 
 </script>
