@@ -7,7 +7,7 @@ use App\Http\Controllers\{Controller,BreadcrumbsController};
 use Illuminate\Http\{Request,Response};
 use Illuminate\Support\Facades\{Session,Validator,URL,Crypt};
 
-use Modules\Collection\Entities\{Customer,Receipt,ReceiptItems,CashDivision,CashDivisionItems,Municipality,Barangay,PreviousTaxType,MunicipalReceipt,F56TDARP, RptMunicipalExcelItems, RptSefAdjustments};
+use Modules\Collection\Entities\{Customer,Receipt,ReceiptItems,CashDivision,CashDivisionItems,Municipality,Barangay,PreviousTaxType,MunicipalReceipt,F56TDARP, RptMunicipalExcel, RptMunicipalExcelItems, RptSefAdjustments};
 use Modules\Collection\Entities\SandGravelTypes as sg_types;
 use Carbon\Carbon,PDF,DB,Datatables;
 use Smalot\PdfParser\Parser;
@@ -605,35 +605,35 @@ class CustomerController extends Controller
                         $get_owner_info = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$det->owner_id));
                         $get_owner_info = collect($get_owner_info);
                         foreach($get_owner_info as $info) {
-                            $owner_name .= nl2br($info->spouse . ' & ' . $info->married_to . '
+                            $owner_name = nl2br($info->spouse . ' & ' . $info->married_to . '
                                 ');
                         }
                     } elseif($det->type_o == 'Person') {
                         $get_owner_info = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$det->owner_id));
                         $get_owner_info = collect($get_owner_info);
                         foreach($get_owner_info as $info) {
-                            $owner_name .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
+                            $owner_name = nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
                                 ');
                         }
                     } elseif($det->type_o == 'Company') {
                         $get_owner_info = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$det->owner_id));
                         $get_owner_info = collect($get_owner_info);
                         foreach($get_owner_info as $info) {
-                            $owner_name .= nl2br($info->company_name . '
+                            $owner_name = nl2br($info->company_name . '
                                 ');
                         }
                     } elseif($det->type_o == 'MarriedTo') {
                         $get_owner_info = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$det->owner_id));
                         $get_owner_info = collect($get_owner_info);
                         foreach($get_owner_info as $info) {
-                            $owner_name .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
+                            $owner_name = nl2br($info->owner_name . ' married to ' . $info->married_to .'
                                 ');
                         }
                     } elseif($det->type_o == 'Special') {
                         $get_owner_info = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$det->owner_id));
                         $get_owner_info = collect($get_owner_info);
                         foreach($get_owner_info as $info) {
-                            $owner_name .= nl2br($info->special_name.'
+                            $owner_name = nl2br($info->special_name.'
                                 ');
                         }
                     }
@@ -657,35 +657,35 @@ class CustomerController extends Controller
                                 $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select spouse, married_to from tax_dec_archive_owner_spouse where owner_id = '.$getNewOwner[0]->owner_id));
                                 $get_owner_info_new = collect($get_owner_info_new);
                                 foreach($get_owner_info_new as $info) {
-                                    $owner_new .= nl2br($info->spouse . ' & ' . $info->married_to . '
+                                    $owner_new = nl2br($info->spouse . ' & ' . $info->married_to . '
                                         ');
                                 }
                             } elseif($getNewOwner[0]->type_o == 'Person') {
                                 $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$getNewOwner[0]->owner_id));
                                 $get_owner_info_new = collect($get_owner_info_new);
                                 foreach($get_owner_info_new as $info) {
-                                    $owner_new .= nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
+                                    $owner_new = nl2br($info->fname . ' ' . $info->mname . ' ' . $info->lname . ' ' . $info->ename .'
                                         ');
                                 }
                             } elseif($getNewOwner[0]->type_o == 'Company') {
                                 $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$getNewOwner[0]->owner_id));
                                 $get_owner_info_new = collect($get_owner_info_new);
                                 foreach($get_owner_info_new as $info) {
-                                    $owner_new .= nl2br($info->company_name . '
+                                    $owner_new = nl2br($info->company_name . '
                                         ');
                                 }
                             } elseif($getNewOwner[0]->type_o == 'MarriedTo') {
                                 $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$getNewOwner[0]->owner_id));
                                 $get_owner_info_new = collect($get_owner_info_new);
                                 foreach($get_owner_info_new as $info) {
-                                    $owner_new .= nl2br($info->owner_name . ' married to ' . $info->married_to .'
+                                    $owner_new = nl2br($info->owner_name . ' married to ' . $info->married_to .'
                                         ');
                                 }
                             } elseif($getNewOwner[0]->type_o == 'Special') {
                                 $get_owner_info_new = DB::connection('mysql2')->select(DB::raw('select special_name from tax_dec_archive_owner_special where owner_id = '.$getNewOwner[0]->owner_id));
                                 $get_owner_info_new = collect($get_owner_info_new);
                                 foreach($get_owner_info_new as $info) {
-                                    $owner_new .= nl2br($info->special_name.'
+                                    $owner_new = nl2br($info->special_name.'
                                         ');
                                 }
                             }
@@ -1068,6 +1068,13 @@ class CustomerController extends Controller
             ['tdarp_number', '=', $tdarp]
         ])->get();
 
+        if(count($excelPayments) == 0){
+            return $payment_record;
+        }
+
+        $year = RptMunicipalExcel::find($excelPayments[0]->col_rpt_municipal_excel_id);
+        $year = $year->report_year;
+
         $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
             from tax_dec_archive_info 
             join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
@@ -1076,12 +1083,33 @@ class CustomerController extends Controller
             where tax_dec_no = "'.$tdarp.'"'));
             
         foreach($excelPayments as $payment){
-           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax_type'] = [5];
-           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['discount'] = [$payment->basic_adv_discount + $payment->basic_current_discount];
-           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['penalty'] = [$payment->basic_penalty_current + $payment->basic_penalty_immediate + $payment->basic_penalty_1992 + $payment->basic_penalty_1991];
-           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax'] = [$payment->basic];
-           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['period_covered'] = [$payment->period_covered];
-           $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['date'] = [$payment->collection_date];
+
+            $period_covered = explode('-', $payment->period_covered);
+            if(end($period_covered) < $year){
+                continue;
+            }
+            
+            if(count($period_covered) > 1){
+                if(end($period_covered) >= $year){
+                    for ($i=$year; $i <= end($period_covered); $i++) { 
+                        $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax_type'] = [5];
+                        $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['discount'] = [( $i != $year ? $payment->basic_adv_discount : $payment->basic_current_discount)];
+                        $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['penalty'] = [$payment->basic_penalty_current];
+                        $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax'] = [($i != $year ? $payment->basic_adv_gross : $payment->basic_current_gross)];
+                        $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['period_covered'] = [$i];
+                        $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['date'] = [$payment->collection_date];
+                    }
+                }
+            }else{
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax_type'] = [5];
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['discount'] = [$payment->basic_adv_discount + $payment->basic_current_discount];
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['penalty'] = [$payment->basic_penalty_current];
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax'] = [$prev_tax_dec[0]->assessed_value * .01];
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['period_covered'] = [end($period_covered)];
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['date'] = [$payment->collection_date];
+            }
+            
+            
         }
         return $payment_record;
     }

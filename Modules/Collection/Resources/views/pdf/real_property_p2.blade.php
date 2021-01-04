@@ -104,7 +104,7 @@
 
         @foreach ($remdep as $rd)
         @if ($rd['name'] == "Other Cities/Prov." || $rd['name'] == 'La Trinidad')
-                @if (date('m/d/Y', strtotime('12/1/2020')) <= date('m/d/Y', strtotime($report_date)));
+                @if (strtotime('12/1/2020') <= strtotime($report_date));
                     @php
                         continue;
                     @endphp
@@ -179,7 +179,7 @@
         </thead>
         @foreach ($rcpt_acct as $rcpt)
             @if ($rcpt['src'] == "Other Cities/Prov." || $rcpt['src'] == 'La Trinidad')
-                @if (date('m/d/Y', strtotime('12/1/2020')) <= date('m/d/Y', strtotime($report_date)));
+                @if (strtotime('12/1/2020') <= strtotime($report_date));
                     @php
                         continue;
                     @endphp
