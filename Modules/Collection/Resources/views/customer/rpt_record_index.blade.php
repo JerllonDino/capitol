@@ -8,7 +8,8 @@
 				<option value="{{ $m->id }}">{{ $m->name }}</option>
 			@endforeach
 		</select>
-		<button class="btn btn-default" id="show" onclick="$.fn.getRecords()">SHOW</button>
+		<button class="btn btn-default" id="show" onclick="$.fn.getRecords(1)">Show</button>
+		<button class="btn btn-default" id="show" onclick="$.fn.getRecords(0)">Show Delinquent</button>
 	</div>
 	<br>
 	<table id="records" class="table table-responsive table-striped table-hover">
@@ -73,8 +74,7 @@
 <script type="text/javascript">
 var isTableProcessed = 0;
 var processingOnce = 0;
-	$.fn.getRecords = function() {
-		
+	$.fn.getRecords = function(isPaid) {
 		if($.fn.DataTable.isDataTable('#records')) {
 			$('#records').DataTable().destroy();
 		}
@@ -116,7 +116,7 @@ var processingOnce = 0;
 			serverSide: false,
 			deferRender: true,
 			ajax: {
-				url: "{{ route('rpt.records_dt') }}",
+				url: "{{ route('rpt.records_dt', ['isPaid' => 'isPaid']) }}".replace('isPaid', isPaid),
 				data: {
 					'mun' : $('#mun').val(),
 				}

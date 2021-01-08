@@ -3,25 +3,13 @@
 namespace Modules\Collection\Http\Controllers;
 
 use App\Http\Controllers\{Controller};
-use Carbon\Carbon;
+use Carbon\Carbon, Datatables;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Modules\Collection\Entities\Barangay;
-use Modules\Collection\Entities\CollectionRate;
-use Modules\Collection\Entities\Customer;
-use Modules\Collection\Entities\F56Detail;
-use Modules\Collection\Entities\F56PreviousReceipt;
-use Modules\Collection\Entities\F56TDARP;
-use Modules\Collection\Entities\F56Type;
 use Modules\Collection\Entities\Municipality;
-use Modules\Collection\Entities\Receipt;
-use Modules\Collection\Entities\ReceiptItemDetail;
-use Modules\Collection\Entities\ReceiptItems;
 use Modules\Collection\Entities\RptMunicipalExcel;
 use Modules\Collection\Entities\RptMunicipalExcelItems;
-use Modules\Collection\Entities\WeekdayHoliday;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
@@ -369,5 +357,30 @@ class MunicipalExcelImportController extends Controller
             return redirect()->route('rpt.import_excel_report');
         }
         
+    }
+
+    public function viewMunicipalRemittance()
+    {
+        $this->base['page_title'] = 'Field Division Municipal Remittance';
+        $this->base['municipality'] = Municipality::all();
+        $this->base['months'] = array();
+        for ($m=1; $m<=12; $m++) {
+            $month = date('F', mktime(0,0,0,$m, 1, date('Y')));
+            array_push($this->base['months'], $month);
+        }
+        return view('collection::customer.rpt_municipal_remittance')->with('base', $this->base);
+    }
+
+    public function getMunicipalRemittances(Request $request)
+    {
+        $municipalRemittances = RptMunicipalExcel::select('col_rpt_municipal_excel.*', 'col_municipality.name as municipality_name')
+        ->join('col_municipality', 'col_municipality.id', '=', 'col_rpt_municipal_excel.municipal')
+        ->where([
+            ['report_year', '=', $request['report_year']],
+            ['report_month', '=', $request['report_month']]
+        ])->get();
+        
+
+        return Datatables::of(collect($municipalRemittances))->make(true);
     }
 }

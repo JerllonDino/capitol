@@ -94,6 +94,7 @@
 			@endif
 			@if(count($property_rec) > 0)
 				@for($j = 0; $j < count($property_rec); $j++)
+					
 					@if($j > 0)
 						@if($property_rec[$j]['owner_id'] != $property_rec[$j-1]['owner_id'])
 							<h3 style="text-align: center;">REAL PROPERTY TAX RECORD</h3>
