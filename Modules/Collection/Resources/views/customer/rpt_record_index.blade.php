@@ -8,7 +8,13 @@
 				<option value="{{ $m->id }}">{{ $m->name }}</option>
 			@endforeach
 		</select>
-		<button class="btn btn-default" id="show" onclick="$.fn.getRecords(1)">Show</button>
+		<label>BARANGAY </label>
+		<select name="brgy" id="brgy" class="form-control">
+			@foreach($base['barangays'] as $b)
+				<option value="{{ $b->id }}">{{ $b->name }}</option>
+			@endforeach
+		</select>
+		<button class="btn btn-default" id="show" onclick="$.fn.getRecords(1)">Show Paid</button>
 		<button class="btn btn-default" id="show" onclick="$.fn.getRecords(0)">Show Delinquent</button>
 	</div>
 	<br>
@@ -119,6 +125,7 @@ var processingOnce = 0;
 				url: "{{ route('rpt.records_dt', ['isPaid' => 'isPaid']) }}".replace('isPaid', isPaid),
 				data: {
 					'mun' : $('#mun').val(),
+					'brgy' : $('#brgy').val()
 				}
 			},
 			columns: [
@@ -196,6 +203,36 @@ function showMantra(number){
 			break;
 	}
 }
+
+$('#mun').change(function(){
+	$.ajax({
+		type: 'post',
+		url: '{{ route("collection.ajax") }}',
+		data: {
+			'_token': '{{ csrf_token() }}',
+			'action': 'get_barangays',
+			'input': $('#mun').val(),
+		},
+	}).done(function(response){
+		$('#brgy').html('');
+		$.each( response, function(key, brgy) {
+			if(brgy.id == brgy) {
+				$('#brgy').append($('<option>', {
+					'data-code':brgy.code,
+					value: brgy.id,
+					text: brgy.name,
+					selected: true
+				}));
+			} else {
+				$('#brgy').append($('<option>', {
+					'data-code':brgy.code,
+					value: brgy.id,
+					text: brgy.name
+				}));
+			}
+		});
+	})
+});
 
 
 	// $(document).on('click', '#rpt_rec', function() {

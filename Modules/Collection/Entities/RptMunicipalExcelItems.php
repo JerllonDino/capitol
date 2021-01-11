@@ -51,6 +51,6 @@ class RptMunicipalExcelItems extends Model
 
     public function excel()
     {
-        return $this->belongsTo(RptMunicipalExcel::class);
+        return $this->belongsTo('Modules\Collection\Entities\RptMunicipalExcel', 'col_rpt_municipal_excel_id');
     }
 }

@@ -676,8 +676,8 @@ class ReportController extends Controller
             $data_prev = DB::table('col_receipt')
                 ->join('col_receipt_items','col_receipt_items.col_receipt_id','=','col_receipt.id')
                 ->select('client_type', DB::raw('sum(value) as value, sum(share_provincial) as prov_share'))
-                ->whereMonth('col_receipt.report_date','<',$request['month'])
-                ->whereYear('col_receipt.report_date','=',$request['year'])
+                ->whereMonth('col_receipt.report_date','=',($request['month'] == '1' ? '12' : $request['month']-1))
+                ->whereYear('col_receipt.report_date','=',( $request['month'] == '1' ? $request['year']-1 : $request['year']))
                 ->where('col_receipt_items.col_acct_title_id','=','4')
                 ->whereIn('client_type', [1,2,3,4,5,6,16])
                 ->where('col_receipt.is_printed','=','1')
@@ -687,8 +687,8 @@ class ReportController extends Controller
             $datac_prev = DB::table('col_cash_division')
                 ->join('col_cash_division_items','col_cash_division_items.col_cash_division_id','=','col_cash_division.id')
                 ->select(DB::raw('sum(value) as value'), 'client_type')
-                ->whereMonth('col_cash_division.date_of_entry','<',$request['month'])
-                ->whereYear('col_cash_division.date_of_entry','=',$request['year'])
+                ->whereMonth('col_cash_division.date_of_entry','=',($request['month'] == '1' ? '12' : $request['month']-1))
+                ->whereYear('col_cash_division.date_of_entry','=',( $request['month'] == '1' ? $request['year']-1 : $request['year']))
                 ->where('col_cash_division_items.col_acct_title_id','=','4')
                 ->whereIn('col_cash_division.client_type', [1,2,3,4,5,6,16])
                 ->whereNull('col_cash_division.deleted_at')
@@ -721,7 +721,7 @@ class ReportController extends Controller
             $this->base['provShare'] = $totalProvincialShare;
             $this->base['graveltypes'] = $typesx;
             $this->base['provSharePrevMnth'] = $provSharePrevMnth;
-
+            // dd($this->base);
             // $pdf = PDF::loadView('collection::pdf/sand_gravel_taxcollected_perclient', $this->base);
             $pdf = PDF::loadView('collection::pdf/sand_gravel_taxcollected_perclient_new', $this->base);
             $pdf->setPaper('legal', 'portrait');

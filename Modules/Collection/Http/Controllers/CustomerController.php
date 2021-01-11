@@ -181,6 +181,7 @@ class CustomerController extends Controller
     public function rpt_record_index() {
         $this->base['page_title'] = 'Payment Records';
         $this->base['municipality'] = Municipality::all();
+        $this->base['barangays'] = Barangay::where('municipality_id', '=', '1')->get();
         return view('collection::customer.rpt_record_index')->with('base', $this->base);    
     }
 
@@ -227,9 +228,9 @@ class CustomerController extends Controller
                         ->leftJoin('capitol.col_f56_detail', 'capitol.col_f56_detail.id', '=', 'capitol.col_f56_tdarp.col_f56_detail_id')
                         ->leftJoin('capitol.col_receipt', 'capitol.col_receipt.id', '=', 'capitol.col_f56_detail.col_receipt_id')
                         ->leftJoin('capitol_rpt.tax_dec_loc_property', 'capitol_rpt.tax_dec_loc_property.tax_dec_id', '=', 'rpt_archive_info.id')
-                        ->leftJoin('capitol.col_rpt_municipal_excel_items', 'capitol.col_rpt_municipal_excel_items.tdarp_number', '=', 'rpt_archive_info.tax_dec_no')
                         ->where([
                             ['capitol_rpt.tax_dec_loc_property.municipality', '=', $req->mun],
+                            ['capitol_rpt.tax_dec_loc_property.brgy', '=', $req->brgy],
                             ['rpt_archive_info.tax_dec_no', '!=', ''],
                             ['rpt_archive_info.tax_dec_no', '!=', null],
                         ])
@@ -238,13 +239,11 @@ class CustomerController extends Controller
                         ->whereNull('capitol_rpt.tax_dec_loc_property.deleted_at')
                         ->when($isPaid == 1, function($query){
                             return $query->whereYear('col_receipt.report_date', '>=', '2019')
-                                        ->orWhere('capitol.col_rpt_municipal_excel_items.tdarp_number', '!=', null)
                                         ->where('capitol.col_receipt.id', '!=', null);
                                         
                         })
                         ->when($isPaid == 0, function($query){
-                            return $query->where('capitol.col_rpt_municipal_excel_items.tdarp_number', '=', null)
-                                            ->where('capitol.col_receipt.id', '=', null);
+                            return $query->where('capitol.col_receipt.id', '=', null);
                         })
                         ->groupBy('rpt_archive_info.tax_dec_no')
                         ->get();
@@ -379,6 +378,7 @@ class CustomerController extends Controller
                             })
                             ->where([
                                 ['old_archive_info.municipality', '=', $req->mun],
+                                ['old_archive_info.brgy', '=', $req->brgy],
                                 ['old_archive_info.deleted_at', '=', null]
                             ])
                             ->orWhere(function($query){

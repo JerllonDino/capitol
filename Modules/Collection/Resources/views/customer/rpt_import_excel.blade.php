@@ -109,6 +109,7 @@
 <form action="{{ route('rpt.save_excel_report') }}" id="excel-form" method="POST">
     {{ csrf_field() }}
     <input type="hidden" name="excel_data">
+    <input type="hidden" name="excel_provincial">
     <input type="hidden" name="excel_final_municipality">
     <input type="hidden" name="excel_final_month">
     <input type="hidden" name="excel_final_year">
@@ -178,6 +179,21 @@
     </div>
   </div>
 
+  <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+            Municipal Report already exist! Do you want to overwrite?
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger confirm-save">Yes</button>
+            <button class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+
 @endsection
 
 @section('js')
@@ -209,8 +225,8 @@
             }).done(function(data){
                 if (data.html) {
                     $excelContainer.html(data.html);
-                    console.log(data.municipality);
                     $('#excel-form').find('input[name="excel_data"]').val(JSON.stringify(data.data));
+                    $('#excel-form').find('input[name="excel_provincial"]').val(JSON.stringify(data.provincial));
                     $('#save-import').show();
                 }else{
                     showMessage(data.message, 1);
@@ -230,6 +246,28 @@
         $('#excel-form').find('input[name="excel_final_municipality"]').val($excelImport.find('[name="excel_municipality"]').val());
         $('#excel-form').find('input[name="excel_final_month"]').val($excelImport.find('[name="excel_month"]').val());
         $('#excel-form').find('input[name="excel_final_year"]').val($excelImport.find('input[name="excel_year"]').val());
+        $.ajax({
+            url : "{{ route('rpt.get_municipal_excel') }}",
+            type: 'get',
+            data: {
+                'municipality' : $excelImport.find('[name="excel_municipality"]').val(),
+                'month': $excelImport.find('[name="excel_month"]').val(),
+                'year': $excelImport.find('input[name="excel_year"]').val()
+            },
+            beforeSend: function(){
+
+            }
+        }).done(function(data){
+            if(data){
+                $('#confirm-modal').modal('show');
+            }else{
+                $('#excel-form').submit();
+            }
+        }).fail(function(){
+
+        });
+    });
+    $('.confirm-save').click(function(){
         $('#excel-form').submit();
     });
 

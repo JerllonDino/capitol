@@ -10,6 +10,7 @@ use Modules\Collection\Entities\Barangay;
 use Modules\Collection\Entities\Municipality;
 use Modules\Collection\Entities\RptMunicipalExcel;
 use Modules\Collection\Entities\RptMunicipalExcelItems;
+use Modules\Collection\Entities\RptMunicipalExcelProvincialShare;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
@@ -154,12 +155,14 @@ class MunicipalExcelImportController extends Controller
             }
 
             if(count(array_filter($arrayData)) > 0){
-                
-                $html = $html . $this->excelSummary(array_filter($arrayData));
+                $excelSummary = $this->excelSummary(array_filter($arrayData));
+                $resortedData = $this->resortExcelData(array_filter($arrayData), $excelSummary['provincial']);
+                $html = $html . $excelSummary['html'];
                 $html = $html . '</table>' . PHP_EOL;
                 return response()->json([
                     'html' => $html,
-                    'data' => $this->resortExcelData(array_filter($arrayData), $request->excel_municipality),
+                    'data' => $resortedData['newSortedData'],
+                    'provincial' => $resortedData['provincialShare'],
                     'municipality' => $request->excel_municipality,
                 ]);
             }else{
@@ -228,17 +231,23 @@ class MunicipalExcelImportController extends Controller
         $provincialHtml = '';
         $excemp = [11,12,24,25,26];
         $provincialTotal = 0;
-        $provincial = 0;
-        foreach($sum as  $iterator => $value){
+
+        $provincial_array = [];
+        foreach($sum as $iterator => $value){
+            $provincial = 0;
             $html = $html . '<td><b>'. (number_format(floatval($value), 2) === '0.00' ? '' : number_format(floatval($value), 2)) . '</b></td>' . PHP_EOL;
             $provincial = (array_search($iterator, $excemp) !== false || $iterator == '27' ? 0 : (floatval($value) * ($iterator > 10 ? .5 : .35 )));
+            array_push($provincial_array, $provincial);
             $provincialTotal = ($iterator == "1" || $iterator == "3" || $iterator == "14" || $iterator == "16" ? $provincialTotal - $provincial : $provincialTotal + $provincial);
             $provincialHtml .= '<td>' . (number_format(floatval($value), 2) === '0.00' || array_search($iterator, $excemp) !== false ? '' : ($iterator == '27' ? number_format(floatval($provincialTotal), 2) : number_format($provincial, 2))) . '</td>' . PHP_EOL;
         }
         $html = $html . '</tr>' . PHP_EOL;
         $html = $html . '<tr>' . PHP_EOL . '<td colspan=7 style="text-align: right">Provincial Share</td>' . $provincialHtml . PHP_EOL . '</tr>'. PHP_EOL;
-        
-        return $html;
+        $response = [
+            'html' => $html,
+            'provincial' => $provincial_array
+        ];
+        return $response;
     }
 
     private function computeDisposition($type, $data, $computedValues)
@@ -274,7 +283,7 @@ class MunicipalExcelImportController extends Controller
         return $computedValues;
     }
 
-    private function resortExcelData($datas)
+    private function resortExcelData($datas, $provincial)
     {
         $newSortedData = [];
         $prevOr = 0;
@@ -328,17 +337,60 @@ class MunicipalExcelImportController extends Controller
                 $newSortedData[$data[3]][$data[4]] = $values;
             }
         }
-        return $newSortedData;
+
+        $provincialShare['basic_advance_amount'] = $provincial[0];
+        $provincialShare['basic_advance_discount'] = $provincial[1];
+        $provincialShare['basic_current_amount'] = $provincial[2];
+        $provincialShare['basic_current_discount'] = $provincial[3];
+        $provincialShare['basic_immediate_amount'] = $provincial[4];
+        $provincialShare['basic_1992_amount'] = $provincial[5];
+        $provincialShare['basic_1991_amount'] = $provincial[6];
+        $provincialShare['basic_penalty_current'] = $provincial[7];
+        $provincialShare['basic_penalty_immediate'] = $provincial[8];
+        $provincialShare['basic_penalty_1992'] = $provincial[9];
+        $provincialShare['basic_penalty_1991'] = $provincial[10];
+        $provincialShare['sef_advance_amount'] = $provincial[13];
+        $provincialShare['sef_advance_discount'] = $provincial[14];
+        $provincialShare['sef_current_amount'] = $provincial[15];
+        $provincialShare['sef_current_discount'] = $provincial[16];
+        $provincialShare['sef_immediate_amount'] = $provincial[17];
+        $provincialShare['sef_1992_amount'] = $provincial[18];
+        $provincialShare['sef_1991_amount'] = $provincial[19];
+        $provincialShare['sef_penalty_current'] = $provincial[20];
+        $provincialShare['sef_penalty_immediate'] = $provincial[21];
+        $provincialShare['sef_penalty_1992'] = $provincial[22];
+        $provincialShare['sef_penalty_1991'] = $provincial[23];
+        $response = [
+            'newSortedData' => $newSortedData,
+            'provincialShare' => $provincialShare
+        ];
+
+        return $response;
     }
 
     public function saveUploadedExcel(Request $request)
     {
         $data = json_decode($request['excel_data']);
-        $excel = RptMunicipalExcel::create([    
-            'municipal' => $request['excel_final_municipality'],
-            'report_month' => $request['excel_final_month'],
-            'report_year' => $request['excel_final_year']
-        ]);
+        $excel = RptMunicipalExcel::where([
+            ['municipal', '=', $request['excel_final_municipality']],
+            ['report_month', '=', $request['excel_final_month']],
+            ['report_year', '=', $request['excel_final_year']]
+        ])->first();
+        if($excel){
+            $excelItem = RptMunicipalExcelItems::where('col_rpt_municipal_excel_id', '=', $excel->id)->delete();
+            $excelProvincial = RptMunicipalExcelProvincialShare::where('col_rpt_municipal_excel_id', '=', $excel->id)->delete();
+            $excel->update([ 
+                    'municipal' => $request['excel_final_municipality'],
+                    'report_month' => $request['excel_final_month'],
+                    'report_year' => $request['excel_final_year']
+                ]);
+        }else{
+            $excel = RptMunicipalExcel::create([ 
+                'municipal' => $request['excel_final_municipality'],
+                'report_month' => $request['excel_final_month'],
+                'report_year' => $request['excel_final_year']
+            ]);
+        }
         
         foreach ($data as $or_number => $values) {
             foreach($values as $tdarp => $value){
@@ -352,35 +404,26 @@ class MunicipalExcelImportController extends Controller
                 $excelItems = RptMunicipalExcelItems::create($arrayData);
             }
         }
-        if ($excelItems) {
+        $provincialArray = (array) json_decode($request['excel_provincial']);
+        $provincialArray['col_rpt_municipal_excel_id'] = $excel->id;
+        $excelProvincialShare = RptMunicipalExcelProvincialShare::create($provincialArray);
+        
+        if ($excelItems && $excelProvincialShare) {
             Session::flash('successMessage', 'Excel imported successfully!');
             return redirect()->route('rpt.import_excel_report');
         }
-        
     }
-
-    public function viewMunicipalRemittance()
+    
+    public function isExistMunicipalExcel(Request $request)
     {
-        $this->base['page_title'] = 'Field Division Municipal Remittance';
-        $this->base['municipality'] = Municipality::all();
-        $this->base['months'] = array();
-        for ($m=1; $m<=12; $m++) {
-            $month = date('F', mktime(0,0,0,$m, 1, date('Y')));
-            array_push($this->base['months'], $month);
-        }
-        return view('collection::customer.rpt_municipal_remittance')->with('base', $this->base);
-    }
-
-    public function getMunicipalRemittances(Request $request)
-    {
-        $municipalRemittances = RptMunicipalExcel::select('col_rpt_municipal_excel.*', 'col_municipality.name as municipality_name')
-        ->join('col_municipality', 'col_municipality.id', '=', 'col_rpt_municipal_excel.municipal')
-        ->where([
-            ['report_year', '=', $request['report_year']],
-            ['report_month', '=', $request['report_month']]
-        ])->get();
+        $municipalExcel = RptMunicipalExcel::where([
+            ['municipal', '=', $request['municipality']],
+            ['report_month', '=', $request['month']],
+            ['report_year', '=', $request['year']]
+        ])->first();
         
-
-        return Datatables::of(collect($municipalRemittances))->make(true);
+        return $municipalExcel ? 1 : 0;
     }
+
+    
 }
