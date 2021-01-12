@@ -317,7 +317,7 @@
 													<td>
 														@if($det['tax_type'][$i] == 5)
 															<!-- MTO -->
-															PTO
+															MTO
 														@elseif($det['tax_type'][$i] == 6)
 															PTO
 														@endif
@@ -432,7 +432,7 @@
 														<td>
 															@if($det['tax_type'][$i] == 5)
 																<!-- MTO -->
-																PTO
+																MTO
 															@elseif($det['tax_type'][$i] == 6)
 																PTO
 															@endif
@@ -600,7 +600,7 @@
 													<td>
 														@if($det['tax_type'] == 5)
 															<!-- MTO -->
-															PTO
+															MTO
 														@elseif($det['tax_type'] == 6)
 															PTO
 														@endif

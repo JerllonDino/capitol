@@ -31,6 +31,9 @@
 @endsection
 
 @section('content')
+<div class="alert-container" style="display:none">
+    
+</div>
 
 <div class="row">
     <div class="col col-sm-12">
@@ -250,6 +253,7 @@ $('#provincial-tbody input').on('keyup change', function(){
 })
 
 $('.search-municipal-remittance').click(function(e){
+    $('.alert-container').hide();
     var municipality = $('#municipality').val();
     var month = $('#remit_month').val();
     var year = $('#remit_year').val();
@@ -270,16 +274,34 @@ $('.search-municipal-remittance').click(function(e){
         var ctr = 0;
         var basicTotal = 0;
         var sefTotal = 0;
-        for (const key in provincialShare) {
-            $('#provincial-tbody').find("#"+key).val(parseFloat(provincialShare[key]).toFixed(2));
-            ctr++;
+        if (response != 0) {
+            for (const key in provincialShare) {
+                $('#provincial-tbody').find("#"+key).val(parseFloat(provincialShare[key]).toFixed(2));
+                ctr++;
+            }
+            computeProvincial();
+            $('#provincialShareModal').modal('show');
+        }else{
+            $('.alert-container').show().html(`
+                <div class="alert alert-danger">
+                    No data found.
+                </div>
+            `);
+            
         }
-        computeProvincial();
-        $('#provincialShareModal').modal('show');
     }).fail(function(error){
-
+        $('.alert-container').html(`
+            <div class="alert alert-danger">
+                Uh oh, Something went wrong, please refresh and try again.
+            </div>
+        `);
+        $('.alert-container').show();
     });
 });
+
+$('.modal').on('hidden.bs.modal', function () {
+  $('#provincial-tbody input').val('');
+})
 
 function computeProvincial()
 {

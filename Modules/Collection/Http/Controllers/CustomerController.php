@@ -187,6 +187,7 @@ class CustomerController extends Controller
 
     public function rpt_record_dt(Request $req, $isPaid) {
         $tax_dec_info = array();
+        $tax_decs2 = [];
         // $tax_decs = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details from tax_dec_archive_info join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id where municipality = '.$req->mun.' and tax_dec_no != "" and tax_dec_no is not null and tax_dec_owner_info.deleted_at is null and tax_dec_archive_info.deleted_at is null and tax_dec_loc_property.deleted_at is null
         //     and (canceled_by_tdrp is null or canceled_by_tdrp = "")
         //     group by tax_dec_no')); 
@@ -234,21 +235,49 @@ class CustomerController extends Controller
                             ['rpt_archive_info.tax_dec_no', '!=', ''],
                             ['rpt_archive_info.tax_dec_no', '!=', null],
                         ])
-                        ->whereNull('capitol_rpt.tax_dec_owner_info.deleted_at')
-                        ->whereNull('rpt_archive_info.deleted_at')
-                        ->whereNull('capitol_rpt.tax_dec_loc_property.deleted_at')
                         ->when($isPaid == 1, function($query){
                             return $query->whereYear('col_receipt.report_date', '>=', '2019')
-                                        ->where('capitol.col_receipt.id', '!=', null);
-                                        
+                                        ->where('capitol.col_receipt.id', '!=', null);     
                         })
                         ->when($isPaid == 0, function($query){
                             return $query->where('capitol.col_receipt.id', '=', null);
                         })
+                        ->whereNull('capitol_rpt.tax_dec_owner_info.deleted_at')
+                        ->whereNull('rpt_archive_info.deleted_at')
+                        ->whereNull('capitol_rpt.tax_dec_loc_property.deleted_at')
                         ->groupBy('rpt_archive_info.tax_dec_no')
                         ->get();
+
+        if($isPaid == 1){
+            $tax_decs2 = DB::table('capitol_rpt.tax_dec_archive_info as rpt_archive_info')
+            ->select('capitol_rpt.tax_dec_owner_info.id as owner_id', 
+                        'rpt_archive_info.id as taxdec_id', 
+                        'rpt_archive_info.tax_dec_no', 
+                        'capitol_rpt.tax_dec_owner_info.address', 
+                        'capitol_rpt.tax_dec_owner_info.type_o', 
+                        'capitol_rpt.tax_dec_loc_property.municipality', 
+                        'capitol_rpt.tax_dec_loc_property.brgy',
+                        'capitol_rpt.tax_dec_loc_property.other_details',
+                        'rpt_archive_info.canceled_by_tdrp'
+                        )
+            ->join('capitol_rpt.tax_dec_owner_info', 'capitol_rpt.tax_dec_owner_info.id', '=', 'rpt_archive_info.owner_id')
+            ->leftJoin('capitol_rpt.tax_dec_loc_property', 'capitol_rpt.tax_dec_loc_property.tax_dec_id', '=', 'rpt_archive_info.id')
+            ->join('capitol.col_rpt_municipal_excel_items', 'capitol.col_rpt_municipal_excel_items.tdarp_number', '=', 'rpt_archive_info.tax_dec_no')
+            ->where([
+                ['capitol_rpt.tax_dec_loc_property.municipality', '=', $req->mun],
+                ['capitol_rpt.tax_dec_loc_property.brgy', '=', $req->brgy],
+                ['rpt_archive_info.tax_dec_no', '!=', ''],
+                ['rpt_archive_info.tax_dec_no', '!=', null]
+            ])
+            ->whereNull('capitol_rpt.tax_dec_owner_info.deleted_at')
+            ->whereNull('rpt_archive_info.deleted_at')
+            ->whereNull('capitol_rpt.tax_dec_loc_property.deleted_at')
+            ->groupBy('rpt_archive_info.tax_dec_no')
+            ->get();
+        }
+        // $tax_decs2 = collect($tax_decs2);
+        $tax_decs = count($tax_decs2) == 0 ? $tax_decs :array_merge($tax_decs, $tax_decs2);
         $tax_decs = collect($tax_decs);
-        // dd($tax_decs);
         foreach($tax_decs as $det) {
             $owner_name = '';
             $loc_mnc = Municipality::find($det->municipality);
@@ -266,7 +295,6 @@ class CustomerController extends Controller
                         ');
                         array_push($owners, $temp_owner);
                     }
-                    
                 }
             } elseif($det->type_o == 'Person') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select fname, lname, mname, ename from tax_dec_archive_owner_person where owner_id = '.$det->owner_id . ' group by fname, lname, mname, ename'));
@@ -279,7 +307,7 @@ class CustomerController extends Controller
                         ');
                         array_push($owners, $temp_owner);
                     }
-                    
+
                 }
             } elseif($det->type_o == 'Company') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select company_name from tax_dec_archive_owner_company where owner_id = '.$det->owner_id . ' group by company_name'));
@@ -291,7 +319,6 @@ class CustomerController extends Controller
                         ');
                         array_push($owners, $info->company_name);
                     }
-                    
                 }
             } elseif($det->type_o == 'MarriedTo') {
                 $get_owner_info = DB::connection('mysql2')->select(DB::raw('select owner_name, married_to from tax_dec_archive_owner_marriedto where owner_id = '.$det->owner_id . ' group by owner_name, married_to'));
@@ -319,7 +346,6 @@ class CustomerController extends Controller
                     
                 }
             }
-            
             
             if(($det->canceled_by_tdrp != "" && !is_null($det->canceled_by_tdrp))) {
                 continue; // for cancelled tax decs w/ NO payments recorded
@@ -1037,13 +1063,6 @@ class CustomerController extends Controller
         
         $year = RptMunicipalExcel::find($excelPayments[0]->col_rpt_municipal_excel_id);
         $year = $year->report_year;
-
-        $prev_tax_dec = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, tax_dec_archive_kind_class.assessed_value, actual_use, tax_dec_archive_info.id as id
-            from tax_dec_archive_info 
-            join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
-            left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
-            join tax_dec_archive_kind_class on tax_dec_archive_info.id = tax_dec_archive_kind_class.tax_dec_id
-            where tax_dec_no = "'.$tdarp.'"'));
             
         foreach($excelPayments as $payment){
 
@@ -1067,7 +1086,7 @@ class CustomerController extends Controller
                 $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax_type'] = [5];
                 $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['discount'] = [$payment->basic_adv_discount + $payment->basic_current_discount];
                 $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['penalty'] = [$payment->basic_penalty_current];
-                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax'] = [$prev_tax_dec[0]->assessed_value * .01];
+                $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['tax'] = [$payment->basic_current_gross];
                 $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['period_covered'] = [end($period_covered)];
                 $payment_record[$payment->id][$payment->tdarp_number][$payment->or_number]['date'] = [$payment->collection_date];
             }

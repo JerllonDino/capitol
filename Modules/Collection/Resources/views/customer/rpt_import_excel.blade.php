@@ -255,7 +255,7 @@
                 'year': $excelImport.find('input[name="excel_year"]').val()
             },
             beforeSend: function(){
-
+                
             }
         }).done(function(data){
             if(data){

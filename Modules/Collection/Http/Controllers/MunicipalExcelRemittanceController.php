@@ -39,7 +39,7 @@ class MunicipalExcelRemittanceController extends Controller
     public function searchProvincialShare(Request $request)
     {
         $municipality = $request['municipality'];
-        $month = $request['month'] ;
+        $month = $request['month'];
         $year = $request['year'];
         $provincialShare = RptMunicipalExcelProvincialShare::select('col_rpt_municipal_excel_provincial.*', 'col_municipality.name as municipality_name')
                                                             ->join('col_rpt_municipal_excel', 'col_rpt_municipal_excel.id', '=', 'col_rpt_municipal_excel_provincial.col_rpt_municipal_excel_id')
@@ -48,8 +48,9 @@ class MunicipalExcelRemittanceController extends Controller
                                                                 ['col_rpt_municipal_excel.municipal', '=', $municipality],
                                                                 ['col_rpt_municipal_excel.report_month', '=', $month],
                                                                 ['col_rpt_municipal_excel.report_year', '=', $year]
-                                                            ])->first()->toArray();
-        $provincialShare = json_encode( (array) $provincialShare);
+                                                            ])->first();
+    
+        $provincialShare = $provincialShare ? (json_encode( (array) $provincialShare->toArray())) : 0;
         return response()->json($provincialShare);
     }
 }
