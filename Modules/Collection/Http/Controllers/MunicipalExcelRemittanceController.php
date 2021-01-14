@@ -6,8 +6,10 @@ use Carbon\Carbon, Datatables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\{Controller};
+use Illuminate\Support\Facades\Session;
 use Modules\Collection\Entities\Municipality;
 use Modules\Collection\Entities\RptMunicipalExcel;
+use Modules\Collection\Entities\RptMunicipalExcelItems;
 use Modules\Collection\Entities\RptMunicipalExcelProvincialShare;
 
 class MunicipalExcelRemittanceController extends Controller
@@ -26,31 +28,39 @@ class MunicipalExcelRemittanceController extends Controller
 
     public function getMunicipalRemittances(Request $request)
     {
-        $municipalRemittances = RptMunicipalExcel::select('col_rpt_municipal_excel.*', 'col_municipality.name as municipality_name')
-        ->join('col_municipality', 'col_municipality.id', '=', 'col_rpt_municipal_excel.municipal')
-        ->where([
-            ['report_year', '=', $request['report_year']],
-            ['report_month', '=', $request['report_month']]
-        ])->get();
+        $municipalRemittances = RptMunicipalExcel::select('col_rpt_municipal_excel.*', 'col_municipality.name as municipality_name', 'col_rpt_municipal_excel_provincial.id as provincial_id')
+                                                ->join('col_municipality', 'col_municipality.id', '=', 'col_rpt_municipal_excel.municipal')
+                                                ->join('col_rpt_municipal_excel_provincial', 'col_rpt_municipal_excel_provincial.col_rpt_municipal_excel_id', '=', 'col_rpt_municipal_excel.id')
+                                                ->where([
+                                                    ['report_year', '=', $request['report_year']],
+                                                    ['report_month', '=', $request['report_month']],
+                                                    ['col_rpt_municipal_excel_provincial.is_verified', '=', $request['isVerified']]
+                                                ])->get();
         
         return Datatables::of(collect($municipalRemittances))->make(true);
     }
 
-    public function searchProvincialShare(Request $request)
+    public function verifyProvincialShare(Request $request)
     {
-        $municipality = $request['municipality'];
-        $month = $request['month'];
-        $year = $request['year'];
-        $provincialShare = RptMunicipalExcelProvincialShare::select('col_rpt_municipal_excel_provincial.*', 'col_municipality.name as municipality_name')
-                                                            ->join('col_rpt_municipal_excel', 'col_rpt_municipal_excel.id', '=', 'col_rpt_municipal_excel_provincial.col_rpt_municipal_excel_id')
-                                                            ->join('col_municipality', 'col_municipality.id', '=', 'col_rpt_municipal_excel.municipal')
-                                                            ->where([
-                                                                ['col_rpt_municipal_excel.municipal', '=', $municipality],
-                                                                ['col_rpt_municipal_excel.report_month', '=', $month],
-                                                                ['col_rpt_municipal_excel.report_year', '=', $year]
-                                                            ])->first();
-    
-        $provincialShare = $provincialShare ? (json_encode( (array) $provincialShare->toArray())) : 0;
+        $values = $request->all();
+        unset($values['_token']);
+        unset($values['id']);
+        $values['is_verified'] = 1;
+        $provincialId = $request['id'];
+        $provincialShare = RptMunicipalExcelProvincialShare::find($provincialId);
+        $provincialShare->update($values);
+        $sessionMessage = 'Municipal Remittance successfully ' . ($request['is_verified'] == 1 ? 'updated!' : 'verified!');
+        Session::flash('successMessage', $sessionMessage);
+        return redirect()->route('rpt.municipal_remittance');
+    }
+
+    public function getProvincialShare(Request $request)
+    {
+        $provincialShareId = $request['data_id'];
+        $provincialShare = RptMunicipalExcelProvincialShare::where([
+            ['id', $provincialShareId]])->first();
+        
+        $provincialShare =  $provincialShare ? (json_encode( (array) $provincialShare->toArray())) : 0;
         return response()->json($provincialShare);
     }
 }
