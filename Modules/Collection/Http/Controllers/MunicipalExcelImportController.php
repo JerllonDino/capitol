@@ -30,79 +30,6 @@ class MunicipalExcelImportController extends Controller
 
     public function viewExcel(Request $request)
     {
-        
-        $tableHeaders = '<thead>
-        <tr>
-            <th rowspan="4">Date</th>
-            <th rowspan="4">Name of Tax Payor</th>
-            <th rowspan="4">Period Covered</th>
-            <th rowspan="4">Official Receipt Number</th>
-            <th rowspan="4">TD/ARP No.</th>
-            <th rowspan="4">Name of Brgy.</th>
-            <th rowspan="4">Classifi <br> cation</th>
-            <th colspan="11">BASIC TAX</th>
-            <th rowspan="4">Sub-total Gross Collection</th>
-            <th rowspan="4">Sub-total Net Collection</th>
-            <th colspan="11">SPECIAL EDUCATION FUND</th>
-            <th rowspan="4">Sub-total Gross Collection</th>
-            <th rowspan="4">Sub-total Net Collection</th>
-            <th rowspan="4">Grand Total Gross Collection</th>
-            <th rowspan="4">Grand Total Net Collection</th>
-        </tr>
-        <tr>
-            <!-- basic --> 
-            <th style="top: 70px" colspan="2" rowspan="2">Advance</th>
-            <th style="top: 70px" colspan="2" rowspan="2">Current Year</th>
-            <th style="top: 70px" rowspan="3">'.(date("Y")-1).'</th>
-            <th style="top: 70px" colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th style="top: 70px" colspan="4">PENALTIES</th>
-            <!-- sef --> 
-            <th style="top: 70px" colspan="2" rowspan="2">Advance</th>
-            <th style="top: 70px" colspan="2" rowspan="2">Current Year</th>
-            <th style="top: 70px" rowspan="3">'.(date("Y")-1).'</th>
-            <th style="top: 70px" colspan="2" rowspan="2">PRIOR YEARS</th>
-            <th style="top: 70px" colspan="4">PENALTIES</th>
-        </tr> 
-        <tr>
-            <!-- basic -->
-            <th style="top: 90px" rowspan="2">'.date("Y").'</th>
-            <th style="top: 90px" rowspan="2">'.(date("Y")-1).'</th>
-            <th style="top: 90px" colspan="2">PRIOR YEARS</th>
-            <!-- sef -->
-            <th style="top: 90px" rowspan="2">'.date("Y").'</th>
-            <th style="top: 90px" rowspan="2">'.(date("Y")-1).'</th>
-            <th style="top: 90px" colspan="2">PRIOR YEARS</th>
-        </tr>
-        <tr>
-            <!-- basic -->
-            <th style="top: 110px">Gross Amount</th>
-            <th style="top: 110px">
-               Disc
-            </th>
-            <th style="top: 110px">Gross Amount</th>
-            <th style="top: 110px">
-               Disc
-            </th>
-            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 110px">1991 & Below</th>
-            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 110px">1991 & Below</th>
-
-            <!-- sef -->
-            <th style="top: 110px">Gross Amount</th>
-            <th style="top: 110px">
-                Disc
-            </th>
-            <th style="top: 110px">Gross Amount</th>
-            <th style="top: 110px">
-               Disc
-            </th>
-            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 110px">1991 & Below</th>
-            <th style="top: 110px">'.(date("Y")-2).'-1992</th>
-            <th style="top: 110px">1991 & Below</th>
-        </tr>
-    </thead>';
         $file = $request->file('imports');
         $non_numeric_cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
         if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv' and $file->isValid()) {
@@ -113,8 +40,7 @@ class MunicipalExcelImportController extends Controller
             $excel = $reader->load($path);
             $sheets = $excel->getSheetNames();
             $worksheet = $excel->getActiveSheet();
-            $html = '<table class="table table-bordered table-hover">' . PHP_EOL;
-            $html = $html . $tableHeaders;
+            $html = '';
             $arrayData = [];
             foreach ($worksheet->getRowIterator() as $i => $row) {
                 $html = $html . '<tr>' . PHP_EOL;
@@ -158,7 +84,6 @@ class MunicipalExcelImportController extends Controller
                 $excelSummary = $this->excelSummary(array_filter($arrayData));
                 $resortedData = $this->resortExcelData(array_filter($arrayData), $excelSummary['provincial']);
                 $html = $html . $excelSummary['html'];
-                $html = $html . '</table>' . PHP_EOL;
                 return response()->json([
                     'html' => $html,
                     'data' => $resortedData['newSortedData'],
@@ -261,8 +186,8 @@ class MunicipalExcelImportController extends Controller
         isset($computedValues[$type]['basic_prior_1991']) ? $computedValues[$type]['basic_prior_1991'] += floatval($data[13]) : $computedValues[$type]['basic_prior_1991'] = floatval($data[13]);
         isset($computedValues[$type]['basic_penalty_current']) ? $computedValues[$type]['basic_penalty_current'] += floatval($data[14]) : $computedValues[$type]['basic_penalty_current'] = floatval($data[14]);
         isset($computedValues[$type]['basic_penalty_immediate']) ? $computedValues[$type]['basic_penalty_immediate'] += floatval($data[15]) : $computedValues[$type]['basic_penalty_immediate'] = floatval($data[15]);
-        isset($computedValues[$type]['basic_penalty_prior_1992']) ? $computedValues[$type]['basic_penalty_prior_1992'] += floatval($data[16]) : $computedValues[$type]['basic_penalty_prior_1992'] = floatval($data[16]);
-        isset($computedValues[$type]['basic_penalty_prior_1991']) ? $computedValues[$type]['basic_penalty_prior_1991'] += floatval($data[17]) : $computedValues[$type]['basic_penalty_prior_1991'] = floatval($data[17]);
+        isset($computedValues[$type]['basic_penalty_1992']) ? $computedValues[$type]['basic_penalty_1992'] += floatval($data[16]) : $computedValues[$type]['basic_penalty_1992'] = floatval($data[16]);
+        isset($computedValues[$type]['basic_penalty_1991']) ? $computedValues[$type]['basic_penalty_1991'] += floatval($data[17]) : $computedValues[$type]['basic_penalty_1991'] = floatval($data[17]);
         isset($computedValues[$type]['basic_subtotal_gross']) ? $computedValues[$type]['basic_subtotal_gross'] += floatval($data[18]) : $computedValues[$type]['basic_subtotal_gross'] = floatval($data[18]);
         isset($computedValues[$type]['basic_subtotal_net']) ? $computedValues[$type]['basic_subtotal_net'] += floatval($data[19]) : $computedValues[$type]['basic_subtotal_net'] = floatval($data[19]);
         isset($computedValues[$type]['sef_advance_gross']) ? $computedValues[$type]['sef_advance_gross'] += floatval($data[20]) : $computedValues[$type]['sef_advance_gross'] = floatval($data[20]);
@@ -274,12 +199,12 @@ class MunicipalExcelImportController extends Controller
         isset($computedValues[$type]['sef_prior_1991']) ? $computedValues[$type]['sef_prior_1991'] += floatval($data[26]) : $computedValues[$type]['sef_prior_1991'] = floatval($data[26]);
         isset($computedValues[$type]['sef_penalty_current']) ? $computedValues[$type]['sef_penalty_current'] += floatval($data[27]) : $computedValues[$type]['sef_penalty_current'] = floatval($data[27]);
         isset($computedValues[$type]['sef_penalty_immediate']) ? $computedValues[$type]['sef_penalty_immediate'] += floatval($data[28]) : $computedValues[$type]['sef_penalty_immediate'] = floatval($data[28]);
-        isset($computedValues[$type]['sef_penalty_prior_1992']) ? $computedValues[$type]['sef_penalty_prior_1992'] += floatval($data[29]) : $computedValues[$type]['sef_penalty_prior_1992'] = floatval($data[29]);
-        isset($computedValues[$type]['sef_penalty_prior_1991']) ? $computedValues[$type]['sef_penalty_prior_1991'] += floatval($data[30]) : $computedValues[$type]['sef_penalty_prior_1991'] = floatval($data[30]);
+        isset($computedValues[$type]['sef_penalty_1992']) ? $computedValues[$type]['sef_penalty_1992'] += floatval($data[29]) : $computedValues[$type]['sef_penalty_1992'] = floatval($data[29]);
+        isset($computedValues[$type]['sef_penalty_1991']) ? $computedValues[$type]['sef_penalty_1991'] += floatval($data[30]) : $computedValues[$type]['sef_penalty_1991'] = floatval($data[30]);
         isset($computedValues[$type]['sef_subtotal_gross']) ? $computedValues[$type]['sef_subtotal_gross'] += floatval($data[31]) : $computedValues[$type]['sef_subtotal_gross'] = floatval($data[31]);
         isset($computedValues[$type]['sef_subtotal_net']) ? $computedValues[$type]['sef_subtotal_net'] += floatval($data[32]) : $computedValues[$type]['sef_subtotal_net'] = floatval($data[32]);
-        isset($computedValues[$type]['grandtotal_gross']) ? $computedValues[$type]['grandtotal_gross'] += floatval($data[33]) : $computedValues[$type]['grandtotal_gross'] = floatval($data[33]);
-        isset($computedValues[$type]['grandtotal_net']) ? $computedValues[$type]['grandtotal_net'] += floatval($data[34]) : $computedValues[$type]['grandtotal_net'] = floatval($data[34]);
+        isset($computedValues[$type]['grand_total_gross']) ? $computedValues[$type]['grand_total_gross'] += floatval($data[33]) : $computedValues[$type]['grand_total_gross'] = floatval($data[33]);
+        isset($computedValues[$type]['grand_total_net']) ? $computedValues[$type]['grand_total_net'] += floatval($data[34]) : $computedValues[$type]['grand_total_net'] = floatval($data[34]);
         return $computedValues;
     }
 
@@ -307,8 +232,8 @@ class MunicipalExcelImportController extends Controller
                 "basic_prior_1991" => $data[13],
                 "basic_penalty_current" => $data[14],
                 "basic_penalty_immediate" => $data[15],
-                "basic_penalty_prior_1992" => $data[16],
-                "basic_penalty_prior_1991" => $data[17],
+                "basic_penalty_1992" => $data[16],
+                "basic_penalty_1991" => $data[17],
                 "basic_subtotal_gross" => $data[18],
                 "basic_subtotal_net" => $data[19],
                 "sef_advance_gross" => $data[20],
@@ -320,12 +245,12 @@ class MunicipalExcelImportController extends Controller
                 "sef_prior_1991" => $data[26],
                 "sef_penalty_current" => $data[27],
                 "sef_penalty_immediate" => $data[28],
-                "sef_penalty_prior_1992" => $data[29],
-                "sef_penalty_prior_1991" => $data[30],
+                "sef_penalty_1992" => $data[29],
+                "sef_penalty_1991" => $data[30],
                 "sef_subtotal_gross" => $data[31],
                 "sef_subtotal_net" => $data[32],
-                "grandtotal_gross" => $data[33],
-                "grandtotal_net" => $data[34],
+                "grand_total_gross" => $data[33],
+                "grand_total_net" => $data[34],
             ];
             if(empty($data[3])){
                 $values['or_number'] = $prevOr;
@@ -425,5 +350,40 @@ class MunicipalExcelImportController extends Controller
         return $municipalExcel ? 1 : 0;
     }
 
+    public function getImportedExcels(Request $request)
+    {
+        $importedExcels = RptMunicipalExcel::select('col_rpt_municipal_excel.*', 'col_municipality.name as municipality_name')
+                            ->where([
+                                ['report_month', $request['report_month']],
+                                ['report_year', $request['report_year']]
+                            ])
+                            ->join('col_municipality', 'col_municipality.id', '=', 'col_rpt_municipal_excel.municipal')
+                            ->get();
+
+        return Datatables::of(collect($importedExcels))->make(true);
+    }
+
+    public function getImportedExcel(Request $request)
+    {
+        $excelId = $request['excel_id'];
+
+        $items = RptMunicipalExcelItems::select('col_rpt_municipal_excel_items.*', 'col_barangay.name as barangay_name')
+                                        ->leftJoin('col_barangay', 'col_barangay.id', '=', 'col_rpt_municipal_excel_items.barangay_id')
+                                        ->where('col_rpt_municipal_excel_id', $excelId)->get()->toArray();
+
+        $itemsArray = [];
+        foreach($items as $item){
+            $item['or_number'] = '0' . $item['or_number'];
+            $item['barangay_id'] = $item['barangay_name'];
+            array_push($itemsArray, array_values(array_except($item, ['id', 'col_rpt_municipal_excel_id', 'barangay_name'])));
+        }
+
+        $response = [
+            'items' => $itemsArray,
+            'disposition' => $this->excelSummary($itemsArray)['html']
+        ];
+
+        return response()->json($response);
+    }
     
 }

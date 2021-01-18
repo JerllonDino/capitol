@@ -391,6 +391,7 @@ The default client type and remarks set by the auto-fill function are based on t
             <th>Date Entry</th>
             <th>Date Report</th>
             <th>Customer/Payor</th>
+            <th>Transaction Type</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -470,6 +471,7 @@ $.fn.loadTable = function(){
                 searchable : true,
             },
             { data: 'name', name: 'name' },
+            { data: 'transaction_type', name: 'transaction_type'},
             { data: null, name: 'is_printed',
                render: function(data) {
                     var status = '';

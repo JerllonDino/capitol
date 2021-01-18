@@ -136,6 +136,9 @@
 									<td>{{ number_format($property_rec[$j]['tax_due'], 2) }}</td>
 								</tr>
 								<tr>
+									<td><b>Land Area: </b></td>
+									<td>{{ $property_rec[$j]['kind_land_area'] }}</td>
+								</tr>
 							</table>
 						@else
 							<br>
@@ -155,6 +158,10 @@
 								<tr>
 									<td><b>Tax Due: </b></td>
 									<td>{{ number_format($property_rec[$j]['tax_due'], 2) }}</td>
+								</tr>
+								<tr>
+									<td><b>Land Area: </b></td>
+									<td>{{ $property_rec[$j]['kind_land_area'] }}</td>
 								</tr>
 							</table>
 							<?php 
@@ -201,6 +208,10 @@
 								<td><b>Tax Due: </b></td>
 								<td>{{ number_format($property_rec[$j]['tax_due'], 2) }}</td>
 							</tr>
+							<tr>
+									<td><b>Land Area: </b></td>
+									<td>{{ $property_rec[$j]['land_area'] }}</td>
+								</tr>
 						</table>
 						@if($j == 0 && count($property_rec) > 2)
 							@if($property_rec[$j]['owner_id'] == $property_rec[$j+1]['owner_id'])

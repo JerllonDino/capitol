@@ -37,6 +37,7 @@ use App\Http\Controllers\BreadcrumbsController;
 use App\Http\Controllers\DatatablesController;
 
 use DB;
+use Modules\Collection\Entities\TransactionType;
 
 class CollectionDatatablesController extends DatatablesController
 {
@@ -203,9 +204,10 @@ class CollectionDatatablesController extends DatatablesController
         $ismany_table = IsManySerials::getTableName();
         $cert_table = RcptCertificate::getTableName();
         $certtype_table = RcptCertificateType::getTableName();
+        $TransactionType = TransactionType::getTableName();
         if($show_mnth != 'ALL'):
             if($show_day == 'ALL' || $show_day == null):
-                $receipts = Receipt::select([$cert_table.'.col_rcpt_certificate_type_id',$certtype_table.'.name as cert_typex',$ismany_table.'.col_receipt_serial_parent',$Withcert_table.'.process_status',$Withcert_table.'.cert_type',$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', $receipt_table.'.serial_no', $receipt_table.'.date_of_entry', $customer_table.'.name', $receipt_table.'.is_cancelled', $receipt_table.'.is_printed',$receipt_table.'.report_date','col_pc_settings.pc_ip', $ismany_table.'.col_serials'])
+                $receipts = Receipt::select([$cert_table.'.col_rcpt_certificate_type_id',$certtype_table.'.name as cert_typex',$ismany_table.'.col_receipt_serial_parent',$Withcert_table.'.process_status',$Withcert_table.'.cert_type',$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', $receipt_table.'.serial_no', $receipt_table.'.date_of_entry', $customer_table.'.name', $receipt_table.'.is_cancelled', $receipt_table.'.is_printed',$receipt_table.'.report_date','col_pc_settings.pc_ip', $ismany_table.'.col_serials', $TransactionType . '.name as transaction_type'])
                 ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
                 ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
                 ->where('transaction_source', '=', 'receipt')
@@ -217,9 +219,10 @@ class CollectionDatatablesController extends DatatablesController
                 ->leftjoin($cert_table, $cert_table.'.col_receipt_id', '=', $receipt_table.'.id')
                 ->leftjoin($certtype_table, $certtype_table.'.id', '=', $cert_table.'.col_rcpt_certificate_type_id')
                 ->leftJoin('col_pc_settings','col_pc_settings.pc_receipt','=','col_receipt.col_serial_id')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
                 ->get();
             else:
-                $receipts = Receipt::select([$cert_table.'.col_rcpt_certificate_type_id',$certtype_table.'.name as cert_typex',$ismany_table.'.col_receipt_serial_parent',$Withcert_table.'.process_status',$Withcert_table.'.cert_type',$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', $receipt_table.'.serial_no', $receipt_table.'.date_of_entry', $customer_table.'.name', $receipt_table.'.is_cancelled', $receipt_table.'.is_printed',$receipt_table.'.report_date','col_pc_settings.pc_ip', $ismany_table.'.col_serials'])
+                $receipts = Receipt::select([$cert_table.'.col_rcpt_certificate_type_id',$certtype_table.'.name as cert_typex',$ismany_table.'.col_receipt_serial_parent',$Withcert_table.'.process_status',$Withcert_table.'.cert_type',$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', $receipt_table.'.serial_no', $receipt_table.'.date_of_entry', $customer_table.'.name', $receipt_table.'.is_cancelled', $receipt_table.'.is_printed',$receipt_table.'.report_date','col_pc_settings.pc_ip', $ismany_table.'.col_serials', $TransactionType . '.name as transaction_type'])
                 ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
                 ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
                 ->whereDay($receipt_table.'.date_of_entry','=',$show_day)
@@ -232,10 +235,11 @@ class CollectionDatatablesController extends DatatablesController
                 ->leftjoin($cert_table, $cert_table.'.col_receipt_id', '=', $receipt_table.'.id')
                 ->leftjoin($certtype_table, $certtype_table.'.id', '=', $cert_table.'.col_rcpt_certificate_type_id')
                 ->leftJoin('col_pc_settings','col_pc_settings.pc_receipt','=','col_receipt.col_serial_id')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
                 ->get();
             endif;
         else:
-             $receipts = Receipt::select([$cert_table.'.col_rcpt_certificate_type_id',$certtype_table.'.name as cert_typex',$ismany_table.'.col_receipt_serial_parent',$Withcert_table.'.process_status',$Withcert_table.'.cert_type',$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', $receipt_table.'.serial_no', $receipt_table.'.date_of_entry', $customer_table.'.name', $receipt_table.'.is_cancelled', $receipt_table.'.is_printed',$receipt_table.'.report_date','col_pc_settings.pc_ip', $ismany_table.'.col_serials'])
+             $receipts = Receipt::select([$cert_table.'.col_rcpt_certificate_type_id',$certtype_table.'.name as cert_typex',$ismany_table.'.col_receipt_serial_parent',$Withcert_table.'.process_status',$Withcert_table.'.cert_type',$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', $receipt_table.'.serial_no', $receipt_table.'.date_of_entry', $customer_table.'.name', $receipt_table.'.is_cancelled', $receipt_table.'.is_printed',$receipt_table.'.report_date','col_pc_settings.pc_ip', $ismany_table.'.col_serials', $TransactionType . '.name as transaction_type'])
             ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
             ->where('transaction_source', '=', 'receipt')
             ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
@@ -246,6 +250,7 @@ class CollectionDatatablesController extends DatatablesController
             ->leftjoin($cert_table, $cert_table.'.col_receipt_id', '=', $receipt_table.'.id')
             ->leftjoin($certtype_table, $certtype_table.'.id', '=', $cert_table.'.col_rcpt_certificate_type_id')
             ->leftJoin('col_pc_settings','col_pc_settings.pc_receipt','=','col_receipt.col_serial_id')
+            ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
             ->get();
         endif;
        
@@ -303,9 +308,10 @@ class CollectionDatatablesController extends DatatablesController
         $user_table = User::getTableName();
         $form_table = Form::getTableName();
         $many_serials = IsManySerials::getTableName();
+        $TransactionType = TransactionType::getTableName();
         if($show_mnth != 'ALL'):
             if($show_day == 'ALL' || $show_day == null):
-                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials'])
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
                 ->with('WithCert')
                 ->with('RcptCertificate')
                 ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
@@ -316,9 +322,10 @@ class CollectionDatatablesController extends DatatablesController
                 ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
                 ->join($form_table, $form_table.'.id', '=', 'af_Type')
                 ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
                 ->get();
             else:
-                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials'])
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
                 ->with('WithCert')
                 ->with('RcptCertificate')
                 ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
@@ -330,10 +337,11 @@ class CollectionDatatablesController extends DatatablesController
                 ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
                 ->join($form_table, $form_table.'.id', '=', 'af_Type')
                 ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
                 ->get();
             endif;
         else:
-            $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials'])
+            $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
             ->with('WithCert')
             ->with('RcptCertificate')
             ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
@@ -343,6 +351,7 @@ class CollectionDatatablesController extends DatatablesController
             ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
             ->join($form_table, $form_table.'.id', '=', 'af_Type')
             ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+            ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
             ->get();
         endif;
         
@@ -359,10 +368,11 @@ class CollectionDatatablesController extends DatatablesController
         $F56TDARP = F56TDARP::getTableName();
         $Municipality = Municipality::getTableName();
         $Barangay = Barangay::getTableName();
+        $TransactionType = TransactionType::getTableName();
         
 
 
-        $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name',$Municipality.'.name as mun_name',$Barangay.'.name as brgy_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed'])
+        $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name',$Municipality.'.name as mun_name',$Barangay.'.name as brgy_name', $TransactionType.'.name as transaction_type', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed'])
             ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
             ->where($receipt_table.'.af_type','=',2)
             ->where('transaction_source', '=', 'field_land_tax')
@@ -371,6 +381,7 @@ class CollectionDatatablesController extends DatatablesController
             ->join($form_table, $form_table.'.id', '=', 'af_Type')
             ->leftjoin($Municipality, $Municipality.'.id', '=', $receipt_table.'.col_municipality_id')
             ->leftjoin($Barangay, $Barangay.'.id', '=', $receipt_table.'.col_barangay_id')
+            ->leftJoin($TransactionType, $TransactionType.'.id', '=', $receipt_table.'.transaction_type')
             ->get();
         return $receipts;
     }

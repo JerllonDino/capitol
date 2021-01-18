@@ -468,7 +468,7 @@ class CustomerController extends Controller
         $cancel_by = [];
 
         // PROPERTY
-        $tax_decs = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, address, type_o, municipality, brgy, other_details, cert_title, class, actual_use, tax_dec_archive_kind_class.assessed_value, effectivity_assesment_yr, canceled_by_tdrp  
+        $tax_decs = DB::connection('mysql2')->select(DB::raw('select tax_dec_owner_info.id as owner_id, tax_dec_archive_info.id as taxdec_id, tax_dec_no, CONCAT(tax_dec_archive_kind_class.land_area, " ", tax_dec_archive_kind_class.measurement) as kind_land_area, address, type_o, municipality, brgy, other_details, cert_title, class, actual_use, tax_dec_archive_kind_class.assessed_value, effectivity_assesment_yr, canceled_by_tdrp  
             from tax_dec_archive_info 
             join tax_dec_owner_info on tax_dec_archive_info.owner_id = tax_dec_owner_info.id 
             left join tax_dec_loc_property on tax_dec_loc_property.tax_dec_id = tax_dec_archive_info.id 
@@ -477,7 +477,7 @@ class CustomerController extends Controller
             and tax_dec_owner_info.deleted_at is null 
             and tax_dec_archive_info.deleted_at is null 
             and tax_dec_loc_property.deleted_at is null
-            order by effectivity_assesment_yr ASC')); 
+            order by effectivity_assesment_yr ASC'));
         if(count($tax_decs) > 0) {
             $tax_decs = collect($tax_decs);
             $owners = [];
@@ -657,10 +657,11 @@ class CustomerController extends Controller
                     'owner_new' => $owner_new_arr,
                     'effectivity_new' => $effectivity_new,
                     'id' => $cancel_by,
+                    'land_area' => $det->kind_land_area
                 ]);
             }
         } else {
-            $old_tax_decs = DB::connection('mysql2')->select(DB::raw('select owner_name, id, municipality, brgy, tax_dec_no, prevs_tax_dec_no, class, assessed_value, canceled_by_tdrp
+            $old_tax_decs = DB::connection('mysql2')->select(DB::raw('select owner_name, id, municipality, brgy, tax_dec_no, prevs_tax_dec_no, class, assessed_value, canceled_by_tdrp, CONCAT(land_area, " ", measurement) as kind_land_area
                 from tax_dec_old_archive_info
                 where tax_dec_no = "'.$td.'"
                 and deleted_at is null'));
@@ -1052,7 +1053,6 @@ class CustomerController extends Controller
 
     private function getAndMergeImportedExcelPayments($tdarp, $payment_record)
     {
-        
         $excelPayments = RptMunicipalExcelItems::where([
             ['tdarp_number', '=', $tdarp]
         ])->get();

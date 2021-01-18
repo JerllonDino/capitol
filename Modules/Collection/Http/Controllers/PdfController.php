@@ -4403,12 +4403,13 @@ class PdfController extends Controller
             ->with('report_sef_items')
             ->with('report_basic_items')
             ->get();
-            
+        $this->base['sef_exist'] = $report_exist;
         if($request['isEdit'] == 0 and count($report_exist) > 0){
-            return 'Report '.(isset($request['report_no']) ? $request['report_no'] : "").' of '.( isset($this->base['municipality']->name) ? $this->base['municipality']->name : '').' already exist!';
+            // return 'Report '.(isset($request['report_no']) ? $request['report_no'] : "").' of '.( isset($this->base['municipality']->name) ? $this->base['municipality']->name : '').' already exist!';
+            $this->base['sef_exist'] = null;
         }
 
-        $this->base['sef_exist'] = $report_exist;
+        
 
         foreach ($receipts as $rcpt_index => $receipt) {
             if ($receipt->is_cancelled) {
@@ -4509,13 +4510,14 @@ class PdfController extends Controller
             'end_date' => Carbon::parse($req->end_date)->format('Y-m-d'),
             'report_date' => Carbon::parse($req->report_date)->format('Y-m-d')
           ];
-          if(isset($req->report_id) || $req->report_id != ""){
+          
+          if($req->report_id != ""){
               $equivalents = [ 'id' => $req->report_id ];
               $values['report_no'] = $req->report_no;
               $values['municipality'] = $req->municipality;
           }
-          
         $insert = RptSefAdjustments::updateOrCreate($equivalents, $values);
+        
 
         RptSefAdjustmentsItems::updateOrCreate(
             [

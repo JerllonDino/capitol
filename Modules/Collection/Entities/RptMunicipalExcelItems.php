@@ -18,7 +18,7 @@ class RptMunicipalExcelItems extends Model
         'basic_adv_discount',
         'basic_current_gross',
         'basic_current_discount',
-        'basic_immediate_year',
+        'basic_immediate',
         'basic_prior_1992',
         'basic_prior_1991',
         'basic_penalty_current',

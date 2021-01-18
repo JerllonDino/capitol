@@ -453,6 +453,7 @@ Please indicate if 'Paid under protest' or 'Held in trust' when necessary."><i c
             <th>Serial</th>
             <th>Date</th>
             <th>Customer/Payor</th>
+            <th>Transaction Type</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>

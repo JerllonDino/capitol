@@ -298,7 +298,6 @@
         var values = $(this).data('values');
         $('.isEdit').val(1);
         var arrayData = {
-            
             'municipality' : values.municipality,
             'report_no' : values.report_no,
             'report_date' : values.report_date,

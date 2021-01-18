@@ -246,6 +246,8 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/real_property_tax/rpt_municipal_remittance/search', 'MunicipalExcelRemittanceController@searchProvincialShare')->name('rpt.search_provincial_share');
     Route::post('/real_property_tax/rpt_municipal_remittace/verify', 'MunicipalExcelRemittanceController@verifyProvincialShare')->name('rpt.verify_provincial_share');
     Route::get('/real_property_tax/rpt_municipal_remmitance/get/report', 'MunicipalExcelRemittanceController@getProvincialShare')->name('rpt.get_provincial_share');
+    Route::get('/real_property_tax/rpt_municipal_remmitance/get/imported', 'MunicipalExcelImportController@getImportedExcels')->name('rpt.get_imported_excels');
+    Route::get('/real_property_tax/rpt_municipal_remmitance/get/imported/items', 'MunicipalExcelImportController@getImportedExcel')->name('rpt.get_imported_excel');
     Route::get('/real_property_tax/importExcel','MunicipalExcelImportController@index')->name('rpt.import_excel_report');
     Route::get('/real_propert_tax/importExcel/checkIfExist', 'MunicipalExcelImportController@isExistMunicipalExcel')->name('rpt.get_municipal_excel');
     Route::post('/real_property_tax/importExcel/view','MunicipalExcelImportController@viewExcel')->name('rpt.view_excel_report');

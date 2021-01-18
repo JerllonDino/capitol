@@ -939,6 +939,7 @@
                   searchable : true,
               },
               { data: 'name', name: 'name' },
+              { data: 'transaction_type', name: 'transaction_type' },
               { data:
                   function(data) {
                       var status = '';

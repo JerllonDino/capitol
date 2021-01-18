@@ -16,7 +16,7 @@ class MunicipalExcelRemittanceController extends Controller
 {
     public function viewMunicipalRemittance()
     {
-        $this->base['page_title'] = 'Field Division Municipal Remittance';
+        $this->base['page_title'] = 'Field Division Municipal Remittance Verification';
         $this->base['municipality'] = Municipality::all();
         $this->base['months'] = array();
         for ($m=1; $m<=12; $m++) {
