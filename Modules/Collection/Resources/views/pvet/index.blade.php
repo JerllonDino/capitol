@@ -26,24 +26,9 @@
 @endsection
 
 @section('content')
-@if ( Session::get('permission')['col_cash_division'] & $base['can_write'] )
-
-<button class="btn btn-primary toggle-col" style="margin-bottom: 20px" data-toggle="collapse" data-target="#rpt-dt">Municipal RPT Records</button>
-
-<div class="table collapse" id="rpt-dt" style="overflow-y: scroll;">
-    <table class="table table-hovered" id="imported-excel" style="margin-top: 20px; width: 100%;">
-        <thead>
-            <th>Year</th>
-            <th>Month</th>
-            <th>Municipality</th>
-            <th>Date Imported</th>
-            <th>Action</th>
-        </thead>
-    </table>
-</div>
-
+{{-- @if ( Session::get('permission')['col_cash_division'] & $base['can_write'] ) --}}
 <div class="row">
-    {{ Form::open(['method' => 'POST', 'route' => ['cash_division.store']]) }}
+    {{ Form::open(['method' => 'POST', 'route' => ['pvet.store']]) }}
     <div class="form-group col-sm-12">
         <dl class="dl-horizontal">
             <dt>User</dt>
@@ -157,60 +142,8 @@
 
 <div id="account_panel">
 </div>
-
-<div class="panel panel-default">
-    <div class="panel-heading"><b>Adjustment</b></div>
-    <div class="panel-body">
-        <form action="{{ route('cashdiv.adjustment_add') }}" method="post" autocomplete="off">
-            {{ csrf_field() }}
-            <div class="form-group col-md-3">
-                <label>Year</label>
-                <select class="form-control" name="adj_yr" required> 
-                    <option></option>
-                    <?php
-                        $year = \Carbon\Carbon::now()->format('Y');
-                        for (; $year > 2015; $year--) { 
-                            echo "<option value='".$year."'>".$year."</option>";
-                        }
-                    ?>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label>Month</label>
-                <select class="form-control" name="adj_mnth" required>
-                    <option></option>
-                    <?php 
-                        $month = ['1'=>'January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                        foreach ($month as $key => $val) { 
-                            echo "<option value='".$key."'>".$val."</option>";
-                        }
-                    ?>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label>Type</label>
-                <select class="form-control" name="adj_type" required>
-                    <option></option>
-                    <option value="OPAg">OPAg</option>
-                    <option value="PVET">PVET</option>
-                    <option value="COLD CHAIN">COLD CHAIN</option>
-                    <option value="CERTIFICATIONS OPP - DOJ">CERTIFICATIONS OPP - DOJ</option>
-                    <option value="PROVINCIAL HEALTH OFFICE">PROVINCIAL HEALTH OFFICE</option>
-                    <option value="RPT">RPT</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label>Adjustment Amount</label>
-                <input type="number" step="0.01" name="adj_amt" class="form-control" required>
-            </div>
-            <br>
-            <button class="btn btn-success" type="submit">Add</button>
-            <a href="{{ route('cashdiv.adjustment_view') }}" class="btn btn-info">View Adjustments</a>
-        </form>
-    </div>
-</div>
-@endif
-@if ( Session::get('permission')['col_cash_division'] & $base['can_read'] )
+{{-- @endif --}}
+{{-- @if ( Session::get('permission')['col_cash_division'] & $base['can_read'] ) --}}
 <table id="seriallist" class="table table-striped table-hover" cellspacing="0" width="100%">
     <thead>
         <tr>
@@ -223,7 +156,7 @@
         </tr>
     </thead>
 </table>
-@endif
+{{-- @endif --}}
 @endsection
 
 @section('js')
@@ -231,7 +164,7 @@
 {{ Html::script('/datatables-1.10.12/js/dataTables.bootstrap.min.js') }}
 {{ Html::script('/base/sweetalert/sweetalert2.min.js') }}
 <script type="text/javascript">
-importedExcelDatatable()
+
  $.fn.loadTable = function(){
   if ( $.fn.DataTable.isDataTable('#seriallist') ) {
   $('#seriallist').DataTable().destroy();
@@ -240,7 +173,7 @@ importedExcelDatatable()
         dom: '<"dt-custom">frtip',
         processing: true,
         serverSide: true,
-        ajax: '{{ route("collection.datatables", "cash_division") }}',
+        ajax: '{{ route("collection.datatables", "pvet") }}',
         columns: [
             { data: 'realname', name: 'realname' },
             { data:
@@ -259,10 +192,10 @@ importedExcelDatatable()
                     var write = '';
                     var deletez = '';
                     @if ( Session::get('permission')['col_cash_division'] & $base['can_read'] )
-                    view = '<a href="{{ route('cash_division.index') }}/'+data.id+'" class="btn btn-sm btn-info datatable-btn" title="View"><i class="fa fa-eye"></i></a>';
+                    view = '<a href="{{ route('pvet.index') }}/'+data.id+'" class="btn btn-sm btn-info datatable-btn" title="View"><i class="fa fa-eye"></i></a>';
                     @endif
                     @if ( Session::get('permission')['col_cash_division'] & $base['can_write'] )
-                    write = '<a href="{{ route('cash_division.index') }}/'+data.id+'/edit" class="btn btn-sm btn-info datatable-btn" title="Edit"><i class="fa fa-pencil-square-o"></i></a>';
+                    write = '<a href="{{ route('pvet.index') }}/'+data.id+'/edit" class="btn btn-sm btn-info datatable-btn" title="Edit"><i class="fa fa-pencil-square-o"></i></a>';
                     @endif
                     @if ( Session::get('permission')['col_cash_division'] & $base['can_write'] )
                     if(data.deleted_at == null){
@@ -280,48 +213,6 @@ importedExcelDatatable()
         ]
     });
 }
-    function getMonthName(monthNumber) {
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return months[monthNumber - 1];
-    }
-    
-    function importedExcelDatatable()
-    {
-        if($.fn.DataTable.isDataTable('#imported-excel')) {
-            $('#imported-excel').DataTable().destroy();
-        }
-        $('#imported-excel').DataTable({
-            processing: true, 
-            serverSide: false,
-            deferRender: true,
-            order: [[ 0, 'desc' ]],
-            ajax: {
-                url: "{{ route('collection.datatables', 'cash_municipal_rpt_excel') }}",
-            },
-            columns: [
-                { data: 'report_year', name: 'report_year' },
-                { data: null, render: function(data){
-                    return getMonthName(data.report_month);
-                } },
-                { data: 'municipality_name', name: 'municipality_name' },
-                { data: 'created_at', name: 'created_at' },
-                { data: null, render: function(data) {
-                    return `<button class="btn btn-info add-report" data-values='`+JSON.stringify(data)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i></button>`;
-                } }
-            ],
-        });
-    }
-
-    $('#imported-excel').on('click', '.add-report', function(){
-        $('#rpt-dt').collapse('hide');
-        var values = $(this).data('values');
-        console.log(values);
-        $('.datepicker').val(values.updated_at);
-        $('textarea[name="refno"]').val(values.municipality_name + "-" + values.report_month + "-" + values.report_year);
-        $('#municipality').val(values.municipal);
-        $('#customer').val(values.municipality_name);
-        $('#customer_type').val(16);
-    });
 
     $.fn.deolete = function(deleteid){
         swal({
@@ -404,10 +295,6 @@ importedExcelDatatable()
 
     };
      $.fn.loadTable();
-     $('#rpt-dt').on('shown.bs.collapse', function () {
-         console.log('test');
-        $(this).css('height', '200px');
-    });
 </script>
 {{ Html::script('/vendor/autocomplete/jquery.autocomplete.js') }}
 <script type="text/javascript">

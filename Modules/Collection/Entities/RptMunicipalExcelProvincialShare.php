@@ -38,6 +38,11 @@ class RptMunicipalExcelProvincialShare extends Model
 
     protected $table = 'col_rpt_municipal_excel_provincial';
 
+    public static function getTableName()
+    {
+        return with(new static)->getTable();
+    }
+
     public function municipalExcel()
     {
         return $this->belongsTo('Modules\Collection\Entities\RptMunicipalExcel', 'col_rpt_municipal_excel_id');

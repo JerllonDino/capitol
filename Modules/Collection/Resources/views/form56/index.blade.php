@@ -200,7 +200,7 @@ The default client type and remarks set by the auto-fill function are based on t
             <option value="3">New Owner w/ back taxes</option>
             <option value="4">Newly Decared w/ back taxes</option>
             <option value="5">Collected by MTO</option>
-            <option value="6">Collected by PTO</option>
+            <option value="6" selected>Collected by PTO</option>
         </select>
     </div>
 

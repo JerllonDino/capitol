@@ -47,6 +47,11 @@ class RptMunicipalExcelItems extends Model
 
     public $timestamps = false;
 
+    public static function getTableName()
+    {
+        return with(new static)->getTable();
+    }
+
     protected $table = 'col_rpt_municipal_excel_items';
 
     public function excel()

@@ -292,6 +292,14 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
 
     Route::get('/payment_transactions', 'PaymentTransactionsController@index')->name('payment_transactions');
     Route::get('/payment_transactions/store', 'PaymentTransactionsController@store')->name('payment_transactions.store');
+
+    Route::resource('opag', 'OpagController');
+    Route::post('/opag_delete', 'CashDivisionController@opag_delete')->name('opag.delete');
+    Route::post('/opag_restore', 'CashDivisionController@opag_restore')->name('opag.restore');
+
+    Route::resource('pvet', 'PvetController');
+    Route::post('/pvet_delete', 'CashDivisionController@pvet_delete')->name('pvet.delete');
+    Route::post('/pvet_restore', 'CashDivisionController@pvet_restore')->name('pvet.restore');
 });
 
 

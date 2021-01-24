@@ -13,6 +13,11 @@ class RptMunicipalExcel extends Model
     ];
 
     protected $table = 'col_rpt_municipal_excel';
+
+    public static function getTableName()
+    {
+        return with(new static)->getTable();
+    }
     
     public function excelItems()
     {

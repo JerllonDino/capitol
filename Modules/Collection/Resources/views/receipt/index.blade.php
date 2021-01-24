@@ -371,15 +371,16 @@ The default client type and remarks set by the auto-fill function are based on t
  <fieldset>
   <legend>Legend:</legend>
         <h5>Certificates Icon</h5>
-        <button class="btn btn-sm btn-gray datatable-btn" title="Certificate"><i class="fa fa-certificate"></i> </button> No Certificate
-        <button  class="btn btn-sm bg-cert-ttc datatable-btn" title="Transfer Tax Certificate"><i class="fa fa-certificate"></i></button>Transfer Tax Certificate
-        <button class="btn btn-sm bg-cert-sg datatable-btn" title="Sand &amp; Gravel Certificate"><i class="fa fa-certificate"></i></button>Sand &amp; Gravel Certificate
-        <button class="btn btn-sm bg-cert-pp datatable-btn" title="Provincial Permit Certificate"><i class="fa fa-certificate"></i></button>Provincial Permit Certificate
+        <button class="btn btn-sm btn-gray datatable-btn legend-btn" name="no_certificate" title="Certificate"><i class="fa fa-certificate"></i> </button> No Certificate
+        <button class="btn btn-sm bg-cert-ttc datatable-btn legend-btn" name="transfer_tax" title="Transfer Tax"><i class="fa fa-certificate"></i></button>Transfer Tax Certificate
+        <button class="btn btn-sm bg-cert-sg datatable-btn legend-btn" name="sand_gravel" title="Sand &amp; Gravel"><i class="fa fa-certificate"></i></button>Sand &amp; Gravel Certificate
+        <button class="btn btn-sm bg-cert-pp datatable-btn legend-btn" name="provincial_permit" title="Provincial Permit"><i class="fa fa-certificate"></i></button>Provincial Permit Certificate
         <hr />
         {{-- <h5>Additional Receipt Icon</h5>
         <button class="btn btn-sm btn-another-none datatable-btn" title="ANOTHER RECEIPT"><i class="fa fa-plus"></i> </button>Create ANOTHER RECEIPT --}}
 
  </fieldset>
+
 
 <table id="seriallist" class="table table-striped table-hover" cellspacing="0" width="100%">
     <thead>
@@ -394,6 +395,7 @@ The default client type and remarks set by the auto-fill function are based on t
             <th>Transaction Type</th>
             <th>Status</th>
             <th>Actions</th>
+            <th>Certificate</th>
         </tr>
     </thead>
 </table>
@@ -403,9 +405,12 @@ The default client type and remarks set by the auto-fill function are based on t
 @section('js')
 
 <script type="text/javascript">
+
+var serialDT = $('#seriallist').DataTable();
     tinymce.init({
         selector: '#remarks',
     });
+
 
     $.fn.showDays = function() {
         if($('#show_mnth').val() != 'ALL') {
@@ -436,10 +441,10 @@ $.fn.loadTable = function(){
     if ( $.fn.DataTable.isDataTable('#seriallist') ) {
         $('#seriallist').DataTable().destroy();
     }
-    $('#seriallist').dataTable({
+    serialDT = $('#seriallist').DataTable({
         dom: '<"dt-custom">frtip',
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: { 
             'url' : '{{ route("collection.datatables", "receipt") }}',
             'data' : {
@@ -448,7 +453,6 @@ $.fn.loadTable = function(){
                 'show_day' : $('#show_day').val(),
             }
         },
-
         columns: [
             { data: 'realname', name: 'realname' },
             { data: 'pc_ip', name: 'col_pc_settings.pc_ip' },
@@ -568,12 +572,39 @@ $.fn.loadTable = function(){
                 bSortable: false,
                 searchable: false,
             },
+            { data: 
+             function(data){
+                var text = "";
+                if(data.cert_typex === 'Transfer Tax'){
+                    text = "transfer_tax";
+                }
+                if(data.cert_typex === 'Sand & Gravel'){
+                    text = "sand_gravel";
+                }
+                if(data.cert_typex === 'Provincial Permit'){
+                    text = "provincial_permit";
+                }
+                if (!data.cert_typex) {
+                    text = "no_certificate";
+                }
+                return text;
+            },
+            bSortable: false,
+            visible: false,
+            searchable: true
+            },
         ],
         order : [[ 4, "desc" ]]
     });
-
+    
 }
 $.fn.loadTable();
+$('.legend-btn').click(function(){
+    var searchValue = $(this).attr('name');
+    console.log($(this).attr('name'));
+    serialDT.column(10).search(searchValue).draw();
+});
+
 
 $("#form").val('1');
 $("#form").trigger( 'change', []);

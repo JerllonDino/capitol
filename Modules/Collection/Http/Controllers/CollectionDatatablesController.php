@@ -37,6 +37,10 @@ use App\Http\Controllers\BreadcrumbsController;
 use App\Http\Controllers\DatatablesController;
 
 use DB;
+use Modules\Collection\Entities\OpagCollection;
+use Modules\Collection\Entities\PvetCollection;
+use Modules\Collection\Entities\RptMunicipalExcel;
+use Modules\Collection\Entities\RptMunicipalExcelProvincialShare;
 use Modules\Collection\Entities\TransactionType;
 
 class CollectionDatatablesController extends DatatablesController
@@ -400,5 +404,55 @@ class CollectionDatatablesController extends DatatablesController
             ->withTrashed()
             ->get();
         return $cash_division;
+    }
+
+    protected function opag()
+    {
+        $opag_table = OpagCollection::getTableName();
+        $user_table = User::getTableName();
+        $Municipality = Municipality::getTableName();
+        $customer_table = Customer::getTableName();
+
+        $opag = OpagCollection::select([$opag_table.'.id',$opag_table.'.refno',$Municipality.'.name', $user_table.'.realname', 'date_of_entry',$customer_table.'.name as customer_name',$opag_table.'.deleted_at'])
+            ->leftjoin($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+            ->leftjoin($Municipality, $Municipality.'.id', '=', $opag_table.'.col_municipality_id')
+            ->leftjoin($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+            // ->withTrashed()
+            ->get();
+        return $opag;
+    }
+
+    protected function pvet()
+    {
+        $pvet_table = PvetCollection::getTableName();
+        $user_table = User::getTableName();
+        $Municipality = Municipality::getTableName();
+        $customer_table = Customer::getTableName();
+
+        $pvet = PvetCollection::select([$pvet_table.'.id',$pvet_table.'.refno',$Municipality.'.name', $user_table.'.realname', 'date_of_entry',$customer_table.'.name as customer_name',$pvet_table.'.deleted_at'])
+            ->leftjoin($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+            ->leftjoin($Municipality, $Municipality.'.id', '=', $pvet_table.'.col_municipality_id')
+            ->leftjoin($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+            // ->withTrashed()
+            ->get();
+        return $pvet;
+    }
+
+    protected function cash_municipal_rpt_excel()
+    {
+        $excel_table = RptMunicipalExcel::getTableName();
+        $excel_provincial = RptMunicipalExcelProvincialShare::getTableName();
+        $Municipality = Municipality::getTableName();
+
+        $importedExcels = RptMunicipalExcel::select($excel_table . '.*', $Municipality . '.name as municipality_name')
+                            ->where([
+                                ['is_printed', 0],
+                                [$excel_provincial . '.is_verified', 1]
+                            ])
+                            ->leftJoin($excel_provincial, $excel_provincial .'.'. $excel_table . '_id', '=', $excel_table . '.id')
+                            ->join($Municipality, $Municipality . '.id', '=', $excel_table . '.municipal')
+                            ->get();
+        
+        return $importedExcels;
     }
 }
