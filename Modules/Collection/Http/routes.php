@@ -300,6 +300,8 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::resource('pvet', 'PvetController');
     Route::post('/pvet_delete', 'CashDivisionController@pvet_delete')->name('pvet.delete');
     Route::post('/pvet_restore', 'CashDivisionController@pvet_restore')->name('pvet.restore');
+
+    Route::resource('field_verification', 'FieldVerificationController');
 });
 
 

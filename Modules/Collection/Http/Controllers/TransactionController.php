@@ -361,6 +361,14 @@ class TransactionController extends Controller
 
         Session::flash('info', ['Successfully created transaction for serial: '.$current]);
 
+        if($request['transaction_source'] == 'opag'){
+            return redirect()->route('opag.index');
+        }
+
+        if($request['transaction_source'] == 'pvet'){
+            return redirect()->route('pvet.index');
+        }
+
         if ($request['form'] == 2) {
             if ($request['transaction_source'] == "receipt") {
                 return redirect()->route('receipt.f56_detail_form', ['id' => $receipt->id]);
@@ -371,6 +379,8 @@ class TransactionController extends Controller
         if ($request['transaction_source'] == "receipt") {
             return redirect()->route('receipt.show', ['id' => $receipt->id]);
         }
+
+        
         return redirect()->route('field_land_tax.index');
     }
 

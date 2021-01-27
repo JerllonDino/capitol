@@ -4,6 +4,7 @@ namespace Modules\Collection\Http\Controllers;
 
 use App\Http\Controllers\{Controller};
 use Carbon\Carbon, Datatables;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Modules\Collection\Entities\Barangay;
@@ -28,14 +29,25 @@ class MunicipalExcelImportController extends Controller
         return view('collection::customer.rpt_import_excel')->with('base', $this->base);
     }
 
+    private function validateDate($date, $format = 'm/d/Y')
+    {
+        try {
+            $d = DateTime::createFromFormat($format, $date);
+            return $d && $d->format($format) === $date;
+        } catch (\Throwable $th) {
+            return false;
+        }
+        
+    }
+
     public function viewExcel(Request $request)
     {
         $file = $request->file('imports');
+        $fileExtension = $file->extension();
         $non_numeric_cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-        if ($file->extension() == 'xlsx' || $file->extension() == 'xls' || $file->extension() == 'csv' and $file->isValid()) {
-            
+        if ($fileExtension == 'xlsx' || $fileExtension == 'xls' || $fileExtension == 'csv' and $file->isValid()) {
             $path = $file->getRealPath();
-            $reader = IOFactory::createReader('Xls');
+            $reader = IOFactory::createReader(ucwords($fileExtension));
             $reader->setReadDataOnly(TRUE);
             $excel = $reader->load($path);
             $sheets = $excel->getSheetNames();
@@ -55,8 +67,11 @@ class MunicipalExcelImportController extends Controller
                         }
                         if($it == 'A'){
                             if(!is_int($cell->getValue())){
-                                $columns = "";
-                                break;
+                                $avalue = explode("/", $cell->getValue());
+                                if(count($avalue) !== 3){
+                                    $columns = "";
+                                    break;
+                                }
                             }
                         }
                         if(empty($cell->getValue())){
@@ -66,23 +81,44 @@ class MunicipalExcelImportController extends Controller
                             $columns = "";
                             continue;
                         }
-                        
-                        $tdData = $it == 'A' ? date('Y-m-d', Date::excelToTimestamp($cell->getValue())) : ($cell->getOldCalculatedValue() ? $cell->getOldCalculatedValue() : $cell->getFormattedValue());
+
+                        if($it == 'A'){
+                            if(is_int($cell->getValue())){
+                                $tdData = date('Y-m-d', Date::excelToTimestamp($cell->getValue()));
+                            }else{
+                                $tdData = date('Y-m-d', strtotime($cell->getValue()));
+                            }
+                        }else{
+                            if($cell->getOldCalculatedValue()){
+                                $tdData = $cell->getOldCalculatedValue();
+                            }else{
+                                $tdData = $cell->getFormattedValue();
+                            }
+                        }
+
                         $tdValues = (array_search($it, $non_numeric_cells) === false ? number_format( floatval($tdData), 2) : $tdData);
-                        
                         array_push($subArrayData, (array_search($it, $non_numeric_cells) === false ? floatval($tdData) : $tdData) );
                         $columns = $columns . '<td>' . ( $tdValues === "0.00" ? '' : $tdValues )  . '</td>' . PHP_EOL;
                         // dd($tdValues);
                     }
-                     
-                array_push($arrayData, $subArrayData);
-                $html = $html . $columns;
-                $html = $html . '</tr>' . PHP_EOL;
+                if(count($subArrayData) < 35){
+                    continue;
+                }
+                if (count($subArrayData) == 35) {
+                    array_push($arrayData, $subArrayData);
+                    $html = $html . $columns;
+                    $html = $html . '</tr>' . PHP_EOL;
+                }else{
+                    return response()->json([
+                        'message' => 'The excel file has invalid headers!',
+                    ]);
+                }
+                
             }
-
-            if(count(array_filter($arrayData)) > 0){
-                $excelSummary = $this->excelSummary(array_filter($arrayData));
-                $resortedData = $this->resortExcelData(array_filter($arrayData), $excelSummary['provincial']);
+            // dd($arrayData);
+            if(count($arrayData) > 0){
+                $excelSummary = $this->excelSummary($arrayData);
+                $resortedData = $this->resortExcelData($arrayData, $excelSummary['provincial']);
                 $html = $html . $excelSummary['html'];
                 return response()->json([
                     'html' => $html,
@@ -106,7 +142,11 @@ class MunicipalExcelImportController extends Controller
     {
         $computedValues = [];
         foreach($datas as $i => $data){
-            switch($data[6]){
+            $receiptClass = $data[6];
+            if (strlen($receiptClass) > 1) {
+                $receiptClass = strtoupper($receiptClass[0]);
+            }
+            switch($receiptClass){
                 case 'R':
                     $computedValues = $this->computeDisposition('residential', $data, $computedValues);
                 break;

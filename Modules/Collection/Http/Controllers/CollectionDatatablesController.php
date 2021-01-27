@@ -362,6 +362,128 @@ class CollectionDatatablesController extends DatatablesController
         return $receipts;
     }
 
+    protected function opag()
+    {
+        $show_year = Input::get('show_year');
+        $show_mnth = Input::get('show_mnth');
+        $show_day = Input::get('show_day');
+        
+        $receipt_table = Receipt::getTableName();
+        $customer_table = Customer::getTableName();
+        $user_table = User::getTableName();
+        $form_table = Form::getTableName();
+        $many_serials = IsManySerials::getTableName();
+        $TransactionType = TransactionType::getTableName();
+        if($show_mnth != 'ALL'):
+            if($show_day == 'ALL' || $show_day == null):
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+                ->with('WithCert')
+                ->with('RcptCertificate')
+                ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+                ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
+                ->where('transaction_source', '=', 'opag')
+                ->where($receipt_table.'.af_type','=',1)
+                ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+                ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+                ->join($form_table, $form_table.'.id', '=', 'af_Type')
+                ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+                ->get();
+            else:
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+                ->with('WithCert')
+                ->with('RcptCertificate')
+                ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+                ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
+                ->whereDay($receipt_table.'.date_of_entry','=',$show_day)
+                ->where('transaction_source', '=', 'opag')
+                ->where($receipt_table.'.af_type','=',1)
+                ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+                ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+                ->join($form_table, $form_table.'.id', '=', 'af_Type')
+                ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+                ->get();
+            endif;
+        else:
+            $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+            ->with('WithCert')
+            ->with('RcptCertificate')
+            ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+            ->where('transaction_source', '=', 'opag')
+            ->where($receipt_table.'.af_type','=',1)
+            ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+            ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+            ->join($form_table, $form_table.'.id', '=', 'af_Type')
+            ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+            ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+            ->get();
+        endif;
+        
+        return $receipts;
+    }
+
+    protected function pvet()
+    {
+        $show_year = Input::get('show_year');
+        $show_mnth = Input::get('show_mnth');
+        $show_day = Input::get('show_day');
+        
+        $receipt_table = Receipt::getTableName();
+        $customer_table = Customer::getTableName();
+        $user_table = User::getTableName();
+        $form_table = Form::getTableName();
+        $many_serials = IsManySerials::getTableName();
+        $TransactionType = TransactionType::getTableName();
+        if($show_mnth != 'ALL'):
+            if($show_day == 'ALL' || $show_day == null):
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+                ->with('WithCert')
+                ->with('RcptCertificate')
+                ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+                ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
+                ->where('transaction_source', '=', 'pvet')
+                ->where($receipt_table.'.af_type','=',1)
+                ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+                ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+                ->join($form_table, $form_table.'.id', '=', 'af_Type')
+                ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+                ->get();
+            else:
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+                ->with('WithCert')
+                ->with('RcptCertificate')
+                ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+                ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
+                ->whereDay($receipt_table.'.date_of_entry','=',$show_day)
+                ->where('transaction_source', '=', 'pvet')
+                ->where($receipt_table.'.af_type','=',1)
+                ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+                ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+                ->join($form_table, $form_table.'.id', '=', 'af_Type')
+                ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+                ->get();
+            endif;
+        else:
+            $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+            ->with('WithCert')
+            ->with('RcptCertificate')
+            ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+            ->where('transaction_source', '=', 'pvet')
+            ->where($receipt_table.'.af_type','=',1)
+            ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+            ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+            ->join($form_table, $form_table.'.id', '=', 'af_Type')
+            ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+            ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+            ->get();
+        endif;
+        
+        return $receipts;
+    }
+
     protected function form56()
     {
         $show_year = Input::get('show_year');
@@ -404,38 +526,6 @@ class CollectionDatatablesController extends DatatablesController
             ->withTrashed()
             ->get();
         return $cash_division;
-    }
-
-    protected function opag()
-    {
-        $opag_table = OpagCollection::getTableName();
-        $user_table = User::getTableName();
-        $Municipality = Municipality::getTableName();
-        $customer_table = Customer::getTableName();
-
-        $opag = OpagCollection::select([$opag_table.'.id',$opag_table.'.refno',$Municipality.'.name', $user_table.'.realname', 'date_of_entry',$customer_table.'.name as customer_name',$opag_table.'.deleted_at'])
-            ->leftjoin($user_table, $user_table.'.id', '=', 'dnlx_user_id')
-            ->leftjoin($Municipality, $Municipality.'.id', '=', $opag_table.'.col_municipality_id')
-            ->leftjoin($customer_table, $customer_table.'.id', '=', 'col_customer_id')
-            // ->withTrashed()
-            ->get();
-        return $opag;
-    }
-
-    protected function pvet()
-    {
-        $pvet_table = PvetCollection::getTableName();
-        $user_table = User::getTableName();
-        $Municipality = Municipality::getTableName();
-        $customer_table = Customer::getTableName();
-
-        $pvet = PvetCollection::select([$pvet_table.'.id',$pvet_table.'.refno',$Municipality.'.name', $user_table.'.realname', 'date_of_entry',$customer_table.'.name as customer_name',$pvet_table.'.deleted_at'])
-            ->leftjoin($user_table, $user_table.'.id', '=', 'dnlx_user_id')
-            ->leftjoin($Municipality, $Municipality.'.id', '=', $pvet_table.'.col_municipality_id')
-            ->leftjoin($customer_table, $customer_table.'.id', '=', 'col_customer_id')
-            // ->withTrashed()
-            ->get();
-        return $pvet;
     }
 
     protected function cash_municipal_rpt_excel()

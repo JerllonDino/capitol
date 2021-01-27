@@ -281,7 +281,7 @@ fieldset {
                     <th colspan="2">Account</th>
                     <th class="td_nature">Nature</th>
                     <th>Amount</th>
-                    <th><button id="add_row" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus"></i></button></th>
+                    <th><button id="add_row" class="btn btn-sm btn-success" data-transactionType="1" type="button"><i class="fa fa-plus"></i></button></th>
                 </tr>
             </thead>
             <tfoot>

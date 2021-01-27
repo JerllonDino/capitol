@@ -654,6 +654,33 @@ $(document).on('keyup', '.account', function(event) {
     });
 });
 
+$(document).on('change', '#account_list', function(event) {
+    var account_id = $(this).val();
+    $(this).next('input').val(account_id);
+    $(this).next('input').next('input').val('subtitle');
+    var element = $(this).parent().next('td').next('td');
+    var shared_acc = $(this).next('input').next('input').next('input');
+
+    $.ajax({
+        type: 'POST',
+        url: '{{ route("collection.ajax") }}',
+        data: {
+            '_token': '{{ csrf_token() }}',
+            'action': 'get_rate',
+            'account_id': account_id,
+            'account_type': "subtitle",
+        },
+        success: function(response) {
+            console.log(response);
+            handle_rate(response, shared_acc,element, account_id, "subtitle");
+            compute_total();
+        },
+        error: function(response) {
+
+        },
+    });
+});
+
 // autocomplete for account input
 // starts here 
 function account_auto() {
@@ -662,6 +689,7 @@ function account_auto() {
         autoFocus: true,
         select: function (event, ui) { // clicking 'select' button does not trigger this function..
             var idx = ($.inArray(ui.item.value, accounts));
+            console.log([ui.item.value, account_ids, account_types]);
             var element = $(this).parent().next('td').next('td');
             var shared_acc = $(this).next('input').next('input').next('input');
 
@@ -743,6 +771,7 @@ function check_shared() {
 }
 
 function handle_rate(response, shared_acc, element, id, type) {
+    console.log([response, shared_acc, element, id, type]);
     if(response[0]){
         var title_id = '<input type="hidden" id="col_acct_title_idx" value="'+response[0].col_acct_title_id+'" /> ';
         var subtitle_id = '<input type="hidden" id="col_acct_subtitle_idx" value="'+response[0].col_acct_subtitle_id+'" /> ';
@@ -1669,78 +1698,61 @@ $(document).on('click', '.account_addtl', function() {
 
 
 $('#add_row').click( function() {
-    $('#table').find('tbody')
-        .append($('<tr>')
-            .append($('<td>')
-                .append($('<input>')
-                    .attr('type', 'text')
-                    .attr('class', 'form-control account')
-                    .attr('required', 'true')
-                )
-                .append($('<input>')
-                    .attr('type', 'hidden')
-                    .attr('class', 'form-control')
-                    .attr('name', 'account_id[]')
-                )
-                .append($('<input>')
-                    .attr('type', 'hidden')
-                    .attr('class', 'form-control')
-                    .attr('name', 'account_type[]')
-                )
-                .append($('<input>')
-                    .attr('type', 'hidden')
-                    .attr('class', 'form-control')
-                    .attr('name', 'account_is_shared[]')
-                    .val(0)
-                )
-            )
-            .append($('<td>')
-                .append($('<button>')
-                    .attr('type', 'button')
-                    .attr('class', 'btn btn-sm btn-info account_addtl')
-                    .attr('disabled', 'true')
-                    .text('Select')
-                )
-                .append($('<input>')
-                    .attr('type', 'hidden')
-                    .attr('class', 'form-control')
-                )
-                .append($('<input>')
-                    .attr('type', 'hidden')
-                    .attr('class', 'form-control account_rate')
-                    .attr('name', 'account_rate[]')
-                    .val(0)
-                )
-            )
-            .append($('<td>')
-                .append($('<input>')
-                    .attr('type', 'text')
-                    .attr('class', 'form-control nature')
-                    .attr('name', 'nature[]')
-                    .attr('required', 'true')
-                    .attr('maxlength', '300')
-                )
-            )
-            .append($('<td>')
-                .append($('<input>')
-                    .attr('type', 'number')
-                    .attr('min', '0')
-                    .attr('step', '.01')
-                    .attr('class', 'form-control amounts')
-                    .attr('name', 'amount[]')
-                    .attr('required', 'true')
-                )
-            )
-            .append($('<td>')
-                .append($('<button>')
-                    .attr('type', 'button')
-                    .attr('class', 'btn btn-warning btn-sm rem_row')
-                    .append($('<i>')
-                        .attr('class', 'fa fa-minus')
-                    )
-                )
-            )
-        )
+    var type = $(this).data('transactiontype');
+    console.log(type);
+    var inputHtml = "";
+    switch (type) {
+        case 1:
+            inputHtml = '<input type="text" class="form-control account" required>';
+            break;
+        case 2:
+            inputHtml = `
+                <input type="hidden" class="form-control account" required>
+                <select name="account_list" id="account_list" class="form-control" required>
+                    <option></option>
+                    <option value="10">Lodging (OPAG)</option>
+                    <option value="3">Sales on Agricultural Products (OPAG)</option>
+                </select>
+            `;
+            break;
+        case 3:
+            inputHtml = `
+                <select name="account_list" id="account_list" class="form-control">
+                    <option value="5">Sales on Veterinary Products</option>
+                </select>
+            `;
+            break;
+        default:
+            inputHtml = '<input type="text" class="form-control account" required>';
+            break;
+    }
+    var html = `
+    <tr>
+        <td>
+            `
+            +inputHtml+
+            `
+            <input type="hidden" class="form-control" name="account_id[]">
+            <input type="hidden" class="form-control" name="account_type[]">
+            <input type="hidden" class="form-control account_is_shared" value="0" name="account_is_shared[]">
+        </td>
+        <td>
+            <button type="button" class="btn btn-sm btn-info account_addtl" disabled>Select</button>
+            <input type="hidden" class="form-control">
+            <input type="hidden" class="form-control account_rate" name="account_rate[]" value="0">
+        </td>
+        <td>
+            <input type="text" class="form-control" name="nature[]" maxlength="300" required>
+        </td>
+        <td class="td_amt">
+            <input type="number" class="form-control amounts" name="amount[]"  step="0.01" required>
+        </td>
+        <td>
+            <button type="button" class="btn btn-warning btn-sm rem_row"><i class="fa fa-minus"></i></button>
+        </td>
+    </tr>
+    `;
+    $('#table').find('tbody').append(html);
     $.fn.natureAutoComplete();
     account_auto();
 });
