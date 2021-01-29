@@ -22,6 +22,10 @@
     .autocomplete-group { padding: 2px 5px; }
     .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
     .select2-container{ width:100% !important; }
+
+    .hide{
+        display:none;
+    }
 </style>
 @endsection
 
@@ -332,7 +336,6 @@ importedExcelDatatable()
                 { data: 'municipality_name', name: 'municipality_name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: null, render: function(data) {
-                    console.log(data);
                     var basic = 0;
                     var sef = 0;
                     data.excel_items.forEach(element => {
@@ -352,8 +355,8 @@ importedExcelDatatable()
                     }
                     
                     return `
-                    <button class="btn btn-info add-report basic" data-value="`+basic+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> Basic</button>
-                    <button class="btn btn-info add-report sef" data-value="`+sef+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> SEF</button>
+                    <button class="btn btn-info add-report basic `+ (data.is_printed_basic == 1 ? "hide" : "" ) +`" data-value="`+basic+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> Basic</button>
+                    <button class="btn btn-info add-report sef `+ (data.is_printed_sef == 1 ? "hide" : "" ) +`" data-value="`+sef+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> SEF</button>
                     `;
                 } }
             ],
@@ -372,28 +375,34 @@ importedExcelDatatable()
         var account_type = 'title';
         var account_title = "";
         var rpt_value = $(this).data('value').toFixed(2);
+        var rpt_type = '';
         var html = '';
 
         if ($(this).hasClass('basic')) {
             account_id = 54;
+            rpt_type = 'basic';
             account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes (General Fund-Proper)";
         }else{
+            rpt_type = 'sef';
             account_id = 55;
             account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes  (Special Education Fund (SEF))";
         }
 
         if(rowCounter == 1){
             $element = $('#table').find('tbody').find('tr').find('td').find('.account');
+            $element.attr('disabled', 'disabled');
             $element.val(account_title);
             $element.next('input').val(account_id);
             $element.next('input').next('input').val(account_type);
+            $element.parent().next('td').next('td').find('input').attr('readonly', 'readonly');
             $element.parent().next('td').next('td').find('input').val(account_title);
             $element.parent().next('td').next('td').next('td').find('input').val(rpt_value);
             $('#table').find('tbody').find('input[name="account_id"]').val(account_id);
             $('#table').find('tbody').find('input[name="account_type"]').val(account_type);
+            $element.parent().next('td').next('td').next('td').next('td').append('<input type="hidden" name="rpt_value" value="'+rpt_type + '-' + values.id +'"/>')
+            $element.parent().next('td').next('td').next('td').next('td').append('<button type="button" class="btn btn-primary btn-sm" id="clear_row"><i class="fa fa-minus"></i></button>')
             rowCounter = rowCounter + 1;
         }else{
-            console.log('rpt');
             html = `
                 <tr>
                     <td>
@@ -414,6 +423,7 @@ importedExcelDatatable()
                         <input type="number" class="form-control amounts" name="amount[]" value="`+rpt_value+`" step="0.01" required>
                     </td>
                     <td>
+                        <input type="hidden" name="rpt_value" value="`+rpt_type + `-` + values.id +`"/>
                         <button type="button" class="btn btn-warning btn-sm rem_row"><i class="fa fa-minus"></i></button>
                     </td>
                 </tr>
@@ -422,6 +432,21 @@ importedExcelDatatable()
             rowCounter = rowCounter + 1;
         }
         $.fn.natureAutoComplete();
+        compute_total();
+    });
+    
+    $(document).on('click', '#clear_row', function(){
+        $element = $('#table').find('tbody').find('tr td:nth-child(1)');
+        $element.find('.account').val('');
+        $element.find('.account').removeAttr('disabled');
+        $element.find('.account').next('input').val('');
+        $element.find('.account').next('input').next('input').val('');
+        $element.next('td').next('td').find('input').val('');
+        $element.next('td').next('td').find('input').removeAttr('readonly');
+        $element.next('td').next('td').next('td').find('input').val('');
+        $element.next('td').next('td').next('td').next('td').find('input').remove();
+        $element.next('td').next('td').next('td').next('td').find('button').remove();
+        rowCounter = rowCounter - 1;
         compute_total();
     });
 

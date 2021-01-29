@@ -541,9 +541,12 @@ class CollectionDatatablesController extends DatatablesController
                             $Municipality . '.name as municipality_name'
                             )
                             ->where([
-                                ['is_printed', 0],
                                 [$excel_provincial . '.is_verified', 1]
                             ])
+                            ->where(function($query) {
+                                $query->orWhere('is_printed_basic', 0)
+                                      ->orWhere('is_printed_sef', 0);
+                            })
                             ->with('excelItems')
                             ->leftJoin($excel_provincial, $excel_provincial .'.'. $excel_table . '_id', '=', $excel_table . '.id')
                             ->join($Municipality, $Municipality . '.id', '=', $excel_table . '.municipal')

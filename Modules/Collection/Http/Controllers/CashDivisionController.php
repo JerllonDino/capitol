@@ -6,7 +6,7 @@ use App\Http\Controllers\{Controller,BreadcrumbsController};
 
 use Illuminate\Http\{Request,Response};
 use Session,Validator,DB,PDF,Excel,Carbon\Carbon;
-use Modules\Collection\Entities\{ReportOfficers,Form,CashDivision,CashDivisionItems,Barangay,CollectionRate,Municipality,Customer,SandGravelTypes as sg_types,CashDivAdjustment, Receipt};
+use Modules\Collection\Entities\{ReportOfficers,Form,CashDivision,CashDivisionItems,Barangay,CollectionRate,Municipality,Customer,SandGravelTypes as sg_types,CashDivAdjustment, Receipt, RptMunicipalExcel};
 use Yajra\Datatables\Datatables;
 
 class CashDivisionController extends Controller
@@ -112,7 +112,7 @@ class CashDivisionController extends Controller
             'col_barangay_id' => (!empty($request['brgy'])) ? $request['brgy'] : '',
             'dnlx_user_id' => $request['user_id'],
             'date_of_entry' => date('Y-m-d', strtotime($request['date'])),
-            'refno' => $request['refno'],
+            // 'refno' => $request['refno'],
             'client_type' => $request['customer_type'],
         ]);
 
@@ -141,6 +141,15 @@ class CashDivisionController extends Controller
             array_push($data, $row);
         }
         CashDivisionItems::insert($data);
+
+        if(isset($request['rpt_value'])){
+            $rpt = explode('-', $request['rpt_value']);
+            if($rpt[0] == 'basic'){
+                RptMunicipalExcel::where('id', $rpt[1])->update(['is_printed_basic' => 1]);
+            }else{
+                RptMunicipalExcel::where('id', $rpt[1])->update(['is_printed_sef' => 1]);
+            }
+        }
 
         Session::flash('info', ['Successfully added Field Income record']);
         return redirect()->route('cash_division.index');
