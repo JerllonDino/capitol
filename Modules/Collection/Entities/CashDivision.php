@@ -19,7 +19,8 @@ class CashDivision extends Model
         'dnlx_user_id',
         'date_of_entry',
         'refno',
-        'client_type'
+        'client_type',
+        'serial_no'
     ];
     // public $timestamps = false;
 

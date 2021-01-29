@@ -6,7 +6,7 @@ use App\Http\Controllers\{Controller,BreadcrumbsController};
 
 use Illuminate\Http\{Request,Response};
 use Session,Validator,DB,PDF,Excel,Carbon\Carbon;
-use Modules\Collection\Entities\{ReportOfficers,CashDivision,CashDivisionItems,Barangay,CollectionRate,Municipality,Customer,SandGravelTypes as sg_types,CashDivAdjustment, Receipt};
+use Modules\Collection\Entities\{ReportOfficers,Form,CashDivision,CashDivisionItems,Barangay,CollectionRate,Municipality,Customer,SandGravelTypes as sg_types,CashDivAdjustment, Receipt};
 use Yajra\Datatables\Datatables;
 
 class CashDivisionController extends Controller
@@ -24,6 +24,7 @@ class CashDivisionController extends Controller
     public function index()
     {
         $this->base['sandgravel_types'] = sg_types::all();
+        $this->base['form'] = Form::all();
         $this->base['sub_header'] = 'New';
         $this->base['municipalities'] = Municipality::all()->toarray();
         $this->base['user'] = Session::get('user');
@@ -68,7 +69,7 @@ class CashDivisionController extends Controller
         $filter = [
             'user_id' => 'required|numeric',
             'date' => 'required|date',
-            'refno' => 'required|max:300',
+            // 'refno' => 'required|max:300',
         ];
 
         if (in_array(1, $request['account_is_shared'])) {

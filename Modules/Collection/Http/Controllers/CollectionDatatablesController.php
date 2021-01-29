@@ -40,6 +40,7 @@ use DB;
 use Modules\Collection\Entities\OpagCollection;
 use Modules\Collection\Entities\PvetCollection;
 use Modules\Collection\Entities\RptMunicipalExcel;
+use Modules\Collection\Entities\RptMunicipalExcelItems;
 use Modules\Collection\Entities\RptMunicipalExcelProvincialShare;
 use Modules\Collection\Entities\TransactionType;
 
@@ -532,13 +533,18 @@ class CollectionDatatablesController extends DatatablesController
     {
         $excel_table = RptMunicipalExcel::getTableName();
         $excel_provincial = RptMunicipalExcelProvincialShare::getTableName();
+        $excel_items = RptMunicipalExcelItems::getTableName();
         $Municipality = Municipality::getTableName();
 
-        $importedExcels = RptMunicipalExcel::select($excel_table . '.*', $Municipality . '.name as municipality_name')
+        $importedExcels = RptMunicipalExcel::select(
+                            $excel_table . '.*',
+                            $Municipality . '.name as municipality_name'
+                            )
                             ->where([
                                 ['is_printed', 0],
                                 [$excel_provincial . '.is_verified', 1]
                             ])
+                            ->with('excelItems')
                             ->leftJoin($excel_provincial, $excel_provincial .'.'. $excel_table . '_id', '=', $excel_table . '.id')
                             ->join($Municipality, $Municipality . '.id', '=', $excel_table . '.municipal')
                             ->get();

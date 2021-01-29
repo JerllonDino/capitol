@@ -60,11 +60,28 @@
         <input type="text" class="form-control datepicker" name="date" value="{{ date('m/d/Y') }}" required autofocus>
     </div>
 
+    <select style="display:none" class="form-control" id="form" name="form" readonly>
+        <option selected disabled></option>
+        @foreach ($base['form'] as $form)
+            @if( $form->id == '1')
+                <option value="{{ $form->id }}" selected>{{ $form->name }}</option>
+            @endif
+        @endforeach
+    </select>
+
+    
+
     <div class="form-group col-sm-6">
+        <label for="serial_id">Series</label>
+        <select class="form-control" name="serial_id" id="serial_id" disabled required>
+        </select>
+    </div>
+
+    {{-- <div class="form-group col-sm-6">
         <label for="refno">Reference No.</label>
         <!--<input type="text" class="form-control" name="refno" value="" required>-->
          <textarea class="form-control" name="refno" value="" rows="2" required></textarea> 
-    </div>
+    </div> --}}
 
     <div class="form-group col-sm-6">
         <label for="municipality">Municipality</label>
@@ -115,7 +132,7 @@
                     <th colspan="2">Account</th>
                     <th class="td_nature">Nature</th>
                     <th>Amount</th>
-                    <th><button id="add_row" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus"></i></button></th>
+                    <th><button id="add_row" class="btn btn-sm btn-success" data-transactionType="1" type="button"><i class="fa fa-plus"></i></button></th>
                 </tr>
             </thead>
             <tfoot>
@@ -231,6 +248,15 @@
 {{ Html::script('/datatables-1.10.12/js/dataTables.bootstrap.min.js') }}
 {{ Html::script('/base/sweetalert/sweetalert2.min.js') }}
 <script type="text/javascript">
+var rowCounter = 1;
+$('#add_row').click(function(){
+    rowCounter = rowCounter + 1;
+    console.log(rowCounter);
+});
+$(document).on('click', '.rem_row', function(){
+    rowCounter = rowCounter-1;
+    console.log(rowCounter);
+})
 importedExcelDatatable()
  $.fn.loadTable = function(){
   if ( $.fn.DataTable.isDataTable('#seriallist') ) {
@@ -306,7 +332,29 @@ importedExcelDatatable()
                 { data: 'municipality_name', name: 'municipality_name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: null, render: function(data) {
-                    return `<button class="btn btn-info add-report" data-values='`+JSON.stringify(data)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i></button>`;
+                    console.log(data);
+                    var basic = 0;
+                    var sef = 0;
+                    data.excel_items.forEach(element => {
+                        basic = basic + parseFloat(element.basic_subtotal_net);
+                        sef = sef + parseFloat(element.sef_subtotal_net);
+                    });
+
+                    var values = {
+                        created_at: data.created_at,
+                        id: data.id,
+                        is_printed: data.is_printed,
+                        municipal: data.municipal,
+                        municipality_name: data.municipality_name,
+                        report_month: data.report_month,
+                        report_year: data.report_year,
+                        updated_at: data.updated_at
+                    }
+                    
+                    return `
+                    <button class="btn btn-info add-report basic" data-value="`+basic+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> Basic</button>
+                    <button class="btn btn-info add-report sef" data-value="`+sef+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> SEF</button>
+                    `;
                 } }
             ],
         });
@@ -315,12 +363,66 @@ importedExcelDatatable()
     $('#imported-excel').on('click', '.add-report', function(){
         $('#rpt-dt').collapse('hide');
         var values = $(this).data('values');
-        console.log(values);
         $('.datepicker').val(values.updated_at);
         $('textarea[name="refno"]').val(values.municipality_name + "-" + values.report_month + "-" + values.report_year);
         $('#municipality').val(values.municipal);
         $('#customer').val(values.municipality_name);
         $('#customer_type').val(16);
+        var account_id = 0;
+        var account_type = 'title';
+        var account_title = "";
+        var rpt_value = $(this).data('value').toFixed(2);
+        var html = '';
+
+        if ($(this).hasClass('basic')) {
+            account_id = 54;
+            account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes (General Fund-Proper)";
+        }else{
+            account_id = 55;
+            account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes  (Special Education Fund (SEF))";
+        }
+
+        if(rowCounter == 1){
+            $element = $('#table').find('tbody').find('tr').find('td').find('.account');
+            $element.val(account_title);
+            $element.next('input').val(account_id);
+            $element.next('input').next('input').val(account_type);
+            $element.parent().next('td').next('td').find('input').val(account_title);
+            $element.parent().next('td').next('td').next('td').find('input').val(rpt_value);
+            $('#table').find('tbody').find('input[name="account_id"]').val(account_id);
+            $('#table').find('tbody').find('input[name="account_type"]').val(account_type);
+            rowCounter = rowCounter + 1;
+        }else{
+            console.log('rpt');
+            html = `
+                <tr>
+                    <td>
+                        <input type="text" class="form-control account" value="`+account_title+`"" required>
+                        <input type="hidden" class="form-control" name="account_id[]" value="`+account_id+`">
+                        <input type="hidden" class="form-control" name="account_type[]" value="`+account_type+`">
+                        <input type="hidden" class="form-control account_is_shared" value="0" name="account_is_shared[]">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-info account_addtl" disabled>Select</button>
+                        <input type="hidden" class="form-control">
+                        <input type="hidden" class="form-control account_rate" name="account_rate[]" value="0">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="nature[]" maxlength="300" value="`+account_title+`" required>
+                    </td>
+                    <td class="td_amt">
+                        <input type="number" class="form-control amounts" name="amount[]" value="`+rpt_value+`" step="0.01" required>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-sm rem_row"><i class="fa fa-minus"></i></button>
+                    </td>
+                </tr>
+            `;
+            $('#table').find('tbody').append(html);
+            rowCounter = rowCounter + 1;
+        }
+        $.fn.natureAutoComplete();
+        compute_total();
     });
 
     $.fn.deolete = function(deleteid){

@@ -253,6 +253,7 @@ class MunicipalExcelImportController extends Controller
         $newSortedData = [];
         $prevOr = 0;
         $prevName = '';
+        $prevBarangay = 0;
         foreach($datas as $i => $data)
         {
             $values = [
@@ -292,13 +293,15 @@ class MunicipalExcelImportController extends Controller
                 "grand_total_gross" => $data[33],
                 "grand_total_net" => $data[34],
             ];
-            if(empty($data[3])){
+            if(empty($data[3]) || empty($data[5])){
                 $values['or_number'] = $prevOr;
                 $values['tax_payor_name'] = $prevName;
+                $values['barangay_id'] = $prevBarangay;
                 $newSortedData[$prevOr][$data[4]] = $values;
             }else{
                 $prevOr = $data[3];
                 $prevName = $data[1];
+                $prevBarangay = $data[5];
                 $newSortedData[$data[3]][$data[4]] = $values;
             }
         }

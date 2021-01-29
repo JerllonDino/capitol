@@ -671,7 +671,6 @@ $(document).on('change', '#account_list', function(event) {
             'account_type': "subtitle",
         },
         success: function(response) {
-            console.log(response);
             handle_rate(response, shared_acc,element, account_id, "subtitle");
             compute_total();
         },
@@ -1699,7 +1698,6 @@ $(document).on('click', '.account_addtl', function() {
 
 $('#add_row').click( function() {
     var type = $(this).data('transactiontype');
-    console.log(type);
     var inputHtml = "";
     switch (type) {
         case 1:
