@@ -369,6 +369,10 @@ class TransactionController extends Controller
             return redirect()->route('pvet.index');
         }
 
+        if($request['transaction_source'] == 'hospital_remittance'){
+            return redirect()->route('hospital_remittance.index');
+        }
+
         if ($request['form'] == 2) {
             if ($request['transaction_source'] == "receipt") {
                 return redirect()->route('receipt.f56_detail_form', ['id' => $receipt->id]);

@@ -656,8 +656,15 @@ $(document).on('keyup', '.account', function(event) {
 
 $(document).on('change', '#account_list', function(event) {
     var account_id = $(this).val();
+    var title = 'subtitle';
+    var selected = $(this).find('option:selected');
     $(this).next('input').val(account_id);
-    $(this).next('input').next('input').val('subtitle');
+    
+    if (typeof selected.data('title') !== 'undefined') {
+        title = selected.data('title');
+    }
+
+    $(this).next('input').next('input').val(title);
     var element = $(this).parent().next('td').next('td');
     var shared_acc = $(this).next('input').next('input').next('input');
 
@@ -668,7 +675,7 @@ $(document).on('change', '#account_list', function(event) {
             '_token': '{{ csrf_token() }}',
             'action': 'get_rate',
             'account_id': account_id,
-            'account_type': "subtitle",
+            'account_type': title,
         },
         success: function(response) {
             handle_rate(response, shared_acc,element, account_id, "subtitle");
@@ -1717,6 +1724,17 @@ $('#add_row').click( function() {
             inputHtml = `
                 <select name="account_list" id="account_list" class="form-control">
                     <option value="5">Sales on Veterinary Products</option>
+                </select>
+            `;
+            break;
+        case 4:
+            inputHtml = `
+                <select name="account_list" id="account_list" class="form-control" required>
+                    <option></option>
+                    <option data-title="subtitle" value="7">Gain on Sale of Drugs and Medicines-5 District Hospitals</option>
+                    <option data-title="subtitle" value="12">Medical, Dental & Laboratory Fees</option>
+                    <option data-title="title" value="26">Hospital Fees</option>
+                    <option data-title="title" value="22">Other Service Income</option>
                 </select>
             `;
             break;

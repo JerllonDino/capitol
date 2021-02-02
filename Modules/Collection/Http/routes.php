@@ -302,6 +302,8 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::post('/pvet_restore', 'CashDivisionController@pvet_restore')->name('pvet.restore');
 
     Route::resource('field_verification', 'FieldVerificationController');
+
+    Route::resource('hospital_remittance', 'HospitalRemittanceController');
 });
 
 

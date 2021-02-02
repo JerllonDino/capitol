@@ -872,11 +872,11 @@
                 <td colspan="3" style="text-align:left">BASIC TAX 1%</td>
                 <!-- ADVANCE -->
                 <th class="border_all">%</th>
-                <th colspan="2" class="border_all ctr">AMOUNT</th>
+                <th colspan="2" class="border_all ctr">GROSS AMOUNT</th>
                 <th colspan="2" class="border_all ctr">DISCOUNT</th>
                 <!-- CURRENT -->
                 <th class="border_all">%</th>
-                <th colspan="2" class="border_all ctr">AMOUNT</th>
+                <th colspan="2" class="border_all ctr">GROSS AMOUNT</th>
                 <th colspan="2" class="border_all ctr">DISCOUNT</th>
                 <!-- PREVIOUS -->
                 <th class="border_all">%</th>

@@ -424,6 +424,67 @@ class CollectionDatatablesController extends DatatablesController
         return $receipts;
     }
 
+    protected function hospital_remittance()
+    {
+        $show_year = Input::get('show_year');
+        $show_mnth = Input::get('show_mnth');
+        $show_day = Input::get('show_day');
+        
+        $receipt_table = Receipt::getTableName();
+        $customer_table = Customer::getTableName();
+        $user_table = User::getTableName();
+        $form_table = Form::getTableName();
+        $many_serials = IsManySerials::getTableName();
+        $TransactionType = TransactionType::getTableName();
+        if($show_mnth != 'ALL'):
+            if($show_day == 'ALL' || $show_day == null):
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+                ->with('WithCert')
+                ->with('RcptCertificate')
+                ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+                ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
+                ->where('transaction_source', '=', 'hospital_remittance')
+                ->where($receipt_table.'.af_type','=',1)
+                ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+                ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+                ->join($form_table, $form_table.'.id', '=', 'af_Type')
+                ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+                ->get();
+            else:
+                $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+                ->with('WithCert')
+                ->with('RcptCertificate')
+                ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+                ->whereMonth($receipt_table.'.date_of_entry','=',$show_mnth)
+                ->whereDay($receipt_table.'.date_of_entry','=',$show_day)
+                ->where('transaction_source', '=', 'hospital_remittance')
+                ->where($receipt_table.'.af_type','=',1)
+                ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+                ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+                ->join($form_table, $form_table.'.id', '=', 'af_Type')
+                ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+                ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+                ->get();
+            endif;
+        else:
+            $receipts = Receipt::select([$receipt_table.'.id', $user_table.'.realname', $form_table.'.name as form_name', 'serial_no', 'date_of_entry', $customer_table.'.name', 'is_cancelled', 'is_printed', 'col_receipt_serial_parent', 'col_serials', $TransactionType . '.name as transaction_type'])
+            ->with('WithCert')
+            ->with('RcptCertificate')
+            ->whereYear($receipt_table.'.date_of_entry','=',$show_year)
+            ->where('transaction_source', '=', 'hospital_remittance')
+            ->where($receipt_table.'.af_type','=',1)
+            ->join($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+            ->join($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+            ->join($form_table, $form_table.'.id', '=', 'af_Type')
+            ->leftjoin($many_serials, $many_serials.'.id', '=', $receipt_table.'.is_many')
+            ->leftJoin($TransactionType, $TransactionType . '.id', '=', $receipt_table . '.transaction_type')
+            ->get();
+        endif;
+        
+        return $receipts;
+    }
+
     protected function pvet()
     {
         $show_year = Input::get('show_year');
