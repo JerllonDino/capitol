@@ -242,6 +242,7 @@ The default client type and remarks set by the auto-fill function are based on t
                         <select name="account_list" id="account_list" class="form-control" required>
                             <option></option>
                             <option value="5">Sales on Veterinary Products</option>
+                            <option data-title="title" value="61">Supervision and Regulation, Enforcement Fees (Quarantine Fees)</option>
                         </select>
                         <input type="hidden" class="form-control" name="account_id[]">
                         <input type="hidden" class="form-control" name="account_type[]">

@@ -70,6 +70,9 @@
                         <option value="">SELECT PROCESS TYPE</option>
                         <option value="LANDTAX">Land Tax Collections</option>
                         <option value="FIELDLANDTAX">Field Land Tax Collections</option>
+                        <option value="CASH">Cash Division</option>
+                        <option value="OPAG">OPAG</option>
+                        <option value="PVET">PVET</option>
                     </select>
 
                   </div>

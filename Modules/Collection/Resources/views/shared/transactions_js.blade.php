@@ -1723,7 +1723,9 @@ $('#add_row').click( function() {
         case 3:
             inputHtml = `
                 <select name="account_list" id="account_list" class="form-control">
+                    <option></option>
                     <option value="5">Sales on Veterinary Products</option>
+                    <option data-title="title" value="61">Supervision and Regulation, Enforcement Fees (Quarantine Fees)</option>
                 </select>
             `;
             break;

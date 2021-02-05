@@ -300,8 +300,8 @@ fieldset {
 
                         {{-- <input type="text" class="form-control account" value="{{ $item->acct_title->name .' ('. $item->acct_title->group->category->name .')' }}" required> --}}
                         <select name="account_list" id="account_list" class="form-control" required>
-                            <option value="10" {{ $item->acct_title->id == 10 ? 'selected' : '' }}>Lodging (OPAG)</option>
-                            <option value="3" {{ $item->acct_title->id == 3 ? 'selected' : '' }}>Sales on Agricultural Products (OPAG)</option>
+                            <option value="10" {{ $item->acct_title->id == 5 ? 'selected' : '' }}>Sales on Veterinary Products</option>
+                            <option data-title="title" value="61" {{ $item->acct_title->id == 61 ? 'selected' : '' }}>Supervision and Regulation, Enforcement Fees (Quarantine Fees)</option>
                         </select>
                         <input type="hidden" class="form-control" name="account_id[]" value="{{ $item->acct_title->id }}">
                         <input type="hidden" class="form-control" name="account_type[]" value="title">
@@ -320,8 +320,8 @@ fieldset {
                         ?>
                         {{-- <input type="text" class="form-control account" value="{{ $item->acct_subtitle->name .' ('. $item->acct_subtitle->title->group->category->name .')' }}" required> --}}
                         <select name="account_list" id="account_list" class="form-control" required>
-                            <option value="10" {{ $item->acct_subtitle->id == 10 ? 'selected' : '' }}>Lodging (OPAG)</option>
-                            <option value="3" {{ $item->acct_subtitle->id == 3 ? 'selected' : '' }}>Sales on Agricultural Products (OPAG)</option>
+                            <option value="10" {{ $item->acct_subtitle->id == 5 ? 'selected' : '' }}>Sales on Veterinary Products</option>
+                            <option data-title="title" value="61" {{ $item->acct_subtitle->id == 61 ? 'selected' : '' }}>Supervision and Regulation, Enforcement Fees (Quarantine Fees)</option>
                         </select>
                         <input type="hidden" class="form-control" name="account_id[]" value="{{ $item->acct_subtitle->id }}">
                         <?php 

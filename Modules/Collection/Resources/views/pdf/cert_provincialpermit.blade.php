@@ -359,7 +359,7 @@
                 @if(preg_match('/Annual Fee/i', $nature) != 1 && preg_match('/Fixed Tax/i', $nature) != 1 && preg_match('/Permit Fee/i', $nature) != 1)
                     <tr>
                         <td>
-                            &nbsp;&nbsp; {!! '- '.$nature !!} 
+                            &nbsp;&nbsp; {!! $nature !!} 
                         </td>
                         <!-- <td class="val">{{-- number_format($item->value, 2) --}}</td>
                         <td class="ctr">{{-- $receipt->serial_no --}}</td>
