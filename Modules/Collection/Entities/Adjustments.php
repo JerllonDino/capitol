@@ -2,11 +2,15 @@
 
 namespace Modules\Collection\Entities;
 
+use OwenIt\Auditing\Auditable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PvetCollection extends Model
+class Adjustments extends Model
 {
-    protected $table = 'col_pvet';
+    use Auditable;
+    use SoftDeletes;
+    protected $table = 'col_adjustments';
     protected $fillable = [
         'col_customer_id',
         'sex',
@@ -15,7 +19,7 @@ class PvetCollection extends Model
         'dnlx_user_id',
         'date_of_entry',
         'refno',
-        'client_type'
+        'client_type',
     ];
     // public $timestamps = false;
 
@@ -25,7 +29,7 @@ class PvetCollection extends Model
     }
 
     public function items() {
-        return $this->hasMany('Modules\Collection\Entities\PvetItems', 'col_pvet_id');
+        return $this->hasMany('Modules\Collection\Entities\AdjustmentItems', 'col_adjustments_id');
     }
 
     public function municipality()

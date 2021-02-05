@@ -304,6 +304,10 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::resource('field_verification', 'FieldVerificationController');
 
     Route::resource('hospital_remittance', 'HospitalRemittanceController');
+
+    Route::resource('adjustments', 'AdjustmentsController');
+    Route::post('adjustments/delete', 'AdjustmentsController@delete')->name('adjustments.delete');
+    Route::post('adjustments/restore', 'AdjustmentsController@restore')->name('adjustments.restore');
 });
 
 

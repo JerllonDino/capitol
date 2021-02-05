@@ -20,7 +20,8 @@ class CashDivision extends Model
         'date_of_entry',
         'refno',
         'client_type',
-        'serial_no'
+        'serial_no',
+        'col_serial_id'
     ];
     // public $timestamps = false;
 

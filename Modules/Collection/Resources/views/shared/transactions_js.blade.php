@@ -1358,7 +1358,6 @@ $(document).on('click', '#go', function() {
 
 <?php if($base['sub_header'] != 'Edit'){ ?>
 $("#form").on('change', function() {
-
     var formx = $(this).val();
     $.ajax({
         type: 'POST',
@@ -1371,6 +1370,7 @@ $("#form").on('change', function() {
             'collection_type' : collection_type
         },
         success: function(response) {
+            $('.toggle-col').removeAttr('disabled');
             var serial_id = '{{ Session::get('serial_id') }}';
             $('#serial_id').html('<option value=""></option>');
             if (response.length > 1) {

@@ -37,6 +37,7 @@ use App\Http\Controllers\BreadcrumbsController;
 use App\Http\Controllers\DatatablesController;
 
 use DB;
+use Modules\Collection\Entities\Adjustments;
 use Modules\Collection\Entities\OpagCollection;
 use Modules\Collection\Entities\PvetCollection;
 use Modules\Collection\Entities\RptMunicipalExcel;
@@ -614,5 +615,21 @@ class CollectionDatatablesController extends DatatablesController
                             ->get();
         
         return $importedExcels;
+    }
+
+    protected function adjustments()
+    {
+        $adjustments_table = Adjustments::getTableName();
+        $user_table = User::getTableName();
+        $Municipality = Municipality::getTableName();
+        $customer_table = Customer::getTableName();
+
+        $adjusments = Adjustments::select([$adjustments_table.'.id',$adjustments_table.'.refno',$Municipality.'.name', $user_table.'.realname', 'date_of_entry',$customer_table.'.name as customer_name',$adjustments_table.'.deleted_at'])
+            ->leftjoin($user_table, $user_table.'.id', '=', 'dnlx_user_id')
+            ->leftjoin($Municipality, $Municipality.'.id', '=', $adjustments_table.'.col_municipality_id')
+            ->leftjoin($customer_table, $customer_table.'.id', '=', 'col_customer_id')
+            // ->withTrashed()
+            ->get();
+        return $adjusments;
     }
 }

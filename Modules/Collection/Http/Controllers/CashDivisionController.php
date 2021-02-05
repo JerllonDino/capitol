@@ -6,7 +6,7 @@ use App\Http\Controllers\{Controller,BreadcrumbsController};
 
 use Illuminate\Http\{Request,Response};
 use Session,Validator,DB,PDF,Excel,Carbon\Carbon;
-use Modules\Collection\Entities\{ReportOfficers,Form,CashDivision,CashDivisionItems,Barangay,CollectionRate,Municipality,Customer,SandGravelTypes as sg_types,CashDivAdjustment, Receipt, RptMunicipalExcel};
+use Modules\Collection\Entities\{ReportOfficers,Form,CashDivision,CashDivisionItems,Barangay,CollectionRate,Municipality,Customer,SandGravelTypes as sg_types,CashDivAdjustment, Receipt, RptMunicipalExcel, Serial};
 use Yajra\Datatables\Datatables;
 
 class CashDivisionController extends Controller
@@ -69,8 +69,30 @@ class CashDivisionController extends Controller
         $filter = [
             'user_id' => 'required|numeric',
             'date' => 'required|date',
+            'serial_id' => 'required|numeric',
             // 'refno' => 'required|max:300',
         ];
+        $serial = Serial::whereId($request['serial_id'])->first();
+        
+        $receipt_checker = null;
+        $current = null;
+        if(!is_null($serial)) {
+            $receipt_checker = Receipt::where('serial_no','=',$serial->serial_current)->first();
+            $current = $serial->serial_current;
+        } else {
+            Session::flash('danger', ['Cannot find serial. Please refresh and try again.']);
+            return back();
+        }
+
+        if ($receipt_checker != null) {
+            Session::flash('danger', ['This SERIAL is already in use Please contact ADMINISTRATOR: '.$current]);
+            return back();
+        }
+
+        if (in_array(1, $request['account_is_shared'])) {
+            $filter['municipality'] = 'required';
+            $filter['brgy'] = 'required';
+        }
 
         if (in_array(1, $request['account_is_shared'])) {
             $filter['municipality'] = 'required';
@@ -86,6 +108,11 @@ class CashDivisionController extends Controller
                 ->add('account', 'An account field is empty or not indentified');
             return redirect()->route('cash_division.index')
                 ->withErrors($validator);
+        } elseif ($serial->serial_current == 0) {
+            $validator->getMessageBag()
+            ->add('serial', 'Series `'.$serial->serial_begin.'-'.$serial->serial_end.'` is finished. Please use another serial.');
+            return redirect()->route('receipt.index')
+            ->withErrors($validator);
         }
 
         $payor_id = 0;
@@ -104,8 +131,14 @@ class CashDivisionController extends Controller
         } else {
             $payor_id = $request['customer_id'];
         }
+        
         # Success
-        $addtl = CashDivision::create([
+        $addtl = CashDivision::updateOrCreate(
+            [
+                'serial_no' => $serial->serial_current
+            ],
+            [
+            'col_serial_id' => $request['serial_id'],
             'col_customer_id' => $payor_id,
             'sex' => (!empty($request['Sex'])) ? $request['Sex'] : '',
             'col_municipality_id' => (!empty($request['municipality'])) ? $request['municipality'] : '',
@@ -115,6 +148,11 @@ class CashDivisionController extends Controller
             // 'refno' => $request['refno'],
             'client_type' => $request['customer_type'],
         ]);
+        Session::put('serial_id', $request['serial_id']);
+
+         # Update Serial
+         $serial->serial_current = ($serial->serial_current == $serial->serial_end) ? 0 : $serial->serial_current + 1;
+         $serial->save();
 
         $data = array();
         foreach ($request['account_id'] as $i => $ai) {

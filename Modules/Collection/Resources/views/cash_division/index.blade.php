@@ -32,7 +32,7 @@
 @section('content')
 @if ( Session::get('permission')['col_cash_division'] & $base['can_write'] )
 
-<button class="btn btn-primary toggle-col" style="margin-bottom: 20px" data-toggle="collapse" data-target="#rpt-dt">Municipal RPT Records</button>
+<button class="btn btn-primary toggle-col" style="margin-bottom: 20px" data-toggle="collapse" data-target="#rpt-dt" disabled>Municipal RPT Records</button>
 
 <div class="table collapse" id="rpt-dt" style="overflow-y: scroll;">
     <table class="table table-hovered" id="imported-excel" style="margin-top: 20px; width: 100%;">
@@ -336,12 +336,39 @@ importedExcelDatatable()
                 { data: 'municipality_name', name: 'municipality_name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: null, render: function(data) {
-                    var basic = 0;
-                    var sef = 0;
+                    var basicNet = 0;
+                    var basicPenalty = 0;
+                    var sefNet = 0;
+                    var sefPenalty = 0;
                     data.excel_items.forEach(element => {
-                        basic = basic + parseFloat(element.basic_subtotal_net);
-                        sef = sef + parseFloat(element.sef_subtotal_net);
+                        basicNet = basicNet + 
+                            parseFloat(element.basic_advance_gross) +
+                            parseFloat(element.basic_current_gross) +
+                            parseFloat(element.basic_immediate) +
+                            parseFloat(element.basic_prior_1991) +
+                            parseFloat(element.basic_prior_1992) +
+                             - parseFloat(element.basic_advance_discount) + parseFloat(element.basic_current_discount);
+                        basicPenalty = basicPenalty + (
+                            parseFloat(element.basic_penalty_1991) +
+                            parseFloat(element.basic_penalty_1992) +
+                            parseFloat(element.basic_penalty_current) +
+                            parseFloat(element.basic_penalty_immediate)
+                        );
+                        sefNet = sefNet + 
+                            parseFloat(element.sef_advance_gross) +
+                            parseFloat(element.sef_current_gross) +
+                            parseFloat(element.sef_immediate) +
+                            parseFloat(element.sef_prior_1991) +
+                            parseFloat(element.sef_prior_1992) +
+                             - parseFloat(element.sef_advance_discount) + parseFloat(element.sef_current_discount);
+                        sefPenalty = sefPenalty + (
+                            parseFloat(element.sef_penalty_1991) +
+                            parseFloat(element.sef_penalty_1992) +
+                            parseFloat(element.sef_penalty_current) +
+                            parseFloat(element.sef_penalty_immediate)
+                        );
                     });
+                    console.log(parseFloat(basicNet).toFixed(2) + ', ' + parseFloat(basicPenalty).toFixed(2) + ', ' + parseFloat(sefNet).toFixed(2) + ', ' + parseFloat(sefPenalty).toFixed(2));
 
                     var values = {
                         created_at: data.created_at,
@@ -355,8 +382,8 @@ importedExcelDatatable()
                     }
                     
                     return `
-                    <button class="btn btn-info add-report basic `+ (data.is_printed_basic == 1 ? "hide" : "" ) +`" data-value="`+basic+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> Basic</button>
-                    <button class="btn btn-info add-report sef `+ (data.is_printed_sef == 1 ? "hide" : "" ) +`" data-value="`+sef+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> SEF</button>
+                    <button class="btn btn-info add-report basic `+ (data.is_printed_basic == 1 ? "hide" : "" ) +`" data-netvalue="`+basicNet+`" data-penaltyvalue="`+basicPenalty+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> Basic</button>
+                    <button class="btn btn-info add-report sef `+ (data.is_printed_sef == 1 ? "hide" : "" ) +`" data-netvalue="`+sefNet+`" data-penaltyvalue="`+sefPenalty+`" data-values='`+JSON.stringify(values)+`'><i class="fa fa-spinner fa-spin" style="display:none"></i> <i class="fa fa-plus"></i> SEF</button>
                     `;
                 } }
             ],
@@ -371,44 +398,67 @@ importedExcelDatatable()
         $('#municipality').val(values.municipal);
         $('#customer').val(values.municipality_name);
         $('#customer_type').val(16);
-        var account_id = 0;
-        var account_type = 'title';
-        var account_title = "";
-        var rpt_value = $(this).data('value').toFixed(2);
-        var rpt_type = '';
+        var rpt_net_data = {
+            account_id : 2,
+            account_type : 'title',
+            account_title : "Real Property Tax-Basic (Net of Discount)",
+            rpt_value : $(this).data('netvalue').toFixed(2),
+            rpt_type : '',
+            rpt_id : values.id
+        };
+        var rpt_penalty_data = {
+            account_id : 0,
+            account_type : 'title',
+            account_title : "",
+            rpt_value : $(this).data('penaltyvalue').toFixed(2),
+            rpt_type : '',
+            rpt_id : values.id
+        };
         var html = '';
 
         if ($(this).hasClass('basic')) {
-            account_id = 54;
-            rpt_type = 'basic';
-            account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes (General Fund-Proper)";
+            rpt_penalty_data.account_id = 54;
+            rpt_penalty_data.rpt_type = 'basic';
+            rpt_net_data.rpt_type = 'basic';
+            rpt_penalty_data.account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes (General Fund-Proper)";
         }else{
-            rpt_type = 'sef';
-            account_id = 55;
-            account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes  (Special Education Fund (SEF))";
+            rpt_penalty_data.rpt_type = 'sef';
+            rpt_net_data.rpt_type = 'sef';
+            rpt_penalty_data.account_id = 55;
+            rpt_penalty_data.account_title = "Tax Revenue-Fines & Penalties-Real Property Taxes  (Special Education Fund (SEF))";
         }
-
+        console.log(rpt_net_data);
         if(rowCounter == 1){
             $element = $('#table').find('tbody').find('tr').find('td').find('.account');
+            $element.val(rpt_net_data.account_title);
             $element.attr('disabled', 'disabled');
-            $element.val(account_title);
-            $element.next('input').val(account_id);
-            $element.next('input').next('input').val(account_type);
+            $element.next('input').val(rpt_net_data.account_id);
+            $element.next('input').next('input').val(rpt_net_data.account_type);
+            $element.parent().next('td').next('td').find('input').val(rpt_net_data.account_title);
             $element.parent().next('td').next('td').find('input').attr('readonly', 'readonly');
-            $element.parent().next('td').next('td').find('input').val(account_title);
-            $element.parent().next('td').next('td').next('td').find('input').val(rpt_value);
-            $('#table').find('tbody').find('input[name="account_id"]').val(account_id);
-            $('#table').find('tbody').find('input[name="account_type"]').val(account_type);
-            $element.parent().next('td').next('td').next('td').next('td').append('<input type="hidden" name="rpt_value" value="'+rpt_type + '-' + values.id +'"/>')
-            $element.parent().next('td').next('td').next('td').next('td').append('<button type="button" class="btn btn-primary btn-sm" id="clear_row"><i class="fa fa-minus"></i></button>')
-            rowCounter = rowCounter + 1;
+            $element.parent().next('td').next('td').next('td').find('input').val(rpt_net_data.rpt_value);
+            $('#table').find('tbody').find('input[name="account_id"]').val(rpt_net_data.account_id);
+            $('#table').find('tbody').find('input[name="account_type"]').val(rpt_net_data.account_type);
+            $element.parent().next('td').next('td').next('td').next('td').append('<input type="hidden" name="rpt_value" value="'+rpt_net_data.rpt_type + '-' + rpt_net_data.rpt_id +'"/>');
+            $element.parent().next('td').next('td').next('td').next('td').append('<button type="button" class="btn btn-primary btn-sm" id="clear_row"><i class="fa fa-minus"></i></button>');
+            $('#table').find('tbody').append(rptHtml(rpt_penalty_data));
+            rowCounter = rowCounter + 2;
         }else{
-            html = `
+            html = rptHtml(rpt_net_data) + rptHtml(rpt_penalty_data);
+            $('#table').find('tbody').append(html);
+            rowCounter = rowCounter + 2;
+        }
+        $.fn.natureAutoComplete();
+        compute_total();
+    });
+
+    function rptHtml(rpt_data){
+        return `
                 <tr>
                     <td>
-                        <input type="text" class="form-control account" value="`+account_title+`"" required>
-                        <input type="hidden" class="form-control" name="account_id[]" value="`+account_id+`">
-                        <input type="hidden" class="form-control" name="account_type[]" value="`+account_type+`">
+                        <input type="text" class="form-control account" value="`+rpt_data.account_title+`"" required>
+                        <input type="hidden" class="form-control" name="account_id[]" value="`+rpt_data.account_id+`">
+                        <input type="hidden" class="form-control" name="account_type[]" value="`+rpt_data.account_type+`">
                         <input type="hidden" class="form-control account_is_shared" value="0" name="account_is_shared[]">
                     </td>
                     <td>
@@ -417,23 +467,18 @@ importedExcelDatatable()
                         <input type="hidden" class="form-control account_rate" name="account_rate[]" value="0">
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="nature[]" maxlength="300" value="`+account_title+`" required>
+                        <input type="text" class="form-control" name="nature[]" maxlength="300" value="`+rpt_data.account_title+`" required>
                     </td>
                     <td class="td_amt">
-                        <input type="number" class="form-control amounts" name="amount[]" value="`+rpt_value+`" step="0.01" required>
+                        <input type="number" class="form-control amounts" name="amount[]" value="`+rpt_data.rpt_value+`" step="0.01" required>
                     </td>
                     <td>
-                        <input type="hidden" name="rpt_value" value="`+rpt_type + `-` + values.id +`"/>
+                        <input type="hidden" name="rpt_value" value="`+rpt_data.rpt_type + `-` + rpt_data.rpt_id +`"/>
                         <button type="button" class="btn btn-warning btn-sm rem_row"><i class="fa fa-minus"></i></button>
                     </td>
                 </tr>
-            `;
-            $('#table').find('tbody').append(html);
-            rowCounter = rowCounter + 1;
-        }
-        $.fn.natureAutoComplete();
-        compute_total();
-    });
+            `
+    }
     
     $(document).on('click', '#clear_row', function(){
         $element = $('#table').find('tbody').find('tr td:nth-child(1)');

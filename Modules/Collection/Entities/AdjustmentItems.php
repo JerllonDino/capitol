@@ -5,12 +5,12 @@ namespace Modules\Collection\Entities;
 use OwenIt\Auditing\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
-class PvetItems extends Model
+class AdjustmentItems extends Model
 {
-    use Auditable;
-    protected $table = 'col_pvet_items';
+                use Auditable;
+    protected $table = 'col_adjustment_items';
     protected $fillable = [
-        'col_pvet_id',
+        'col_adjustments_id',
         'col_acct_title_id',
         'col_acct_subtitle_id',
         'value',
@@ -18,6 +18,7 @@ class PvetItems extends Model
         'share_municipal',
         'share_barangay',
         'nature',
+        
     ];
     // public $timestamps = false;
     
@@ -26,9 +27,9 @@ class PvetItems extends Model
         return with(new static)->getTable();
     }
     
-    public function cash_division()
+    public function adjustments()
     {
-        return $this->belongsTo('Modules\Collection\Entities\PvetCollection', 'col_pvet_id');
+        return $this->belongsTo('Modules\Collection\Entities\Adjustments', 'col_adjustments_id');
     }
     
     public function acct_title()
