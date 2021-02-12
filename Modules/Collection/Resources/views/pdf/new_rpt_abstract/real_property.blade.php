@@ -277,11 +277,22 @@
                 @elseif($receipt->F56Detailmny()->count() > 0)
                     @foreach ($receipt->F56Detailmny as $f56_detail)
                     <?php
+
+                    $nameLength = mb_strlen($f56_detail->owner_name);
                         if ($rowCounter == 20) {
                             echo('<tr style="border:none"><td colspan=35 style="border:none"><div class="table-break"></div></td></tr>');
                             $rowCounter = 0;
                         }else{
-                            $rowCounter++;
+                            if ($nameLength >= 35 ) {
+                                $rowCounter = $rowCounter + 2;
+                            }elseif ($nameLength >= 55) {
+                                $rowCounter = $rowCounter + 3;
+                            }
+                            elseif ($nameLength >= 70) {
+                                $rowCounter = $rowCounter + 4;
+                            }else{
+                                $rowCounter++;
+                            }
                         }
                     
                         

@@ -111,7 +111,7 @@ class CashDivisionController extends Controller
         } elseif ($serial->serial_current == 0) {
             $validator->getMessageBag()
             ->add('serial', 'Series `'.$serial->serial_begin.'-'.$serial->serial_end.'` is finished. Please use another serial.');
-            return redirect()->route('receipt.index')
+            return redirect()->route('cash_division.index')
             ->withErrors($validator);
         }
 

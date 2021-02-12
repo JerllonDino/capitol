@@ -87,7 +87,7 @@
          <textarea class="form-control" name="refno" value="" rows="2" required></textarea> 
     </div> --}}
 
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-6" style="display:none">
         <label for="municipality">Municipality</label>
         <select class="form-control" name="municipality" id="municipality">
             <option selected></option>
@@ -97,7 +97,7 @@
         </select>
     </div>
 
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-6" style="display:none">
         <label for="barangay">Barangay</label>
         <select class="form-control" name="brgy" id="brgy" disabled>
         </select>

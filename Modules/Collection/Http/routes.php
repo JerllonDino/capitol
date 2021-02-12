@@ -294,16 +294,18 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::get('/payment_transactions/store', 'PaymentTransactionsController@store')->name('payment_transactions.store');
 
     Route::resource('opag', 'OpagController');
-    Route::post('/opag_delete', 'CashDivisionController@opag_delete')->name('opag.delete');
-    Route::post('/opag_restore', 'CashDivisionController@opag_restore')->name('opag.restore');
+    Route::get('/opag-report', 'OpagController@report')->name('opag.report');
+    Route::get('/opag-opag_report', 'PdfController@opag_report')->name('pdf.opag_report');
 
     Route::resource('pvet', 'PvetController');
-    Route::post('/pvet_delete', 'CashDivisionController@pvet_delete')->name('pvet.delete');
-    Route::post('/pvet_restore', 'CashDivisionController@pvet_restore')->name('pvet.restore');
+    Route::get('/pvet-report', 'PvetController@report')->name('pvet.report');
+    Route::get('/pvet-pvet_report', 'PdfController@pvet_report')->name('pdf.pvet_report');
 
     Route::resource('field_verification', 'FieldVerificationController');
 
     Route::resource('hospital_remittance', 'HospitalRemittanceController');
+    Route::get('/hospital-report', 'HospitalRemittanceController@report')->name('hospital_remittance.report');
+    Route::get('/hospital-hospital_report', 'PdfController@hospital_report')->name('pdf.hospital_report');
 
     Route::resource('adjustments', 'AdjustmentsController');
     Route::post('adjustments/delete', 'AdjustmentsController@delete')->name('adjustments.delete');

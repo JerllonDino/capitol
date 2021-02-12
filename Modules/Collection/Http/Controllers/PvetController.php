@@ -4,15 +4,16 @@ namespace Modules\Collection\Http\Controllers;
 
 use App\Http\Controllers\{Controller,BreadcrumbsController};
 use Illuminate\Http\{ Request,Response};
-use Illuminate\Support\Facades\{ Session,Validator};
+use Illuminate\Support\Facades\{Session,Validator};
 
-use Modules\Collection\Entities\{ Customer,Form,Municipality,Barangay,Receipt,ReceiptItems,
+use Modules\Collection\Entities\{AccountCategory, Customer,Form,Municipality,Barangay,Receipt,ReceiptItems,
         Serial, WeekdayHoliday, TransactionType, CollectionRate,
         F56Type, F56Detail, F56TDARP, ReceiptItemDetail, AdaSettings,
         SandGravelTypes as sg_types,SGbooklet, RcptCertificate, RcptCertificateType, ReportOfficers, WithCert, ReportOfficerNew, OtherFeesCharges
         };
 
 use Carbon\Carbon;
+use DB;
 
 class PvetController extends Controller
 {
@@ -346,15 +347,19 @@ class PvetController extends Controller
         return redirect()->route('pvet.index');
     }
 
-    // public function f56_detail_form($id)
-    // {
-    //     $this->base['detail'] = F56Detail::where('col_receipt_id', '=', $id)->get();
-    //     $this->base['sub_header'] = 'Form 56 Detail';
-    //     $this->base['id'] = $id;
-    //     $this->base['f56_types'] = F56Type::get();
-    //     $this->base['receipt'] = Receipt::whereId($id)->first();
-    //     return view('collection::opag.f56_detail')->with('base', $this->base);
-    // }
+    public function report()
+    {
+        $this->base['categories'] = AccountCategory::get();
+        $this->base['page_title'] = 'PVET Report';
+        $this->base['months'] = array();
+        $this->base['report_officers'] = ReportOfficerNew::join('col_report_officer_position', 'col_report_officer_position.id', '=', 'col_new_report_officers.position_name')->select(DB::raw('col_new_report_officers.id as officer_id, col_new_report_officers.position_name as position_id'), 'position', 'officer_name')->where('col_new_report_officers.deleted_at', null)
+        ->where('col_report_officer_position.deleted_at', null)
+        ->get();
+        for ($month = 1; $month <= 12; $month++) {
+            $this->base['months'][$month] = date('F', mktime(0,0,0,$month));
+        }
+        return view('collection::pvet.report')->with('base', $this->base);
+    }
 
     /**
      * Remove the specified resource from storage.

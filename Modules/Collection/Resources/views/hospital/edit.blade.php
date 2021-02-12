@@ -80,12 +80,12 @@ fieldset {
         <input type="text" class="form-control datepicker" name="date" value="{{ date('m/d/Y  H:i:s', strtotime($base['receipt']->date_of_entry)) }}" required autofocus>
     </div>
 
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-8">
         <label for="date">Report Date</label>
         <input type="text" class="form-control datepicker" name="report_date" value="{{ date('m/d/Y', strtotime($base['receipt']->report_date)) }}" required autofocus>
     </div>
 
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-4 d-none">
         <label for="municipality">Municipality</label>
         <select class="form-control" name="municipality" id="municipality">
             @if ($base['receipt']->col_municipality_id == '')
@@ -103,7 +103,7 @@ fieldset {
             @endforeach
         </select>
     </div>
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-4 d-none">
         <label for="barangay">Barangay</label>
         @if (!empty($base['barangays']))
         <select class="form-control" name="brgy" id="brgy">
@@ -124,7 +124,7 @@ fieldset {
         </select>
     </div>
 
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-8">
         <label for="customer">Hospital Name</label>
         <input type="text" class="form-control" name="customer" id="customer"  value="{{ $base['receipt']->customer->name }}">
         <input type="hidden" class="form-control" name="customer_id" id="customer_id" value="{{ $base['receipt']->customer->id }}">

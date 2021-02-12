@@ -48,7 +48,7 @@
 
 
 
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-6 d-none">
         <label for="municipality">Municipality</label>
         <select class="form-control" name="municipality" id="municipality">
             @if ($base['addtl']->col_municipality_id == '')
@@ -66,7 +66,7 @@
             @endforeach
         </select>
     </div>
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-6 d-none">
         <label for="barangay">Barangay</label>
         @if (!empty($base['barangays']))
         <select class="form-control" name="brgy" id="brgy">

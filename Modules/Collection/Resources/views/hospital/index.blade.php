@@ -119,7 +119,7 @@
         <input type="text" class="form-control datepicker" name="date" id="date_timex"  required autofocus>
     </div>
 
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-2 d-none">
         <label for="user">AF Type</label>
         <select class="form-control" id="form" name="form" readonly>
             <option selected disabled></option>
@@ -137,7 +137,7 @@
         </select>
     </div>
 
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-2 d-none">
         <label for="municipality">Municipality</label>
         <select class="form-control" name="municipality" id="municipality" >
             <option selected></option>
@@ -147,19 +147,19 @@
         </select>
     </div>
 
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-2 d-none">
         <label for="barangay">Barangay</label>
         <select class="form-control" name="brgy" id="brgy" disabled >
         </select>
     </div>
 
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-6">
         <label for="customer">Hospital Name</label>
         <input type="text" class="form-control" name="customer" id="customer" required>
         <input type="hidden" class="form-control" name="customer_id" id="customer_id">
     </div>
 
-    <div class="form-group col-sm-4" style="display:none">
+    <div class="form-group col-sm-4 d-none">
         <label for="customer_type">Client Type </label>
         <small title="Auto-fill for clients having transaction/s with 'Permit Fees' or 'Professional Tax' accounts or client type 'Professional Tax' only. 
 The default client type and remarks set by the auto-fill function are based on the client's most recent transaction with the aforementioned account/client types."><i class="fa fa-info-circle"></i> NOTE</small> <br>

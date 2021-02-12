@@ -4651,4 +4651,123 @@ class PdfController extends Controller
         return Datatables::of(collect($reports))->make(true);
     }
 
+    public function pvet_report(Request $request)
+    {
+        $form_51 = 1;
+        $insurance_premium = 42;
+        $amusement = 6;
+        $date_start = date('Y-m-d', strtotime($request['start_date']));
+        $date_end = date('Y-m-d', strtotime($request['end_date']));
+        $report_date = date('Y-m-d', strtotime($request['report_date']));
+        $account = AccountSubtitle::find(5);
+        
+        $receipts = Receipt::where('report_date','>=', $date_start)
+            ->where('report_date','<=', $date_end)
+            ->where('transaction_source', '=', 'pvet')
+            ->where('af_type', $form_51)
+            // ->where('is_cancelled', 0)
+            ->orderBy('serial_no', 'ASC')
+            ->orderBy('updated_at', 'DESC')
+            ->get();
+
+        if($request['account_list'] == 61){
+            $account = AccountTitle::find(61);
+        }
+
+        $this->base['account'] = $account;
+        $this->base['report_date'] = $report_date;
+
+
+        $this->base['typex'] = $request['button_pdf_type'];
+        $typex = $request['button_pdf_type'];
+    
+        if($typex === 'type_A'){
+            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
+        // ->setPaper("legal", 'Landscape');
+            ->setPaper("legal", 'Portrait');
+        }
+
+        return $pdf->stream();
+    }
+
+    public function opag_report(Request $request)
+    {
+        $form_51 = 1;
+        $insurance_premium = 42;
+        $amusement = 6;
+        $date_start = date('Y-m-d', strtotime($request['start_date']));
+        $date_end = date('Y-m-d', strtotime($request['end_date']));
+        $report_date = date('Y-m-d', strtotime($request['report_date']));
+        $account = AccountSubtitle::find(5);
+        
+        $receipts = Receipt::where('report_date','>=', $date_start)
+            ->where('report_date','<=', $date_end)
+            ->where('transaction_source', '=', 'pvet')
+            ->where('af_type', $form_51)
+            // ->where('is_cancelled', 0)
+            ->orderBy('serial_no', 'ASC')
+            ->orderBy('updated_at', 'DESC')
+            ->get();
+
+        if($request['account_list'] == 61){
+            $account = AccountTitle::find(61);
+        }
+
+        $this->base['account'] = $account;
+        $this->base['report_date'] = $report_date;
+
+
+        $this->base['typex'] = $request['button_pdf_type'];
+        $typex = $request['button_pdf_type'];
+    
+        if($typex === 'type_A'){
+            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
+        // ->setPaper("legal", 'Landscape');
+            ->setPaper("legal", 'Portrait');
+        }
+
+        return $pdf->stream();
+    }
+
+    public function hospital_report(Request $request)
+    {
+        $form_51 = 1;
+        $insurance_premium = 42;
+        $amusement = 6;
+        $date_start = date('Y-m-d', strtotime($request['start_date']));
+        $date_end = date('Y-m-d', strtotime($request['end_date']));
+        $report_date = date('Y-m-d', strtotime($request['report_date']));
+        $account = AccountSubtitle::find(5);
+        
+        $receipts = Receipt::where('report_date','>=', $date_start)
+            ->where('report_date','<=', $date_end)
+            ->where('transaction_source', '=', 'pvet')
+            ->where('af_type', $form_51)
+            // ->where('is_cancelled', 0)
+            ->orderBy('serial_no', 'ASC')
+            ->orderBy('updated_at', 'DESC')
+            ->get();
+
+        if($request['account_list'] == 61){
+            $account = AccountTitle::find(61);
+        }
+
+        $this->base['account'] = $account;
+        $this->base['report_date'] = $report_date;
+
+
+        $this->base['typex'] = $request['button_pdf_type'];
+        $typex = $request['button_pdf_type'];
+    
+        if($typex === 'type_A'){
+            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
+        // ->setPaper("legal", 'Landscape');
+            ->setPaper("legal", 'Portrait');
+        }
+
+        return $pdf->stream();
+    }
+
+
+
 }

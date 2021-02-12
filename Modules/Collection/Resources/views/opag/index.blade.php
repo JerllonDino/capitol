@@ -119,7 +119,7 @@
         <input type="text" class="form-control datepicker" name="date" id="date_timex"  required autofocus>
     </div>
 
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-2 d-none">
         <label for="user">AF Type</label>
         <select class="form-control" id="form" name="form" readonly>
             <option selected disabled></option>
@@ -137,7 +137,7 @@
         </select>
     </div>
 
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-3">
         <label for="municipality">Municipality</label>
         <select class="form-control" name="municipality" id="municipality" >
             <option selected></option>
@@ -147,7 +147,7 @@
         </select>
     </div>
 
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-3">
         <label for="barangay">Barangay</label>
         <select class="form-control" name="brgy" id="brgy" disabled >
         </select>
@@ -296,6 +296,8 @@ The default client type and remarks set by the auto-fill function are based on t
     {{ Form::close() }}
 </div>
 <hr>
+
+
 
 <div id="account_panel">
 </div>

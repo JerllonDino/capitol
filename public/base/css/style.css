@@ -27,11 +27,15 @@ textarea {
 }
 
 .dtable td {
-    overflow:hidden;
+    overflow:hidden; 
     word-wrap: break-word;
 }
 
 .row-hidden {
+    display: none;
+}
+
+.d-none{
     display: none;
 }
 

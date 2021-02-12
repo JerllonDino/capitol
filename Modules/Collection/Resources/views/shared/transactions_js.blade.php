@@ -678,7 +678,7 @@ $(document).on('change', '#account_list', function(event) {
             'account_type': title,
         },
         success: function(response) {
-            handle_rate(response, shared_acc,element, account_id, "subtitle");
+            handle_rate(response, shared_acc,element, account_id, title);
             compute_total();
         },
         error: function(response) {
