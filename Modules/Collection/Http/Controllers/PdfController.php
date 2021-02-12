@@ -4660,6 +4660,8 @@ class PdfController extends Controller
         $date_end = date('Y-m-d', strtotime($request['end_date']));
         $report_date = date('Y-m-d', strtotime($request['report_date']));
         $account = AccountSubtitle::find(5);
+
+        // dd($request);
         
         $receipts = Receipt::where('report_date','>=', $date_start)
             ->where('report_date','<=', $date_end)
@@ -4668,17 +4670,28 @@ class PdfController extends Controller
             // ->where('is_cancelled', 0)
             ->orderBy('serial_no', 'ASC')
             ->orderBy('updated_at', 'DESC')
+            ->with('items')
+            ->with('customer')
             ->get();
 
         if($request['account_list'] == 61){
             $account = AccountTitle::find(61);
         }
+        
+        $acctble_officer_name = ReportOfficerNew::find($request['report_officer']);
 
         $this->base['account'] = $account;
         $this->base['report_date'] = $report_date;
+        $this->base['acctble_officer_name'] = $acctble_officer_name;
 
+        $this->base['date_start_text'] = date("M j", strtotime($request['start_date']));
+        $this->base['date_end_text'] = date("M j, Y", strtotime($request['end_date']));
 
         $this->base['typex'] = $request['button_pdf_type'];
+
+        $this->base['receipts'] = $receipts;
+        // dd($this->base['receipts']);
+
         $typex = $request['button_pdf_type'];
     
         if($typex === 'type_A'){

@@ -80,7 +80,7 @@
               <option></option>
               <?php
                   foreach ($base['report_officers'] as $officer) { ?>
-                    <option value="{{ $officer['officer_id']."_".$officer['position_id']."_".$officer['position'] }}">{{ $officer['officer_name'] }}</option>
+                    <option value="{{ $officer['officer_id'] }}">{{ $officer['officer_name'] }}</option>
               <?php   }
               ?>
             </select>

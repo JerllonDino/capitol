@@ -42,8 +42,9 @@
         }
 
        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
-            border-top: 1px solid #868282;
-            border-bottom: 1px solid #868282;
+            /* border-top: 1px solid #868282;
+            border-bottom: 1px solid #868282; */
+            border:none;
         }
        .table>thead:first-child>tr:first-child>th, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
             border: 1px solid #000;
@@ -126,26 +127,27 @@
         <?php 
           $gtotal = 0;
         ?>
-<div class="firstpage">
-    <table class="center ">
+<div class="firstpage" style="margin-top: 50px">
+    <table class="center">
     <tr>
         <td style="font-size: 12px;">
         REPORT OF COLLECTIONS AND DEPOSITS <br />
-        <strong>PROVINCIAL GOVERNMENT OF BENGUET</strong><br />
+        {{-- <strong>PROVINCIAL GOVERNMENT OF BENGUET</strong><br /> --}}
+        Period of Collection of {{ $date_start_text }} - {{ $date_end_text }}
         </td>
         </tr>
     </table>
 </div>
 
-<div class="otherpage">
-    <table class="table table-condensed headerxxxx" >
+<div class="otherpage" style="margin-top: 50px">
+    <table class="table table-condensed" >
         <tr>
             <td><b>{{ $account->name }}</b></td>
-            <td>Date</td>
-            <td class="underline">{{ $report_date }}</td>
+            <td></td>
+            <td class="underline"></td>
         </tr>
         <tr>
-            <td>Accountable Collector: <b>{{ $acctble_officer_name->value }} - {{ $acctble_officer_position->value }}</b></td>
+            <td>Accountable Collector: <b>{{ $acctble_officer_name->officer_name }}</b></td>
             <td class="val">Report No.</td>
             <td class="underline">{{ $_GET['report_no'] }}</td>
         </tr>
@@ -158,14 +160,31 @@
         <tr class="page-break">
             <th>Date</th>
             <th>OR Nos.</th>
-            <th class=" detail_payor" rowspan="2">Payor</th>
-            <th class="" rowspan="2">TOTAL AMOUNT</th>
+            <th>Payor</th>
+            <th>TOTAL AMOUNT</th>
         </tr>
   
 </thead>
         <!-- VALUES PER RECEIPT -->
 <tbody>
-
+@foreach ($receipts as $receipt)
+<tr>
+    <td>{{ $receipt->report_date }}</td>
+    <td>{{ $receipt->serial_no }}</td>
+    <td>{{ $receipt->customer->name }}</td>
+    <td>
+        @php
+            $sum = 0;   
+        @endphp
+        @foreach ($receipt->items as $item)
+            @php
+                $sum += $item->value;
+            @endphp
+        @endforeach
+        {{ $sum }}
+    </td>
+</tr>
+@endforeach
 </tbody>
 </table>
 </div>
