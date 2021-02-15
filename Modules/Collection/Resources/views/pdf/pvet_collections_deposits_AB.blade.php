@@ -19,6 +19,10 @@
           /*page-break-after:always*/
         }
 
+        .table-break{
+            page-break-before: always;
+            /* display: none; */
+        }
 
         /* class works for table */
         table.page-break{
@@ -26,7 +30,7 @@
         }
 
         #collections>thead>tr>th,#collections>tbody>tr>td, #collections>tbody>tr>th{
-            font-size: 9px;
+            font-size: 12px;
             padding: 1px;
         }
 
@@ -149,13 +153,13 @@
         <tr>
             <td>Accountable Collector: <b>{{ $acctble_officer_name->officer_name }}</b></td>
             <td class="val">Report No.</td>
-            <td class="underline">{{ $_GET['report_no'] }}</td>
+            <td class="underline">PVET-{{ $_GET['report_no'] }}</td>
         </tr>
     </table>
 
 <h4>A. COLLECTIONS</h4>
 <div class="table-responsive col-sm-6">
-    <table id="collections" class="table table-bordered table-condensed table-responsive page-break small-launay">
+    <table id="collections" class="table table-bordered table-condensed table-responsive page-break">
     <thead style="text-align: center;">
         <tr class="page-break">
             <th>Date</th>
@@ -167,7 +171,11 @@
 </thead>
         <!-- VALUES PER RECEIPT -->
 <tbody>
-@foreach ($receipts as $receipt)
+    @php
+        $subTotal = 0;
+        $total = 0;
+    @endphp
+@foreach ($receipts as $i => $receipt)
 <tr>
     <td>{{ $receipt->report_date }}</td>
     <td>{{ $receipt->serial_no }}</td>
@@ -182,9 +190,58 @@
             @endphp
         @endforeach
         {{ $sum }}
+        @php
+            $subTotal =+ $sum;
+        @endphp
     </td>
 </tr>
+
+@if ($i == 45 || $i == count($receipts)-1)
+    @php
+        $total += $subTotal;
+    @endphp
+    <tr>
+        <td></td>
+        <td><b>Sub Total</b></td>
+        <td></td>
+        <td>{{ number_format((float)$subTotal, 2, '.', '')}}</td>
+    </tr>
+    @if ($i == count($receipts)-1)
+        <tr>
+            <td></td>
+            <td><b>Total</b></td>
+            <td></td>
+            <td>{{ number_format((float)$total, 2, '.', '')}}</td>
+        </tr>
+    @endif
+    @if ($i == 45)
+        <tr style="border:none"><td colspan=4 style="border:none"><div class="table-break"></div></td></tr>
+        @php
+            $subTotal = 0;
+        @endphp
+    @endif
+        
+    @endif
 @endforeach
+</tbody>
+</table>
+</div>
+<h4>B. REMITTANCES/DEPOSITS</h4>
+<div class="table-responsive col-sm-6">
+    <table id="collections" class="table table-bordered table-condensed table-responsive page-break">
+    <thead style="text-align: center;">
+        <tr class="page-break">
+            <th>Accountable Officer/Bank</th>
+            <th>Reference No.</th>
+            <th>Amount</th>
+        </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>IRENE C. BAGKING</td>
+        <td>{{ $_GET['report_no'] }}</td>
+        <td>{{ number_format((float)$total, 2, '.', '')}}</td>
+    </tr>
 </tbody>
 </table>
 </div>

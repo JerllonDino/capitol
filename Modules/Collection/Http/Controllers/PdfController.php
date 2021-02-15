@@ -4673,9 +4673,105 @@ class PdfController extends Controller
             ->with('items')
             ->with('customer')
             ->get();
-
         if($request['account_list'] == 61){
             $account = AccountTitle::find(61);
+        }
+        
+        $acctble_officer_name = ReportOfficerNew::find($request['report_officer']);
+
+        $this->base['account'] = $account;
+        $this->base['report_date'] = $report_date;
+        $this->base['acctble_officer_name'] = $acctble_officer_name;
+
+        $this->base['date_start_text'] = date("F j", strtotime($request['start_date']));
+        $this->base['date_end_text'] = date("j, Y", strtotime($request['end_date']));
+
+        $this->base['typex'] = $request['button_pdf_type'];
+
+        $this->base['receipts'] = $receipts;
+        // dd($this->base['receipts']);
+
+        $typex = $request['button_pdf_type'];
+    
+        if($typex === 'type_A'){
+            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
+        // ->setPaper("legal", 'Landscape');
+            ->setPaper("letter", 'Portrait');
+        }
+
+        return $pdf->stream();
+    }
+
+    public function opag_report(Request $request)
+    {
+        $form_51 = 1;
+        $date_start = date('Y-m-d', strtotime($request['start_date']));
+        $date_end = date('Y-m-d', strtotime($request['end_date']));
+        $report_date = date('Y-m-d', strtotime($request['report_date']));
+        $account = $request['account_type'] == "GF" ? "General Fund" : 'Cold Chain Project';
+        $this->base['account'] = $account;
+        
+        $receipts = Receipt::where('report_date','>=', $date_start)
+            ->where('report_date','<=', $date_end)
+            ->where('transaction_source', '=', 'opag')
+            ->where('af_type', $form_51)
+            ->orderBy('serial_no', 'ASC')
+            ->orderBy('updated_at', 'DESC')
+            ->with('items')
+            ->with('customer')
+            ->get();
+        
+            // dd($receipts);
+        $acctble_officer_name = ReportOfficerNew::find($request['report_officer']);
+
+        $this->base['report_date'] = $report_date;
+        $this->base['acctble_officer_name'] = $acctble_officer_name;
+
+        $this->base['date_start_text'] = date("M j", strtotime($request['start_date']));
+        $this->base['date_end_text'] = date("M j, Y", strtotime($request['end_date']));
+
+        $this->base['typex'] = $request['button_pdf_type'];
+
+        $this->base['receipts'] = $receipts;
+        // dd($this->base['receipts']);
+
+        $typex = $request['button_pdf_type'];
+    
+        if($typex === 'type_A'){
+            $pdf = PDF::loadView('collection::pdf.opag_collections_deposits_AB', $this->base)
+        // ->setPaper("legal", 'Landscape');
+            ->setPaper("letter", 'Portrait');
+        }
+
+        return $pdf->stream();
+    }
+
+    public function hospital_report(Request $request)
+    {
+        $form_51 = 1;
+        $insurance_premium = 42;
+        $amusement = 6;
+        $date_start = date('Y-m-d', strtotime($request['start_date']));
+        $date_end = date('Y-m-d', strtotime($request['end_date']));
+        $report_date = date('Y-m-d', strtotime($request['report_date']));
+        $account = AccountSubtitle::find(10);
+
+        // dd($request);
+        
+        $receipts = Receipt::where('report_date','>=', $date_start)
+            ->where('report_date','<=', $date_end)
+            ->where('transaction_source', '=', 'hospital')
+            ->where('af_type', $form_51)
+            // ->where('is_cancelled', 0)
+            ->orderBy('serial_no', 'ASC')
+            ->orderBy('updated_at', 'DESC')
+            ->with('items')
+            ->with('customer')
+            ->get();
+
+        
+        if($request['account_list'] == 3){
+            $account = AccountSubtitle::find(3);
         }
         
         $acctble_officer_name = ReportOfficerNew::find($request['report_officer']);
@@ -4697,85 +4793,7 @@ class PdfController extends Controller
         if($typex === 'type_A'){
             $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
         // ->setPaper("legal", 'Landscape');
-            ->setPaper("legal", 'Portrait');
-        }
-
-        return $pdf->stream();
-    }
-
-    public function opag_report(Request $request)
-    {
-        $form_51 = 1;
-        $insurance_premium = 42;
-        $amusement = 6;
-        $date_start = date('Y-m-d', strtotime($request['start_date']));
-        $date_end = date('Y-m-d', strtotime($request['end_date']));
-        $report_date = date('Y-m-d', strtotime($request['report_date']));
-        $account = AccountSubtitle::find(5);
-        
-        $receipts = Receipt::where('report_date','>=', $date_start)
-            ->where('report_date','<=', $date_end)
-            ->where('transaction_source', '=', 'pvet')
-            ->where('af_type', $form_51)
-            // ->where('is_cancelled', 0)
-            ->orderBy('serial_no', 'ASC')
-            ->orderBy('updated_at', 'DESC')
-            ->get();
-
-        if($request['account_list'] == 61){
-            $account = AccountTitle::find(61);
-        }
-
-        $this->base['account'] = $account;
-        $this->base['report_date'] = $report_date;
-
-
-        $this->base['typex'] = $request['button_pdf_type'];
-        $typex = $request['button_pdf_type'];
-    
-        if($typex === 'type_A'){
-            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
-        // ->setPaper("legal", 'Landscape');
-            ->setPaper("legal", 'Portrait');
-        }
-
-        return $pdf->stream();
-    }
-
-    public function hospital_report(Request $request)
-    {
-        $form_51 = 1;
-        $insurance_premium = 42;
-        $amusement = 6;
-        $date_start = date('Y-m-d', strtotime($request['start_date']));
-        $date_end = date('Y-m-d', strtotime($request['end_date']));
-        $report_date = date('Y-m-d', strtotime($request['report_date']));
-        $account = AccountSubtitle::find(5);
-        
-        $receipts = Receipt::where('report_date','>=', $date_start)
-            ->where('report_date','<=', $date_end)
-            ->where('transaction_source', '=', 'pvet')
-            ->where('af_type', $form_51)
-            // ->where('is_cancelled', 0)
-            ->orderBy('serial_no', 'ASC')
-            ->orderBy('updated_at', 'DESC')
-            ->get();
-
-        if($request['account_list'] == 61){
-            $account = AccountTitle::find(61);
-        }
-
-        $this->base['account'] = $account;
-        $this->base['report_date'] = $report_date;
-
-
-        $this->base['typex'] = $request['button_pdf_type'];
-        $typex = $request['button_pdf_type'];
-    
-        if($typex === 'type_A'){
-            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
-        // ->setPaper("legal", 'Landscape');
-            ->setPaper("legal", 'Portrait');
+            ->setPaper("letter", 'Portrait');
         }
 
         return $pdf->stream();
