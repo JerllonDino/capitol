@@ -1359,6 +1359,9 @@ $(document).on('click', '#go', function() {
 <?php if($base['sub_header'] != 'Edit'){ ?>
 $("#form").on('change', function() {
     var formx = $(this).val();
+    if (typeof source === 'undefined') {
+        source = 0;
+    }
     $.ajax({
         type: 'POST',
         url: '{{ route("collection.ajax") }}',
@@ -1367,19 +1370,20 @@ $("#form").on('change', function() {
             'action': 'get_serial',
             'form': $('#form').val(),
             'user_id': $('#user_id').val(),
-            'collection_type' : collection_type
+            'collection_type' : collection_type,
+            'source' : source
         },
         success: function(response) {
             $('.toggle-col').removeAttr('disabled');
             var serial_id = '{{ Session::get('serial_id') }}';
             $('#serial_id').html('<option value=""></option>');
             if (response.length > 1) {
-
                 $('#confirm').attr('disabled', false);
                 if( $('#form').val() == 1 ){
                     $.each(response, function(key, val) {
                         var getSplit = val.label.split(' ');
                         var getEndBal = getSplit[0].split('-');
+                        
                         // if(getEndBal[1] != val.current) {
                             if (serial_id == val.id) {
                                 $('#serial_id')

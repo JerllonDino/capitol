@@ -306,6 +306,10 @@ Route::group(['middleware' => ['web', 'auth'], 'namespace' => 'Modules\Collectio
     Route::resource('hospital_remittance', 'HospitalRemittanceController');
     Route::get('/hospital-report', 'HospitalRemittanceController@report')->name('hospital_remittance.report');
     Route::get('/hospital-hospital_report', 'PdfController@hospital_report')->name('pdf.hospital_report');
+    Route::get('/hospitals', 'HospitalRemittanceController@hospitals')->name('hospitals');
+    Route::post('/hospitals/store', 'HospitalRemittanceController@hospitals_store')->name('hospitals.store');
+    Route::post('/hospitals/edit', 'HospitalRemittanceController@hospitals_edit')->name('hospitals.edit');
+    Route::post('/hospitals/delete', 'HospitalRemittanceController@hospitals_delete')->name('hospitals.delete');
 
     Route::resource('adjustments', 'AdjustmentsController');
     Route::post('adjustments/delete', 'AdjustmentsController@delete')->name('adjustments.delete');

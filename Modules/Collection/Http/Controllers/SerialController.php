@@ -14,6 +14,7 @@ use Modules\Collection\Entities\AccountCategory;
 use Modules\Collection\Entities\Serial;
 use Modules\Collection\Entities\Form;
 use Modules\Collection\Entities\Municipality;
+use Modules\Collection\Entities\ReportOfficerNew;
 
 class SerialController extends Controller
 {
@@ -35,6 +36,7 @@ class SerialController extends Controller
     public function index()
     {
         $this->base['municipality'] = Municipality::orderBy('name', 'ASC')->get();
+        $this->base['accountable_officer'] = ReportOfficerNew::all();
         $res = Form::all();
         return view('collection::serial.index', compact('res'))->with('base', $this->base);
     }
@@ -95,7 +97,8 @@ class SerialController extends Controller
                             'unit' => $unit,
                             'acct_cat_id' => $acct_cat_id,
                             'municipality_id' => $municipality,
-                            'serial_current' => $request['start']
+                            'serial_current' => $request['start'],
+                            'accountable_officer' => $request['accountable_officer']
                         ]);
             Session::flash('info', ['Successfully created serial '.$request['start'].' - '.$request['end']]);
             return redirect()->route('serial.index');

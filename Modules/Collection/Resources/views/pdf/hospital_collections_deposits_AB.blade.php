@@ -137,7 +137,7 @@
     <tr>
         <td style="font-size: 12px;">
         REPORT OF COLLECTIONS AND DEPOSITS <br />
-        {{-- <strong>PROVINCIAL GOVERNMENT OF BENGUET</strong><br /> --}}
+        Provincial Health Office<br />
         Period of Collection of {{ $date_range }}
         </td>
         </tr>

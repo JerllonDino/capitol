@@ -38,6 +38,7 @@ use App\Http\Controllers\DatatablesController;
 
 use DB;
 use Modules\Collection\Entities\Adjustments;
+use Modules\Collection\Entities\Hospitals;
 use Modules\Collection\Entities\OpagCollection;
 use Modules\Collection\Entities\PvetCollection;
 use Modules\Collection\Entities\RptMunicipalExcel;
@@ -631,5 +632,12 @@ class CollectionDatatablesController extends DatatablesController
             // ->withTrashed()
             ->get();
         return $adjusments;
+    }
+
+    public function hospitals()
+    {
+        $hospitals = Hospitals::all();
+
+        return $hospitals;
     }
 }

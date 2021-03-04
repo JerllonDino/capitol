@@ -349,6 +349,8 @@ The default client type and remarks set by the auto-fill function are based on t
 @section('js')
 
 <script type="text/javascript">
+
+var source = 'opag';
 $.fn.showDays = function() {
     if($('#show_mnth').val() != 'ALL') {
         $('#show_day').empty();

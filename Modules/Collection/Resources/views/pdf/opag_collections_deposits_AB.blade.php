@@ -31,6 +31,7 @@
 
         #collections>thead>tr>th,#collections>tbody>tr>td, #collections>tbody>tr>th{
             font-size: 12px;
+            text-align: center;
             padding: 1px;
         }
 
@@ -137,7 +138,7 @@
         <td style="font-size: 12px;">
         REPORT OF COLLECTIONS AND DEPOSITS <br />
         <strong>Office of the Provincial Agriculture</strong><br />
-        Period of Collection of {{ $date_start_text }} - {{ $date_end_text }}
+        Period of Collection of {{ $date_range }}
         </td>
         </tr>
     </table>
@@ -185,7 +186,7 @@
     @foreach ($receipt->items as $item)
 
         <tr>
-            <td>{{ $receipt->report_date }}</td>
+            <td>{{ date("j-M", strtotime($receipt->report_date)) }}</td>
             <td>{{ $receipt->serial_no }}</td>
             <td>{{ $receipt->customer->name }}</td>
             <td>{{ $item->nature }}</td>

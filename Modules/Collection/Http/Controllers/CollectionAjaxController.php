@@ -22,6 +22,7 @@ use PDF;
 use Illuminate\Http\Request;
 use Modules\Collection\Entities\PCSettings;
 use App\Http\Controllers\AjaxController;
+use Modules\Collection\Entities\ReportOfficerNew;
 
 class CollectionAjaxController extends AjaxController
 {
@@ -144,17 +145,29 @@ class CollectionAjaxController extends AjaxController
     }
 
     protected function get_serial($params) {
+        // dd($params);
         $data = [];
         $collection_type = $params['collection_type'];
         $collection_type =  str_replace("show_in_","",$collection_type);
         $collection_type =  strtoupper($collection_type);
         $ip =  \Request::ip();
         $serials = Serial::where('serial_current', '<>', 0)
-            ->where('acctble_form_id', $params['form'])
-            ->get();
+            ->where('acctble_form_id', $params['form']);
+
+        if($params['source'] != "0"){
+            $serials = $serials->whereNotNull('accountable_officer');
+        }else{
+            $serials = $serials->whereNull('accountable_officer');
+        }
+        $serials = $serials->get();
 
         foreach ($serials as $serial) {
-              $addtl_data = '';
+            $addtl_data = '';
+            $officer = null;
+            if($serial->accountable_officer){
+                $officer = ReportOfficerNew::find($serial->accountable_officer);
+                $officer = $officer->officer_name;
+            }
             if($params['form'] == 1 ){
                 if($params['collection_type'] === 'show_in_landtax'){
                     if ($serial->pc_receipts){
@@ -172,7 +185,8 @@ class CollectionAjaxController extends AjaxController
                                 array_push($data, [
                                     'id' => $serial->id,
                                     'current' => $serial->serial_current,
-                                    'label' => $serial->serial_begin .'-'. $serial->serial_end . $addtl_data,
+                                    'officer' => $serial->accountable_officer,
+                                    'label' => $serial->serial_begin .'-'. $serial->serial_end . ($params['source'] != "0" ? "(" . $officer . ")" : $addtl_data),
                                     'municipality' => $serial->municipality_id,
 
                                 ]);
@@ -190,10 +204,13 @@ class CollectionAjaxController extends AjaxController
                                 if($serial->serial_current == $serial->serial_end && count($checkCurrent) > 0) {
                                     continue;
                                 }
+                                
+
                                 array_push($data, [
                                     'id' => $serial->id,
                                     'current' => $serial->serial_current,
-                                    'label' => $serial->serial_begin .'-'. $serial->serial_end . $addtl_data,
+                                    'officer' => $serial->accountable_officer,
+                                    'label' => $serial->serial_begin .'-'. $serial->serial_end . ($params['source'] != "0" ? " (".$officer.")" : $addtl_data),
                                     'municipality' => $serial->municipality_id
                                 ]);
                      }

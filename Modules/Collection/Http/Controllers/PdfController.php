@@ -4129,13 +4129,8 @@ class PdfController extends Controller
                     $receipt_first = '';
                     $receipt_last = '';
 
-                    if ($form == 2) {
-                        #form 56
-                        $idx = $er->municipality->name . $er->serial_begin;
-                    } else {
-                        # form 51
-                        $idx = $er->serial_begin;
-                    }
+                    $idx = $er->serial_begin;
+
 
                     if (strtotime($er->date_added) == strtotime($date_end)) {
                         $receipt_qty = ($er->serial_end - $er->serial_begin) + 1;
@@ -4676,6 +4671,109 @@ class PdfController extends Controller
         if($request['account_list'] == 61){
             $account = AccountTitle::find(61);
         }
+
+        $rcpt_acct_af = array();
+        $bank = array();
+        
+        foreach ($receipts as $rcpt_index => $receipt) {
+
+            if (!isset($rcpt_acct_af[$receipt->col_serial_id])) {
+                $rcpt_acct_af[$receipt->col_serial_id]['serials'] = [];
+            }
+            array_push($rcpt_acct_af[$receipt->col_serial_id]['serials'], $receipt->serial_no);
+
+            if ($receipt->is_cancelled) {
+                continue;
+            }
+            $total = 0;
+            $total_share_mun = 0;
+            $total_share_brgy = 0;
+            $category = [];
+
+            foreach($receipt->items as $item) {
+                // $category = null;
+                if ($item->col_acct_title_id !== 0) {
+                    # title
+                    $category = $item->acct_title->group->category;
+                    $type = 'titles';
+                    $name = $item->acct_title->name;
+                } else {
+                    # subtitle
+                    $category = (isset($item->acct_subtitle->title->group->category)) ? $item->acct_subtitle->title->group->category : '';
+                    $type = 'subtitles';
+                    // $name = $item->acct_subtitle->name;
+                    $name = (isset($item->acct_subtitle->name)) ? $item->acct_subtitle->name : '';
+                }
+
+                if($category){
+                    if (isset($accounts[$category->name])) {
+                        if (!isset($shares[$receipt->col_municipality_id][$receipt->serial_no])) {
+                            if ($receipt->col_municipality_id !== 0) {
+                                $shares[$receipt->col_municipality_id][$receipt->serial_no] = 0;
+                                $shares[$receipt->col_municipality_id]['barangays'][$receipt->col_barangay_id][$receipt->serial_no] = 0;
+                            }
+
+                            if ($receipt->col_barangay_id != 0) {
+                                $shares[$receipt->col_municipality_id]['barangays'][$receipt->col_barangay_id]['count'] += 1;
+                                $shares[$receipt->col_municipality_id]['count'] += 1;
+                            }
+                        }
+
+                        # for processing receipts paid via bank
+                        $bank_row = array();
+                        if (isset($bank[$receipt->serial_no])){
+                            $bank[$receipt->serial_no]['amt'] += $item->value;
+                        } else {
+                            if (in_array($receipt->transaction_type, [2,3])) {
+                                $bank_row['bank'] = $receipt->bank_name;
+                                $bank_row['check_no'] = $receipt->bank_number;
+                                $bank_row['payee'] = $receipt->customer->name;
+                                $bank_row['amt'] = $item->value;
+                                $bank[$receipt->serial_no] = $bank_row;
+                            }
+                        }
+
+                        if ($receipt->col_municipality_id !== 0 && $receipt->col_municipality_id != 14) {
+                            $shares[$receipt->col_municipality_id]['total_share'] += $item->share_municipal;
+                            if(!isset($shares[$receipt->col_municipality_id]['barangays'][$receipt->col_barangay_id]['total_share'])){
+                               continue;
+                            }
+                            $shares[$receipt->col_municipality_id]['barangays'][$receipt->col_barangay_id]['total_share'] += $item->share_barangay;
+                            $shares[$receipt->col_municipality_id][$receipt->serial_no] += $item->share_municipal;
+                            $shares[$receipt->col_municipality_id]['barangays'][$receipt->col_barangay_id][$receipt->serial_no] += $item->share_barangay;
+                        }
+
+                            $total += $item->value;
+                            $accounts[$category->name]['count'] += 1;
+                            if(isset($accounts[$category->name][$type][$name])) //
+                                $accounts[$category->name][$type][$name]['count'] += 1; 
+
+                            if (!isset($accounts[$category->name][$type][$name][$item->receipt->serial_no])) {
+                                $accounts[$category->name][$type][$name][$item->receipt->serial_no] = $item->share_provincial;
+                                // $accounts[$category->name][$type][$name][$item->receipt->serial_no] = $item->value;
+                            } else {
+                                $accounts[$category->name][$type][$name][$item->receipt->serial_no] += $item->share_provincial;
+                                // $accounts[$category->name][$type][$name][$item->receipt->serial_no] += $item->value;
+                            }
+
+                            if ($receipt->is_cancelled !== 1) {
+                                if(isset($accounts[$category->name][$type][$name]['total'])) 
+                                    $accounts[$category->name][$type][$name]['total'] += $item->share_provincial;
+                                    // $accounts[$category->name][$type][$name]['total'] += $item->value;
+                                if(isset($trantypes[$receipt->transaction_type]['total']))
+                                    $trantypes[$receipt->transaction_type]['total'] += $item->value;
+                            }
+                        // }
+                    }
+                }
+            }
+
+            if ($receipt->is_cancelled !== 1) {
+                $receipts_total[$receipt->serial_no] = $total;
+            }
+        }
+        $rcpt_acct = $this->format_sort_af($form_51, $rcpt_acct_af, $date_start, $date_end);
+        $this->base['rcpt_acct'] = $rcpt_acct;
         
         $acctble_officer_name = ReportOfficerNew::find($request['report_officer']);
 
@@ -4683,8 +4781,15 @@ class PdfController extends Controller
         $this->base['report_date'] = $report_date;
         $this->base['acctble_officer_name'] = $acctble_officer_name;
 
-        $this->base['date_start_text'] = date("F j", strtotime($request['start_date']));
-        $this->base['date_end_text'] = date("j, Y", strtotime($request['end_date']));
+        $date_start_text = date("F j", strtotime($request['start_date']));
+        $date_end_text = date("F j, Y", strtotime($request['end_date']));
+        $this->base['date_range'] = $date_start_text . ' - ' . $date_end_text;
+        // $this->base['report_start'];
+
+
+        if($request['start_date'] == $request['end_date']){
+            $this->base['date_range'] = $date_end_text;
+        }
 
         $this->base['typex'] = $request['button_pdf_type'];
 
@@ -4695,6 +4800,11 @@ class PdfController extends Controller
     
         if($typex === 'type_A'){
             $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_AB', $this->base)
+        // ->setPaper("legal", 'Landscape');
+            ->setPaper("letter", 'Portrait');
+        }
+        if($typex === 'type_C' || $typex === 'type_D'){
+            $pdf = PDF::loadView('collection::pdf.pvet_collections_deposits_CD', $this->base)
         // ->setPaper("legal", 'Landscape');
             ->setPaper("letter", 'Portrait');
         }
@@ -4727,8 +4837,13 @@ class PdfController extends Controller
         $this->base['report_date'] = $report_date;
         $this->base['acctble_officer_name'] = $acctble_officer_name;
 
-        $this->base['date_start_text'] = date("M j", strtotime($request['start_date']));
-        $this->base['date_end_text'] = date("M j, Y", strtotime($request['end_date']));
+        $date_start_text = date("F j", strtotime($request['start_date']));
+        $date_end_text = date("F j, Y", strtotime($request['end_date']));
+        $this->base['date_range'] = $date_start_text . ' - ' . $date_end_text;
+
+        if($request['start_date'] == $request['end_date']){
+            $this->base['date_range'] = $date_end_text;
+        }
 
         $this->base['typex'] = $request['button_pdf_type'];
 
@@ -4780,8 +4895,13 @@ class PdfController extends Controller
         $this->base['report_date'] = $report_date;
         $this->base['acctble_officer_name'] = $acctble_officer_name;
 
-        $this->base['date_start_text'] = date("M j", strtotime($request['start_date']));
-        $this->base['date_end_text'] = date("M j, Y", strtotime($request['end_date']));
+        $date_start_text = date("F j", strtotime($request['start_date']));
+        $date_end_text = date("F j, Y", strtotime($request['end_date']));
+        $this->base['date_range'] = $date_start_text . ' - ' . $date_end_text;
+
+        if($request['start_date'] == $request['end_date']){
+            $this->base['date_range'] = $date_end_text;
+        }
 
         $this->base['typex'] = $request['button_pdf_type'];
 

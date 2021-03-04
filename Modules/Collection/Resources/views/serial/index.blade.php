@@ -58,6 +58,16 @@
         <input type="text" class="form-control" name="date" id="date" value="{{ date('m/d/Y') }}" required>
     </div>
 
+    <div class="form-group col-sm-3">
+        <label for="municipality">Accountable Officer (if applicable)</label>
+        <select class="form-control" name="accountable_officer" id="accountable_officer">
+            <option value="" selected disabled></option>
+            @foreach($base['accountable_officer'] as $officer)
+            <option value="{{$officer->id}}">{{$officer->officer_name}}</option>
+            @endforeach
+        </select>
+    </div>
+
     <div class="form-group col-sm-12">
       <button type="submit" class="btn btn-success" name="button" id="confirm">Add</button>
     </div>

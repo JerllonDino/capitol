@@ -17,7 +17,8 @@ class Serial extends Model
         'unit',
         'acct_cat_id',
         'municipality_id',
-        'serial_current'
+        'serial_current',
+        'accountable_officer'
     ];
     // public $timestamps = false;
 
@@ -49,6 +50,11 @@ class Serial extends Model
    public function pc_receipts()
     {
          return $this->hasOne('Modules\Collection\Entities\PCSettings', 'pc_receipt');
+    }
+
+    public function officers()
+    {
+        return $this->hasMany('Modules\Collection\Entities\ReportOfficerNew', 'accountable_officer');
     }
 
 }

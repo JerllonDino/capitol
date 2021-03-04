@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\{ Session,Validator};
 use Modules\Collection\Entities\{AccountCategory, Customer,Form,Municipality,Barangay,Receipt,ReceiptItems,
         Serial, WeekdayHoliday, TransactionType, CollectionRate,
         F56Type, F56Detail, F56TDARP, ReceiptItemDetail, AdaSettings,
-        SandGravelTypes as sg_types,SGbooklet, RcptCertificate, RcptCertificateType, ReportOfficers, WithCert, ReportOfficerNew, OtherFeesCharges
+    Hospitals,
+    SandGravelTypes as sg_types,SGbooklet, RcptCertificate, RcptCertificateType, ReportOfficers, WithCert, ReportOfficerNew, OtherFeesCharges
         };
 
 use Carbon\Carbon;
@@ -368,4 +369,39 @@ class HospitalRemittanceController extends Controller
     public function destroy()
     {
     }
+
+    public function hospitals()
+    {
+        return view('collection::hospitals')->with('base', $this->base);
+    }
+
+    public function hospitals_store(Request $request)
+    {
+        $hospital = Hospitals::insert([
+            ['name' => $request->name]
+        ]);
+
+        return redirect()->route('hospitals');
+    }
+
+    public function hospitals_edit(Request $request)
+    {
+        $hospital = Hospitals::find($request->id);
+
+        $hospital->name = $request->name;
+
+        $hospital->save();
+
+        return redirect()->route('hospitals');
+    }
+
+    public function hospitals_delete(Request $request)
+    {
+        $hospital = Hospitals::find($request->id);
+
+        $hospital->delete();
+
+        return response('Success', 200);
+    }
+
 }
