@@ -137,7 +137,7 @@
 								</tr>
 								<tr>
 									<td><b>Land Area: </b></td>
-									<td>{{ $property_rec[$j]['kind_land_area'] }}</td>
+									<td>{{ isset($property_rec[$j]['kind_land_area']) ? $property_rec[$j]['kind_land_area'] : '' }}</td>
 								</tr>
 							</table>
 						@else
